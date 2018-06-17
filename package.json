@@ -8,6 +8,10 @@
         "watch": "webpack -w",
         "start": "webpack-dev-server"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jxzhe/SS_Final_Project.git"
+    },
     "author": "",
     "license": "ISC",
     "dependencies": {
