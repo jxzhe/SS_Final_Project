@@ -1885,6 +1885,8 @@ var Stage1 = function (_Phaser$State) {
             this.life_icon.anchor.set(0.5);
             this.life_text = this.add.bitmapText(this.game.width * 0.15, this.game.height * 0.035, 'carrier_command', 'x' + this.game.total_life);
             this.life_text.anchor.set(0.5);
+            this.life_text.scale.set(0.6);
+            this.life_text.tint = 0x220000;
         }
     }, {
         key: 'check_duplicate',
