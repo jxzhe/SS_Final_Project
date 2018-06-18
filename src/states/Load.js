@@ -24,6 +24,7 @@ export default class Load extends Phaser.State {
         this.load.image('Menu_Layer04', 'image/Menu/Menu_Layer_04.png');
         this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
         this.load.image('prist', 'image/Menu/prist.png');
+        this.load.image('info_back', 'image/Menu/info_back.png');
         this.load.image('talk', 'image/Menu/talk.png');
         this.load.spritesheet('bookgirl', 'image/Menu/bookgirlset.png', 66, 84);
         this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
@@ -53,6 +54,7 @@ export default class Load extends Phaser.State {
         this.load.spritesheet('Mouse_Drag', 'image/Mouse_Drag.png', 160, 112);
 
         this.load.spritesheet('Player00', 'image/Player/Player00.png', 45, 45);
+        this.load.spritesheet('Player01', 'image/Player/Player01.png', 45, 50);
 
         this.load.spritesheet('Enemy00', 'image/Enemy/Enemy00.png', 31, 39);
         this.load.spritesheet('Enemy01', 'image/Enemy/Enemy01.png', 45, 44);
@@ -89,6 +91,6 @@ export default class Load extends Phaser.State {
         this.load.image('favicon', 'image/Icon/favicon.png');
     }
     create() {
-        this.state.start('Stage2');
+        this.state.start('Menu');
     }
 }

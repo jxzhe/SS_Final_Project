@@ -219,25 +219,36 @@ export default class Stage1 extends Phaser.State {
         this.mouse_drag.frame = 0;
         this.mouse_drag.alpha = 0;
 
-        this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+        if(this.game.player_choice == 0) {
+            this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+            this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
+            this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
+            this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
+            this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
+            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+        }
+        else {
+            this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+            this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
+            this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
+            this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
+            this.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
+            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+        }
         this.physics.arcade.enable(this.player);
         this.player.is_touching = false;
         this.player.body.bounce.set(0.3);
         this.player.anchor.set(0.5);
         this.player.angle = 0;
         this.player.body.gravity.y = 300;
-        this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
-        this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
-        this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
-        this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
-        this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
-        this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
 
-        this.dbg = this.add.text(5, 5, ``);
-        this.dbg.fontSize = 20;
-        this.dbg.fill = '#000';
+        // this.dbg = this.add.text(5, 5, ``);
+        // this.dbg.fontSize = 20;
+        // this.dbg.fill = '#000';
 
-        this.main_layer.addMultiple([this.dbg, this.mouse_drag, this.player, this.gravity_0, this.gravity_1]);
+        this.main_layer.addMultiple([/*this.dbg, */this.mouse_drag, this.player, this.gravity_0, this.gravity_1]);
 
         this.back_layer_0.create(0, 0, 'Map01_Layer03');
         this.back_layer_0.create(this.game.width, 0, 'Map01_Layer03');
@@ -313,7 +324,7 @@ export default class Stage1 extends Phaser.State {
 
         this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
         this.life_icon.anchor.set(0.5);
-        this.life_text = this.add.text(this.game.width * 0.12, this.game.height * 0.035, `x${this.game.total_life}`);
+        this.life_text = this.add.bitmapText(this.game.width * 0.15, this.game.height * 0.035, 'carrier_command', `x${this.game.total_life}`);
         this.life_text.anchor.set(0.5);
     }
     check_duplicate(spawn, arr) {
@@ -605,7 +616,7 @@ export default class Stage1 extends Phaser.State {
         // Life window
         this.life_text.text = `x${this.game.total_life}`;
         // debug window
-        this.dbg.text = `FPS: ${this.time.fps}\nCurrent Mouse: (${this.input.activePointer.x}, ${this.input.activePointer.y})\nLast Mouse: (${this.game.mouse.x}, ${this.game.mouse.y})\nCombo: ${this.counter.combo}\n`;
+        // this.dbg.text = `FPS: ${this.time.fps}\nCurrent Mouse: (${this.input.activePointer.x}, ${this.input.activePointer.y})\nLast Mouse: (${this.game.mouse.x}, ${this.game.mouse.y})\nCombo: ${this.counter.combo}\n`;
 
         if (this.player.body.touching.none) {
             this.player.is_touching = false;
