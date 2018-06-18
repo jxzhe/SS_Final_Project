@@ -400,9 +400,10 @@ var Load = function (_Phaser$State) {
                         this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
                         this.load.image('prist', 'image/Menu/prist.png');
                         this.load.image('talk', 'image/Menu/talk.png');
-                        this.load.spritesheet('bookgirlset', 'image/Menu/bookgirlset.png', 44, 56);
-                        this.load.spritesheet('pumpgirlset', 'image/Menu/pumpgirlset.png', 31, 54);
-                        this.load.spritesheet('saveset', 'image/Menu/saveset.png', 52, 79);
+                        this.load.spritesheet('bookgirl', 'image/Menu/bookgirlset.png', 66, 84);
+                        this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
+                        this.load.spritesheet('saveboy', 'image/Menu/saveset.png', 78, 119);
+                        this.load.spritesheet('exitdoor', 'image/Menu/exitdoor.png', 58, 94);
 
                         this.load.image('Map01_Layer00', 'image/Map01/Map01_Layer00.png');
                         this.load.image('Map01_Layer01', 'image/Map01/Map01_Layer01.png');
@@ -508,34 +509,44 @@ var Menu = function (_Phaser$State) {
     _createClass(Menu, [{
         key: 'create',
         value: function create() {
+
             this.create_layer_0();
             this.create_layer_1();
             this.create_layer_2();
             this.create_layer_3();
             this.create_layer_4();
+            this.create_npc_layer();
             this.create_main_layer();
             this.create_layer_5();
         }
     }, {
         key: 'create_layer_0',
         value: function create_layer_0() {
-            this.layer_0 = this.add.sprite(0, 0, 'Menu_Layer00');
+            this.layer_0 = this.add.image(0, 0, 'Menu_Layer00');
             this.layer_0.fixedToCamera = true;
+            this.world.setBounds(0, 0, 1586, 793);
+            this.physics.arcade.setBoundsToWorld();
         }
     }, {
         key: 'create_layer_1',
         value: function create_layer_1() {
-            this.layer_1 = this.add.sprite(0, 0, 'Menu_Layer01');
+            this.layer_1 = this.add.group();
+            this.layer_1.create(0, 0, 'Menu_Layer01');
+            this.layer_1.create(1586, 0, 'Menu_Layer01');
         }
     }, {
         key: 'create_layer_2',
         value: function create_layer_2() {
-            this.layer_2 = this.add.sprite(0, 0, 'Menu_Layer02');
+            this.layer_2 = this.add.group();
+            this.layer_2.create(0, 0, 'Menu_Layer02');
+            this.layer_2.create(1586, 0, 'Menu_Layer02');
         }
     }, {
         key: 'create_layer_3',
         value: function create_layer_3() {
-            this.layer_3 = this.add.sprite(0, 0, 'Menu_Layer03');
+            this.layer_3 = this.add.group();
+            this.layer_3.create(0, 0, 'Menu_Layer03');
+            this.layer_3.create(1586, 0, 'Menu_Layer03');
         }
     }, {
         key: 'create_layer_4',
@@ -544,19 +555,115 @@ var Menu = function (_Phaser$State) {
             this.border_layer.enableBody = true;
             this.layer_4 = this.add.sprite(0, 0, 'Menu_Layer04');
             this.physics.arcade.enable(this.layer_4);
-            this.layer_4.body.setSize(1586, 62, 0, 732);
+            this.layer_4.body.setSize(1586, 62, 0, 745);
             this.border_layer.addMultiple([this.layer_4]);
             this.border_layer.setAll('body.immovable', true);
         }
     }, {
         key: 'create_layer_5',
         value: function create_layer_5() {
-            this.layer_5 = this.add.sprite(0, 0, 'Menu_Layer05');
+            this.layer_5 = this.add.group();
+            this.layer_5.create(0, 0, 'Menu_Layer05');
+            this.layer_5.create(1586, 0, 'Menu_Layer05');
+        }
+    }, {
+        key: 'create_npc_layer',
+        value: function create_npc_layer() {
+            var _this2 = this;
+
+            this.npc_layer = this.add.group();
+
+            this.talk_sign_prist = this.add.sprite(312, 745 - 112 + 40, 'talk');
+            this.talk_sign_prist.visible = false;
+            this.talk_sign_prist.inputEnabled = true;
+            this.talk_sign_prist.input.useHandCursor = true;
+            this.talk_sign_prist.anchor.set(0, 1);
+            this.talk_sign_prist.mask = this.add.graphics(312, 745 - 112);
+            this.talk_sign_prist.mask.anchor.set(0, 1);
+            this.talk_sign_prist.mask.beginFill(0x000000);
+            this.talk_sign_prist.mask.drawRect(0, -33, 45, 33);
+            this.talk_sign_prist.events.onInputUp.add(function () {
+                //
+            }, this);
+
+            this.talk_sign_pumpgirl = this.add.sprite(613, 745 - 92 + 40, 'talk');
+            this.talk_sign_pumpgirl.anchor.set(0, 1);
+            this.talk_sign_pumpgirl.mask = this.add.graphics(613, 745 - 92);
+            this.talk_sign_pumpgirl.mask.anchor.set(0, 1);
+            this.talk_sign_pumpgirl.mask.beginFill(0x000000);
+            this.talk_sign_pumpgirl.mask.drawRect(0, -33, 45, 33);
+
+            this.talk_sign_bookgirl = this.add.sprite(851, 745 - 92 + 40, 'talk');
+            this.talk_sign_bookgirl.anchor.set(0, 1);
+            this.talk_sign_bookgirl.mask = this.add.graphics(851, 745 - 92);
+            this.talk_sign_bookgirl.mask.anchor.set(0, 1);
+            this.talk_sign_bookgirl.mask.beginFill(0x000000);
+            this.talk_sign_bookgirl.mask.drawRect(0, -33, 45, 33);
+
+            this.talk_sign_save = this.add.sprite(1211, 745 - 132 + 40, 'talk');
+            this.talk_sign_save.anchor.set(0, 1);
+            this.talk_sign_save.mask = this.add.graphics(1211, 745 - 132);
+            this.talk_sign_save.mask.anchor.set(0, 1);
+            this.talk_sign_save.mask.beginFill(0x000000);
+            this.talk_sign_save.mask.drawRect(0, -33, 45, 33);
+
+            this.talk_sign_exitdoor = this.add.sprite(1501, 745 - 102 + 40, 'talk');
+            this.talk_sign_exitdoor.anchor.set(0, 1);
+            this.talk_sign_exitdoor.visible = false;
+            this.talk_sign_exitdoor.inputEnabled = true;
+            this.talk_sign_exitdoor.input.useHandCursor = true;
+            this.talk_sign_exitdoor.mask = this.add.graphics(1501, 745 - 102);
+            this.talk_sign_exitdoor.mask.anchor.set(0, 1);
+            this.talk_sign_exitdoor.mask.beginFill(0x000000);
+            this.talk_sign_exitdoor.mask.drawRect(0, -33, 45, 33);
+            this.talk_sign_exitdoor.events.onInputUp.add(function () {
+                _this2.state.start('Stage1');
+            }, this);
+
+            this.prist = this.add.sprite(312, 745, 'prist');
+            this.prist.anchor.set(0, 1);
+            this.prist.sign = this.talk_sign_prist;
+            this.prist.tween = this.add.tween(this.talk_sign_prist).to({ y: 745 - 112 }, 300);
+            this.prist.tween_back = this.add.tween(this.talk_sign_prist).to({ y: 745 - 112 + 40 }, 300);
+
+            this.pumpgirl = this.add.sprite(613, 745, 'pumpgirl');
+            this.pumpgirl.anchor.set(0, 1);
+            this.pumpgirl.sign = this.talk_sign_pumpgirl;
+            this.pumpgirl.animations.add('idle', [0, 1, 2], 5, true);
+            this.pumpgirl.animations.play('idle');
+            this.pumpgirl.tween = this.add.tween(this.talk_sign_pumpgirl).to({ y: 745 - 92 }, 300);
+            this.pumpgirl.tween_back = this.add.tween(this.talk_sign_pumpgirl).to({ y: 745 - 92 + 40 }, 300);
+
+            this.bookgirl = this.add.sprite(851, 745, 'bookgirl');
+            this.bookgirl.anchor.set(0, 1);
+            this.bookgirl.sign = this.talk_sign_bookgirl;
+            this.bookgirl.animations.add('idle', [0, 1, 2, 3, 4, 5], 8, true);
+            this.bookgirl.animations.play('idle');
+            this.bookgirl.tween = this.add.tween(this.talk_sign_bookgirl).to({ y: 745 - 92 }, 300);
+            this.bookgirl.tween_back = this.add.tween(this.talk_sign_bookgirl).to({ y: 745 - 92 + 40 }, 300);
+
+            this.save = this.add.sprite(1211, 745, 'saveboy');
+            this.save.anchor.set(0, 1);
+            this.save.sign = this.talk_sign_save;
+            this.save.animations.add('idle', [0, 1, 2, 3], 8, true);
+            this.save.animations.play('idle');
+            this.save.tween = this.add.tween(this.talk_sign_save).to({ y: 745 - 132 }, 300);
+            this.save.tween_back = this.add.tween(this.talk_sign_save).to({ y: 745 - 132 + 40 }, 300);
+
+            this.exitdoor = this.add.sprite(1501, 745, 'exitdoor');
+            this.exitdoor.anchor.set(0, 1);
+            this.exitdoor.sign = this.talk_sign_exitdoor;
+            this.exitdoor.animations.add('idle', [0, 1, 2, 3], 8, true);
+            this.exitdoor.animations.play('idle');
+            this.exitdoor.tween = this.add.tween(this.talk_sign_exitdoor).to({ y: 745 - 102 }, 300);
+            this.exitdoor.tween_back = this.add.tween(this.talk_sign_exitdoor).to({ y: 745 - 102 + 40 }, 300);
+
+            this.npc_layer.addMultiple([this.prist, this.pumpgirl, this.bookgirl, this.save, this.exitdoor]);
         }
     }, {
         key: 'create_main_layer',
         value: function create_main_layer() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.main_layer = this.add.group();
 
@@ -569,6 +676,7 @@ var Menu = function (_Phaser$State) {
 
             this.player = this.add.sprite(500, 500, 'Player00');
             this.physics.arcade.enable(this.player);
+            this.player.body.collideWorldBounds = true;
             this.player.is_touching = false;
             this.player.body.bounce.set(0.3);
             this.player.anchor.set(0.5);
@@ -582,30 +690,30 @@ var Menu = function (_Phaser$State) {
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
             this.player.inputEnabled = true;
             this.player.events.onInputDown.add(function (sprite, pointer) {
-                if (!_this2.game.mouse.is_down) {
-                    _this2.game.mouse.is_down = true;
-                    _this2.game.mouse.x = pointer.x;
-                    _this2.game.mouse.y = pointer.y;
+                if (!_this3.game.mouse.is_down) {
+                    _this3.game.mouse.is_down = true;
+                    _this3.game.mouse.x = pointer.x;
+                    _this3.game.mouse.y = pointer.y;
                     sprite.body.velocity.x = 0;
                     sprite.body.velocity.y = 0;
 
-                    _this2.mouse_drag.alpha = 1;
-                    _this2.player.body.gravity.y = _this2.player.body.gravity.y > 0 ? 25 : -25;
+                    _this3.mouse_drag.alpha = 1;
+                    _this3.player.body.gravity.y = _this3.player.body.gravity.y > 0 ? 25 : -25;
                 }
             }, this);
             this.player.events.onInputUp.add(function (sprite, pointer) {
-                _this2.game.total_life -= 1;
-                _this2.game.mouse.is_down = false;
-                _this2.game.time_angle = 0;
-                _this2.game.last_time = _this2.time.now;
-                var dx = _this2.game.mouse.x - pointer.x;
-                var dy = _this2.game.mouse.y - pointer.y;
+                _this3.game.total_life -= 1;
+                _this3.game.mouse.is_down = false;
+                _this3.game.time_angle = 0;
+                _this3.game.last_time = _this3.time.now;
+                var dx = _this3.game.mouse.x - pointer.x;
+                var dy = _this3.game.mouse.y - pointer.y;
                 sprite.body.velocity.x = dx > 0 ? Math.min(1000, dx * 5) : Math.max(-1000, dx * 5);
                 sprite.body.velocity.y = dy > 0 ? Math.min(1000, dy * 5) : Math.max(-1000, dy * 5);
-                _this2.mouse_drag.animations.play('fire').onComplete.add(function () {
-                    _this2.mouse_drag.frame = 0;_this2.mouse_drag.alpha = 0;
+                _this3.mouse_drag.animations.play('fire').onComplete.add(function () {
+                    _this3.mouse_drag.frame = 0;_this3.mouse_drag.alpha = 0;
                 });
-                _this2.player.body.gravity.y = _this2.player.body.gravity.y > 0 ? 300 : -300;
+                _this3.player.body.gravity.y = _this3.player.body.gravity.y > 0 ? 300 : -300;
             }, this);
             this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
@@ -614,6 +722,8 @@ var Menu = function (_Phaser$State) {
     }, {
         key: 'update',
         value: function update() {
+            var _this4 = this;
+
             // Physics Controller
             this.physics.arcade.collide(this.player, this.border_layer);
 
@@ -645,6 +755,168 @@ var Menu = function (_Phaser$State) {
             } else if (!this.game.mouse.is_down) {
                 this.player.frame = 0;
                 this.player.animations.stop();
+            }
+
+            // NPC effect
+
+            var _loop = function _loop(child) {
+                if (_this4.player.x > child.x - 25 && _this4.player.x < child.x + 75) {
+                    child.sign.visible = true;
+                    child.tween.start();
+                } else {
+                    child.tween_back.start().onComplete.add(function () {
+                        child.sign.visible = false;
+                    });
+                }
+            };
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.npc_layer.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var child = _step.value;
+
+                    _loop(child);
+                }
+
+                // Layer effect
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            if (this.player.x > 928 * 0.5 && this.player.x < 1586 - 928 * 0.5) {
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                    for (var _iterator2 = this.layer_1.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var child = _step2.value;
+
+                        child.x -= this.player.body.velocity.x * 0.0025;
+                        if (child.x < -1586) {
+                            child.x += 1586 * 2;
+                        } else if (child.x > 1586) {
+                            child.x -= 1586 * 2;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                            _iterator2.return();
+                        }
+                    } finally {
+                        if (_didIteratorError2) {
+                            throw _iteratorError2;
+                        }
+                    }
+                }
+
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                    for (var _iterator3 = this.layer_2.children[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var _child = _step3.value;
+
+                        _child.x -= this.player.body.velocity.x * 0.006;
+                        if (_child.x < -1586) {
+                            _child.x += 1586 * 2;
+                        } else if (_child.x > 1586) {
+                            _child.x -= 1586 * 2;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+                    } finally {
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
+                        }
+                    }
+                }
+
+                var _iteratorNormalCompletion4 = true;
+                var _didIteratorError4 = false;
+                var _iteratorError4 = undefined;
+
+                try {
+                    for (var _iterator4 = this.layer_3.children[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                        var _child2 = _step4.value;
+
+                        _child2.x -= this.player.body.velocity.x * 0.0095;
+                        if (_child2.x < -1586) {
+                            _child2.x += 1586 * 2;
+                        } else if (_child2.x > 1586) {
+                            _child2.x -= 1586 * 2;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError4 = true;
+                    _iteratorError4 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                            _iterator4.return();
+                        }
+                    } finally {
+                        if (_didIteratorError4) {
+                            throw _iteratorError4;
+                        }
+                    }
+                }
+
+                var _iteratorNormalCompletion5 = true;
+                var _didIteratorError5 = false;
+                var _iteratorError5 = undefined;
+
+                try {
+                    for (var _iterator5 = this.layer_5.children[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                        var _child3 = _step5.value;
+
+                        _child3.x -= this.player.body.velocity.x * 0.015;
+                        if (_child3.x < -1586) {
+                            _child3.x += 1586 * 2;
+                        } else if (_child3.x > 1586) {
+                            _child3.x -= 1586 * 2;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError5 = true;
+                    _iteratorError5 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                            _iterator5.return();
+                        }
+                    } finally {
+                        if (_didIteratorError5) {
+                            throw _iteratorError5;
+                        }
+                    }
+                }
             }
         }
     }]);
