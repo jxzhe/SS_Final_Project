@@ -12,17 +12,19 @@ export default class Menu extends Phaser.State {
         this.create_layer_5();
     }
     create_layer_0() {
-        this.layer_0 = this.add.sprite(0, 0, 'Menu_Layer00');
+        this.layer_0 = this.add.image(0, 0, 'Menu_Layer00');
         this.layer_0.fixedToCamera = true;
+        this.world.setBounds(0, 0, 1586, 793);
+        this.physics.arcade.setBoundsToWorld();
     }
     create_layer_1() {
-        this.layer_1 = this.add.sprite(0, 0, 'Menu_Layer01');
+        this.layer_1 = this.add.image(0, 0, 'Menu_Layer01');
     }
     create_layer_2() {
-        this.layer_2 = this.add.sprite(0, 0, 'Menu_Layer02');
+        this.layer_2 = this.add.image(0, 0, 'Menu_Layer02');
     }
     create_layer_3() {
-        this.layer_3 = this.add.sprite(0, 0, 'Menu_Layer03');
+        this.layer_3 = this.add.image(0, 0, 'Menu_Layer03');
     }
     create_layer_4() {
         this.border_layer = this.add.group();
@@ -48,6 +50,7 @@ export default class Menu extends Phaser.State {
 
         this.player = this.add.sprite(500, 500, 'Player00');
         this.physics.arcade.enable(this.player);
+        this.player.body.collideWorldBounds = true;
         this.player.is_touching = false;
         this.player.body.bounce.set(0.3);
         this.player.anchor.set(0.5);
