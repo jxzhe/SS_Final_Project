@@ -31,6 +31,12 @@ export default class Boot extends Phaser.State {
         
         this.time.advancedTiming = true;
     }
+    preload() {
+        this.load.baseURL = 'src/assets/';
+        this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
+        this.load.image('progressBarBorder', 'image/progressBarBorder.png');
+        this.load.image('progressBarContent', 'image/progressBarContent.png');
+    }
     create() {
         this.state.start('Load');
     }
