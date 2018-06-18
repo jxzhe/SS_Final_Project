@@ -36,6 +36,8 @@ export default class Menu extends Phaser.State {
         this.layer_5 = this.add.image(0, 0, 'Menu_Layer05');
     }
     create_main_layer() {
+        this.main_layer = this.add.group();
+
         this.mouse_drag = this.add.sprite(0, 0, 'Mouse_Drag');
         this.mouse_drag.anchor.set(0.5);
         this.mouse_drag.scale.set(0.5);
@@ -82,6 +84,8 @@ export default class Menu extends Phaser.State {
             this.player.body.gravity.y = (this.player.body.gravity.y > 0) ? 300 : -300;
         }, this);
         this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+
+        this.main_layer.addMultiple([this.mouse_drag, this.player]);
     }
     update() {
         // Physics Controller
