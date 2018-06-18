@@ -323,6 +323,14 @@ var Boot = function (_Phaser$State) {
             });
         }
     }, {
+        key: 'preload',
+        value: function preload() {
+            this.load.baseURL = 'src/assets/';
+            this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
+            this.load.image('progressBarBorder', 'image/progressBarBorder.png');
+            this.load.image('progressBarContent', 'image/progressBarContent.png');
+        }
+    }, {
         key: 'create',
         value: function create() {
             this.state.start('Load');
@@ -610,7 +618,14 @@ var Load = function (_Phaser$State) {
     _createClass(Load, [{
         key: 'preload',
         value: function preload() {
-            this.load.baseURL = 'src/assets/';
+            var progressLabel = this.add.bitmapText(928 * 0.5 + 50, 793 * 0.5 - 50, 'carrier_command', 'Loading...');
+            progressLabel.anchor.setTo(0.5, 0.5);
+            progressLabel.fontSize = 40;
+            progressLabel.tint = 0xfcfcfc;
+
+            var progressBarContent = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarContent');
+            var progressBarBorder = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarBorder');
+            this.load.setPreloadSprite(progressBarContent);
 
             this.load.audio('melo00', 'audio/system00_melo00.wav');
             this.load.audio('melo01', 'audio/system00_melo01.wav');

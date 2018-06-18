@@ -3,13 +3,20 @@ export default class Load extends Phaser.State {
         super();
     }
     preload() {
-        this.load.baseURL = 'src/assets/';
-
+        var progressLabel = this.add.bitmapText(928 * 0.5 + 50, 793 * 0.5 - 50, 'carrier_command', 'Loading...');
+        progressLabel.anchor.setTo(0.5, 0.5);
+        progressLabel.fontSize = 40;
+        progressLabel.tint = 0xfcfcfc;
+        
+        var progressBarContent = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarContent');
+        var progressBarBorder = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarBorder');
+        this.load.setPreloadSprite(progressBarContent);
+        
         this.load.audio('melo00', 'audio/system00_melo00.wav');
         this.load.audio('melo01', 'audio/system00_melo01.wav');
         this.load.audio('melo02', 'audio/system00_melo02.wav');
         this.load.audio('melo03', 'audio/system00_melo03.wav');
-
+        
         this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
 
         this.load.image('tileset', 'map/tileset.png');
