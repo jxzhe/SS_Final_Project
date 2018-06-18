@@ -3,7 +3,6 @@ export default class Menu extends Phaser.State {
         super();
     }
     create() {
-        
         this.create_layer_0();
         this.create_layer_1();
         this.create_layer_2();
@@ -83,9 +82,11 @@ export default class Menu extends Phaser.State {
         this.talk_sign_pumpgirl.mask.beginFill(0x000000);
         this.talk_sign_pumpgirl.mask.drawRect(0, -33, 45, 33);
         this.talk_sign_pumpgirl.btns = {
-            'player1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', `Player 1 (Beginner)`),
-            'player2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', `Player 2 (Advanced)`),
+            'player1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', `Prinny`),
+            'player2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', `Prince`),
         };
+        this.talk_sign_pumpgirl.btns.player1.tint = 0x331111;
+        this.talk_sign_pumpgirl.btns.player2.tint = 0x331111;
         this.talk_sign_pumpgirl.btns.player1.anchor.set(0.5, 0);
         this.talk_sign_pumpgirl.btns.player2.anchor.set(0.5, 0);
         this.talk_sign_pumpgirl.btns.player1.visible = false;
@@ -103,6 +104,7 @@ export default class Menu extends Phaser.State {
             this.talk_sign_pumpgirl.btns.player1.visible = true;
             this.talk_sign_pumpgirl.btns.player2.visible = true;
         }, this);
+
 
         this.talk_sign_bookgirl = this.add.sprite(851, 745 - 92 + 40, 'talk');
         this.talk_sign_bookgirl.anchor.set(0, 1);
@@ -137,6 +139,8 @@ export default class Menu extends Phaser.State {
             'stage1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', `Stage 1 (Beginner)`),
             'stage2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', `Stage 2 (Advanced)`),
         };
+        this.talk_sign_exitdoor.btns.stage1.tint = 0x331111;
+        this.talk_sign_exitdoor.btns.stage2.tint = 0x331111;
         this.talk_sign_exitdoor.btns.stage1.anchor.set(0.5, 0);
         this.talk_sign_exitdoor.btns.stage2.anchor.set(0.5, 0);
         this.talk_sign_exitdoor.btns.stage1.visible = false;
@@ -211,7 +215,24 @@ export default class Menu extends Phaser.State {
         this.mouse_drag.frame = 0;
         this.mouse_drag.alpha = 0;
 
-        this.player = this.add.sprite(500, 500, 'Player00');
+        if (this.game.player_choice == 0) {
+            this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+            this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
+            this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
+            this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
+            this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
+            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+        }
+        else {
+            this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+            this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
+            this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
+            this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
+            this.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
+            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+        }
         this.physics.arcade.enable(this.player);
         this.player.body.collideWorldBounds = true;
         this.player.is_touching = false;
@@ -219,12 +240,6 @@ export default class Menu extends Phaser.State {
         this.player.anchor.set(0.5);
         this.player.angle = 0;
         this.player.body.gravity.y = 300;
-        this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
-        this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
-        this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
-        this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
-        this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
-        this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
         this.player.inputEnabled = true;
         this.player.events.onInputDown.add((sprite, pointer) => {
             if (!this.game.mouse.is_down) {
@@ -271,6 +286,30 @@ export default class Menu extends Phaser.State {
             this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
         });
+        this.talk_sign_pumpgirl.btns.player1.events.onInputOver.add(() => {
+            this.add.tween(this.talk_sign_pumpgirl.btns.player1).to({ fontSize: 25 }, 100).start();
+        });
+        this.talk_sign_pumpgirl.btns.player2.events.onInputOver.add(() => {
+            this.add.tween(this.talk_sign_pumpgirl.btns.player2).to({ fontSize: 25 }, 100).start();
+        });
+        this.talk_sign_pumpgirl.btns.player1.events.onInputOut.add(() => {
+            this.add.tween(this.talk_sign_pumpgirl.btns.player1).to({ fontSize: 20 }, 100).start();
+        });
+        this.talk_sign_pumpgirl.btns.player2.events.onInputOut.add(() => {
+            this.add.tween(this.talk_sign_pumpgirl.btns.player2).to({ fontSize: 20 }, 100).start();
+        });
+        this.talk_sign_exitdoor.btns.stage1.events.onInputOver.add(() => {
+            this.add.tween(this.talk_sign_exitdoor.btns.stage1).to({ fontSize: 22 }, 100).start();
+        });
+        this.talk_sign_exitdoor.btns.stage2.events.onInputOver.add(() => {
+            this.add.tween(this.talk_sign_exitdoor.btns.stage2).to({ fontSize: 22 }, 100).start();
+        });
+        this.talk_sign_exitdoor.btns.stage1.events.onInputOut.add(() => {
+            this.add.tween(this.talk_sign_exitdoor.btns.stage1).to({ fontSize: 20 }, 100).start();
+        });
+        this.talk_sign_exitdoor.btns.stage2.events.onInputOut.add(() => {
+            this.add.tween(this.talk_sign_exitdoor.btns.stage2).to({ fontSize: 20 }, 100).start();
+        });
 
         this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
@@ -312,60 +351,60 @@ export default class Menu extends Phaser.State {
 
         // NPC effect
         let flag = 0;
-        for(let child of this.npc_layer.children) {
-            if(this.player.x > child.x - 25 && this.player.x < child.x + 75) {
+        for (let child of this.npc_layer.children) {
+            if (this.player.x > child.x - 25 && this.player.x < child.x + 75) {
                 child.sign.visible = true;
                 child.tween.start();
             } else {
                 ++flag;
-                child.tween_back.start().onComplete.add(() => { 
+                child.tween_back.start().onComplete.add(() => {
                     child.sign.visible = false;
                 });
-                if(child.key == 'exitdoor') {
+                if (child.key == 'exitdoor') {
                     this.talk_sign_exitdoor.btns.stage1.visible = false;
                     this.talk_sign_exitdoor.btns.stage2.visible = false;
                 }
-                else if(child.key == 'pumpgirl') {
+                else if (child.key == 'pumpgirl') {
                     this.talk_sign_pumpgirl.btns.player1.visible = false;
                     this.talk_sign_pumpgirl.btns.player2.visible = false;
                 }
             }
         }
-        if(flag == this.npc_layer.length) {
+        if (flag == this.npc_layer.length) {
             this.info_back.text.visible = true;
         }
 
         // Layer effect
-        if(this.player.x > 928 * 0.5 && this.player.x < 1586 - 928 * 0.5 ) {
-            for(let child of this.layer_1.children) {
+        if (this.player.x > 928 * 0.5 && this.player.x < 1586 - 928 * 0.5) {
+            for (let child of this.layer_1.children) {
                 child.x -= this.player.body.velocity.x * 0.0025;
-                if(child.x < -1586) {
+                if (child.x < -1586) {
                     child.x += 1586 * 2;
-                } else if(child.x > 1586) {
+                } else if (child.x > 1586) {
                     child.x -= 1586 * 2;
                 }
             }
-            for(let child of this.layer_2.children) {
+            for (let child of this.layer_2.children) {
                 child.x -= this.player.body.velocity.x * 0.006;
-                if(child.x < -1586) {
+                if (child.x < -1586) {
                     child.x += 1586 * 2;
-                } else if(child.x > 1586) {
+                } else if (child.x > 1586) {
                     child.x -= 1586 * 2;
                 }
             }
-            for(let child of this.layer_3.children) {
+            for (let child of this.layer_3.children) {
                 child.x -= this.player.body.velocity.x * 0.0095;
-                if(child.x < -1586) {
+                if (child.x < -1586) {
                     child.x += 1586 * 2;
-                } else if(child.x > 1586) {
+                } else if (child.x > 1586) {
                     child.x -= 1586 * 2;
                 }
             }
-            for(let child of this.layer_5.children) {
+            for (let child of this.layer_5.children) {
                 child.x -= this.player.body.velocity.x * 0.015;
-                if(child.x < -1586) {
+                if (child.x < -1586) {
                     child.x += 1586 * 2;
-                } else if(child.x > 1586) {
+                } else if (child.x > 1586) {
                     child.x -= 1586 * 2;
                 }
             }

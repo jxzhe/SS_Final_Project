@@ -219,7 +219,7 @@ export default class Stage1 extends Phaser.State {
         this.mouse_drag.frame = 0;
         this.mouse_drag.alpha = 0;
 
-        if(this.game.player_choice == 0) {
+        if (this.game.player_choice == 0) {
             this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
             this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
             this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
@@ -621,6 +621,9 @@ export default class Stage1 extends Phaser.State {
         if (this.player.body.touching.none) {
             this.player.is_touching = false;
         }
+        if (this.game.total_life < 0.1) {
+            this.state.start('Over');
+        }
     }
     handle_gravity(player, gravity) {
         if (gravity.key == 'Gravity00') {
@@ -683,9 +686,6 @@ export default class Stage1 extends Phaser.State {
         if (!player.is_touching) {
             this.game.total_life -= 2;
             player.is_touching = true;
-        }
-        if (this.game.total_life < 0.1) {
-            this.state.start('Over');
         }
     }
     handle_sign(player, sign) {

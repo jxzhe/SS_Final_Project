@@ -144,7 +144,7 @@ export default class Clear extends Phaser.State {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
             let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xfff00f});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_e[i][0] + 29;
+            cube.position.x = text_e[i][0] + 23;
             cube.position.y = text_e[i][1] - 6;
             cube.position.z = text_e[i][2];
             group_e.add(cube);
@@ -156,7 +156,7 @@ export default class Clear extends Phaser.State {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
             let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xfff00f});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_a[i][0] + 23;
+            cube.position.x = text_a[i][0] + 29;
             cube.position.y = text_a[i][1] - 6;
             cube.position.z = text_a[i][2];
             group_a.add(cube);

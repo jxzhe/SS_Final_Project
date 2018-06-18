@@ -79,6 +79,7 @@ export default class Load extends Phaser.State {
         this.load.spritesheet('Boss_Gate_Sign01', 'image/Boss_Gate/Boss_Gate_Sign01.png', 54, 40);
 
         this.load.spritesheet('Boss00', 'image/Boss/Boss00.png', 400, 400);
+        this.load.spritesheet('Boss01', 'image/Boss/Boss01.png', 340, 400);
 
         this.load.image('HP_Front', 'image/HP/HP_Front.png');
         this.load.image('HP_Back', 'image/HP/HP_Back.png');
@@ -91,6 +92,6 @@ export default class Load extends Phaser.State {
         this.load.image('favicon', 'image/Icon/favicon.png');
     }
     create() {
-        this.state.start('Menu');
+        this.state.start('Start');
     }
 }
