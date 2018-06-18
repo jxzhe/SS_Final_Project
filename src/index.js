@@ -21,7 +21,11 @@ class Game extends Phaser.Game {
         this.state.start('Boot');
     }
 }
-
+document.body.onkeypress = e => {
+    if(e.keyCode == 8) {
+        e.preventDefault();
+    }
+};
 window.onload = () => {
     firebase.initializeApp({
         apiKey: "AIzaSyCLWVQ1SEiVTQG2B88_wD38ftmjaeycTKc",

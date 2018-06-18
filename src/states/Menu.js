@@ -117,6 +117,15 @@ export default class Menu extends Phaser.State {
         this.talk_sign_bookgirl.mask.beginFill(0x000000);
         this.talk_sign_bookgirl.mask.drawRect(0, -33, 45, 33);
 
+        this.sign_input = { 
+            'name': this.add.bitmapText(928 * 0.4, 90, 'carrier_command', `${this.game.inputBuffer}`),
+            'isPassword': false
+        };
+        this.sign_input.name_title = this.add.bitmapText(928 * 0.18, 90, 'carrier_command', `NAME: `);
+        this.sign_input.name_title.fixedToCamera = true;
+        this.sign_input.name_title.visible = false;
+        this.sign_input.name.fixedToCamera = true;
+        this.sign_input.name.visible = false;
         this.talk_sign_save = this.add.sprite(1211, 745 - 132 + 40, 'talk');
         this.talk_sign_save.anchor.set(0, 1);
         this.talk_sign_save.visible = false;
@@ -126,6 +135,11 @@ export default class Menu extends Phaser.State {
         this.talk_sign_save.mask.anchor.set(0, 1);
         this.talk_sign_save.mask.beginFill(0x000000);
         this.talk_sign_save.mask.drawRect(0, -33, 45, 33);
+        this.talk_sign_save.events.onInputUp.add(() => {
+            this.info_back.text.visible = false;
+            this.sign_input.name.visible = true;
+            this.sign_input.name_title.visible = true;
+        });
 
         this.talk_sign_exitdoor = this.add.sprite(1501, 745 - 102 + 40, 'talk');
         this.talk_sign_exitdoor.anchor.set(0, 1);
@@ -205,6 +219,8 @@ export default class Menu extends Phaser.State {
         this.exitdoor.tween_back = this.add.tween(this.talk_sign_exitdoor).to({ y: 745 - 102 + 40 }, 300);
 
         this.npc_layer.addMultiple([this.prist, this.pumpgirl, this.bookgirl, this.save, this.exitdoor]);
+
+        this.input.keyboard.onPressCallback = this.processKey.bind(this);
     }
     create_main_layer() {
         this.main_layer = this.add.group();
@@ -369,6 +385,10 @@ export default class Menu extends Phaser.State {
                     this.talk_sign_pumpgirl.btns.player1.visible = false;
                     this.talk_sign_pumpgirl.btns.player2.visible = false;
                 }
+                else if(child.key == 'saveboy') {
+                    this.sign_input.name_title.visible = false;
+                    this.sign_input.name.visible = false;
+                }
             }
         }
         if (flag == this.npc_layer.length) {
@@ -408,6 +428,31 @@ export default class Menu extends Phaser.State {
                 } else if (child.x > 1586) {
                     child.x -= 1586 * 2;
                 }
+            }
+        }
+        this.sign_input.name.text = `${this.game.inputBuffer}`;
+    }
+    processKey(key) {
+        if(this.game.input.keyboard.lastKey.keyCode == Phaser.Keyboard.ENTER) {
+            if(this.game.inputBuffer !== '') {
+                // firebase.database().ref(`m_leaderboard${bgIdx}`).push({
+                //     name: `${this.game.inputBuffer}`,
+                //     score: `${this.global.score}`,
+                // });
+                this.game.inputBuffer = '';
+                this.sign_input.name_title.text = 'PSWD: ';
+                this.sign_input.isPassword = true;
+            }
+        }
+        else if(this.game.input.keyboard.lastKey.keyCode == Phaser.Keyboard.BACKSPACE) {
+            this.game.inputBuffer = this.game.inputBuffer.slice(0, -1);
+        }
+        else {
+            if(!this.sign_input.isPassword && this.game.inputBuffer.length < 10) {
+                this.game.inputBuffer += String(key);
+            }
+            else if(this.sign_input.isPassword && this.game.inputBuffer.length < 4) {
+                this.game.inputBuffer += String(key);
             }
         }
     }
