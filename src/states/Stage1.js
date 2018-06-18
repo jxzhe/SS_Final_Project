@@ -521,7 +521,7 @@ export default class Stage1 extends Phaser.State {
         if (this.is_boss_state) {
             // Boss check clear
             if (this.boss.hp < 0.01) {
-                this.state.start('clear');
+                this.state.start('Clear');
             }
             this.boss_HP.front.mask.scale.set(this.boss.hp / 100, 1);
             // Boss attack bahavior

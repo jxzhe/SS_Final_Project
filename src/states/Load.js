@@ -16,7 +16,7 @@ export default class Load extends Phaser.State {
         this.load.tilemap('map', 'map/map.json', null, Phaser.Tilemap.TILED_JSON);
 
         this.load.image('Minimap_02', 'image/Minimap/Minimap_02.png');
-
+        
         this.load.image('Menu_Layer00', 'image/Menu/Menu_Layer_00.png');
         this.load.image('Menu_Layer01', 'image/Menu/Menu_Layer_01.png');
         this.load.image('Menu_Layer02', 'image/Menu/Menu_Layer_02.png');
@@ -44,6 +44,7 @@ export default class Load extends Phaser.State {
         this.load.spritesheet('Map02_Layer2', 'image/Map02/Map02_Layer2.png', 950, 793);
         this.load.spritesheet('Map02_Layer3', 'image/Map02/Map02_Layer3.png', 950, 793);
         this.load.spritesheet('Map02_Layer4', 'image/Map02/Map02_Layer4.png', 950, 793);
+        this.load.image('HiddenBlock', 'image/Map02/HiddenBlock.png');
 
         this.load.image('Particle00', 'image/Particle/Particle00.png');
         this.load.image('Particle01', 'image/Particle/Particle01.png');

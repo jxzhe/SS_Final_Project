@@ -7,11 +7,13 @@ export default class Stage2 extends Phaser.State {
         this.create_layer_1();
         this.create_layer_2();
         this.create_layer_3();
-        this.create_map();
         this.create_sign_layer();
         this.create_main_layer();
+        this.create_map();
         this.create_layer_4();
         this.create_enemy_layer();
+        this.create_bullet_layer();
+        this.create_boss_layer();
         this.create_minimap_layer();
         this.create_board_layer();
         this.audio = {
@@ -27,11 +29,18 @@ export default class Stage2 extends Phaser.State {
         this.tween_down = this.add.tween(this.player).to({ angle: 180 }, 250);
         this.tween_up = this.add.tween(this.player).to({ angle: 0 }, 250);
         this.destroy_emitter = this.add.group();
+        this.boss.move_effect = null;
+        this.boss.last_time = 0;
+        this.is_boss_state = false;
         this.stage.backgroundColor = '#ffffff';
     }
     create_layer_0() {
         this.layer_0 = this.add.image(0, 0, 'Map02_Layer0');
         this.layer_0.fixedToCamera = true;
+        this.purple = this.add.graphics(0, 0);
+        this.purple.beginFill(0x330033).drawRect(0, 0, 928, 793)
+        this.purple.alpha = 0;
+        this.purple.fixedToCamera = true;;
     }
     create_layer_1() {
         this.layer_1 = this.add.group();
@@ -65,16 +74,10 @@ export default class Stage2 extends Phaser.State {
         });
         this.layer_3.setAll('alpha', 0.75);
     }
-    create_map() {
-        this.map = this.add.tilemap('map');
-        this.map.addTilesetImage('tileset');
-        this.map_layer = this.map.createLayer('Layer 1');
-        this.map_layer.resizeWorld();
-        this.map.setCollisionBetween(1, 76);
-    }
     create_sign_layer() {
         this.sign_layer = this.add.group();
-        let x = 96 * 45, y = 96 * 45;
+
+        let x = 4605, y = 4325;
         this.boss_gate = {
             'back': this.add.sprite(x + 63, y + 85, 'Boss_Gate03'),
             'down': this.add.sprite(x, y, 'Boss_Gate02'),
@@ -87,7 +90,7 @@ export default class Stage2 extends Phaser.State {
         this.boss_gate.door.body.setSize(46, 63, 34, 52);
 
         this.boss_gate.back.anchor.set(0.5);
-        this.boss_gate.back.mask = this.add.graphics(x + 63, x + 85);
+        this.boss_gate.back.mask = this.add.graphics(x + 63, y + 85);
         this.boss_gate.back.mask.anchor.set(0.5);
         this.boss_gate.back.mask.beginFill(0x000000);
         this.boss_gate.back.mask.drawRect(-42.5, -52.5, 85, 105);
@@ -106,18 +109,19 @@ export default class Stage2 extends Phaser.State {
         this.boss_gate.down_effect = this.add.tween(this.boss_gate.down).to({ y: y + 200 }, 1500);
         this.boss_gate.back_effect = this.add.tween(this.boss_gate.back).to({ angle: 360 }, 4000).loop();
 
-        this.boss_gate_sign_bloom = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+        x = 4355, y = 4485;
+        this.boss_gate_sign_bloom = this.add.sprite(x, y, 'Boss_Gate_Sign01');
         this.boss_gate_sign_bloom.anchor.set(0.5);
         this.boss_gate_sign_bloom.alpha = 0.7;
         this.boss_gate_sign_bloom.frame = 2;
         this.boss_gate_sign_bloom.bloom_effect = this.add.tween(this.boss_gate_sign_bloom).to({ alpha: 0.1 }, 750).yoyo(true).loop().start();
 
-        this.boss_gate_sign = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+        this.boss_gate_sign = this.add.sprite(x, y, 'Boss_Gate_Sign01');
         this.physics.arcade.enable(this.boss_gate_sign);
         this.boss_gate_sign.body.immovable = true;
         this.boss_gate_sign.anchor.set(0.5);
 
-        this.boss_gate_sign00 = this.add.sprite(x + 530, y - 60 - 42, 'Boss_Gate_Sign00');
+        this.boss_gate_sign00 = this.add.sprite(x, y - 42, 'Boss_Gate_Sign00');
         this.boss_gate_sign00.anchor.set(0.5);
         this.boss_gate_sign00.animations.add('default', [0, 1, 2], 3, true);
         this.boss_gate_sign00.play('default');
@@ -158,8 +162,8 @@ export default class Stage2 extends Phaser.State {
             { x: 202, y: 150 }, { x: 26, y: 172 }, { x: 26, y: 172 }
         ];
         let r = Math.floor(Math.random() * 4);
-        // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
-        this.player = this.add.sprite(101 * 45, 95 * 45, 'Player00');
+        this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
+        // this.player = this.add.sprite(112 * 45, 84 * 45, 'Player00');
         this.physics.arcade.enable(this.player);
         this.player.is_touching = false;
         this.player.body.bounce.set(0.3);
@@ -201,6 +205,16 @@ export default class Stage2 extends Phaser.State {
 
         this.main_layer.addMultiple([this.mouse_drag, this.player, this.gravity_0, this.gravity_1]);
     }
+    create_map() {
+        this.map = this.add.tilemap('map');
+        this.map.addTilesetImage('tileset');
+        this.map_layer = this.map.createLayer('Layer 1');
+        this.map_layer.resizeWorld();
+        this.map.setCollisionByExclusion(Array.from(Array(70 - 58 + 1).keys()).map(t => t + 58));
+
+        this.hidden_block = this.add.sprite(100 * 45, 87 * 45, 'HiddenBlock');
+        this.physics.arcade.enable(this.hidden_block);
+    }
     create_layer_4() {
         this.layer_4 = this.add.group();
         this.layer_4.create(-99999, 800, 'Map02_Layer4');
@@ -222,6 +236,43 @@ export default class Stage2 extends Phaser.State {
             }
         }
         this.enemy_layer.setAll('body.gravity.y', 300);
+    }
+    create_bullet_layer() {
+        this.bullet_layer = this.add.group();
+    }
+    create_boss_layer() {
+        this.boss_HP = {
+            'back': this.add.sprite(this.game.width * 0.06, this.game.height - 20, 'HP_Back'),
+            'front': this.add.sprite(this.game.width * 0.06, this.game.height - 20, 'HP_Front'),
+        };
+        this.boss_HP.front.anchor.set(0, 0.5);
+        this.boss_HP.back.anchor.set(0, 0.5);
+
+        this.boss_HP.front.mask = this.add.graphics(this.game.width * 0.06, this.game.height - 20);
+        this.boss_HP.front.mask.beginFill(0xffffff);
+        this.boss_HP.front.mask.anchor.set(0, 0.5);
+        this.boss_HP.front.mask.drawRect(0, -15, 800, 30);
+
+        this.boss_HP.front.visible = false;
+        this.boss_HP.back.visible = false;
+
+        this.boss = this.add.sprite(96 * 45, 100 * 45, 'Boss00');
+        this.physics.arcade.enable(this.boss);
+        this.boss.body.setSize(150, 200, 125, 100);
+        this.boss.anchor.set(0.5);
+        this.boss.body.immovable = true;
+        this.boss.animations.add('walk', [0, 1], 3, true);
+        this.boss.animations.add('attack', [2, 3, 4], 8, false);
+        this.boss.visible = false;
+        // this.add.tween(this.boss).to({ y: 100 * 45 + 50 }, 1000).yoyo(true).loop().start();
+        this.boss.hp = 100;
+
+        this.boss_HP.front.fixedToCamera = true;
+        this.boss_HP.back.fixedToCamera = true;
+        this.boss_HP.front.mask.fixedToCamera = true;
+
+        // this.boss_layer = this.add.group();
+        // this.boss_layer.addMultiple([this.boss_HP, this.boss]);
     }
     create_minimap_layer() {
         this.minimap_layer = this.add.group();
@@ -306,6 +357,12 @@ export default class Stage2 extends Phaser.State {
         let cur_time = this.time.now;
 
         // Physics Controller
+        if (this.is_boss_state) {
+            if (this.game.mouse.is_down == false) {
+                this.physics.arcade.collide(this.player, this.bullet_layer, (player, bullet) => bullet.hit = true);
+            }
+            this.physics.arcade.overlap(this.boss, this.bullet_layer, this.handle_boss_hit.bind(this));
+        }
         for (let child of this.enemy_layer.children) {
             if (this.board[`Enemy${child.key.substring(5, 7)}Ratio`].total_clear >= this.game.total_enemies) {
                 this.physics.arcade.collide(this.player, child, this.handle_obstacle_hit.bind(this));
@@ -313,12 +370,20 @@ export default class Stage2 extends Phaser.State {
                 this.physics.arcade.overlap(this.player, child, this.handle_enemy_hit.bind(this));
             }
         }
-        this.physics.arcade.collide(this.player, [this.main_layer], this.handle_gravity.bind(this));
-        this.physics.arcade.collide(this.player, [this.map_layer, this.map], this.handle_gravity.bind(this));
+        this.physics.arcade.collide(this.player, [this.main_layer, this.map_layer, this.map], this.handle_gravity.bind(this));
         this.physics.arcade.collide(this.enemy_layer, [this.map_layer, this.map]);
         this.physics.arcade.collide(this.enemy_layer);
         this.physics.arcade.collide(this.player, this.boss_gate_sign, this.handle_sign.bind(this));
         this.physics.arcade.overlap(this.player, this.boss_gate.door, this.handle_sign.bind(this));
+        this.physics.arcade.collide(this.bullet_layer, [this.player]);
+
+        this.physics.arcade.overlap(this.hidden_block, this.player, block => {
+            this.add.tween(this.hidden_block).to({ alpha: 0.5 }, 80).start();
+            this.hidden_block.last_overlapped = this.time.now + 80;
+        });
+        if (this.hidden_block.last_overlapped && this.time.now > this.hidden_block.last_overlapped) {
+            this.add.tween(this.hidden_block).to({ alpha: 1 }, 80).start();
+        }
 
         // Mouse Effect
         let angle = this.math.angleBetween(this.input.activePointer.x, this.input.activePointer.y, this.player.body.position.x + this.player.offsetX - this.camera.x, this.player.body.position.y + this.player.offsetY - this.camera.y);
@@ -449,6 +514,57 @@ export default class Stage2 extends Phaser.State {
             this.board[`Enemy0${i}Ratio`].mask.scale.set(percent, 1);
         }
 
+        // Boss functions
+        if (this.is_boss_state) {
+            if (this.boss.hp < 0.01) {
+                this.state.start('Clear');
+            }
+            this.boss_HP.front.mask.scale.set(this.boss.hp / 100, 1);
+            // Boss attack bahavior
+            if (this.boss.last_time + 5000 < cur_time) {
+                if (this.player.x > this.boss.x) {
+                    this.boss.animations.play('walk');
+                    this.boss.scale.set(-1, 1);
+                } else {
+                    this.boss.animations.play('walk');
+                    this.boss.scale.set(1, 1);
+                }
+
+                this.boss.last_time = cur_time;
+                if (this.boss.move_effect) {
+                    this.boss.move_effect.stop();
+                    this.tweens.remove(this.boss.move_effect);
+                }
+                this.boss.move_effect = this.add.tween(this.boss).to({ x: this.player.x, y: this.player.y - 350 }, 2000).start();
+                this.boss.move_effect.onComplete.add(() => {
+                    this.tweens.remove(this.boss.move_effect);
+                    this.boss.animations.play('attack');
+                    setTimeout(() => {
+                        this.boss.frame = 2;
+                    }, 1000);
+                    this.time.events.repeat(Phaser.Timer.SECOND * 0.75, 3, () => {
+                        for (let i = 0; i < 6; ++i) {
+                            let bullet = this.add.sprite(this.boss.x + (i < 3 ? 136 : -145), this.boss.y + 52, `Enemy0${Math.floor(Math.random() * 3.99)}`, 0, this.bullet_layer);
+                            bullet.angle = -90 + Math.random() * 180;
+                            this.physics.arcade.enable(bullet);
+                            bullet.body.mass = 0.25;
+                            bullet.body.bounce.set(1);
+                            bullet.body.velocity.x = (i - (i < 3 ? 1 : 4)) * 80;
+                            bullet.body.velocity.y = 200;
+                            bullet.hit = false;
+                        }
+                    }, this);
+                    this.world.bringToTop(this.bullet_layer);
+                });
+            }
+            this.bullet_layer.forEach(bullet => {
+                if (bullet.x < this.camera.x || bullet.x > this.camera.x + 928 ||
+                    bullet.y < this.camera.y || bullet.y > this.camera.y + 793) {
+                    bullet.destroy();
+                }
+            });
+        }
+
         // Life window
         this.life_text.text = `x${this.game.total_life}`;
 
@@ -542,15 +658,22 @@ export default class Stage2 extends Phaser.State {
                 this.boss_gate.down.destroy();
             });
             this.boss_gate.front_effect.start();
+            this.add.tween(this.purple).to({ alpha: 0.6 }, 1000).start();
         } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
             this.is_boss_state = true;
             this.boss.visible = true;
             this.boss.animations.play('walk');
             this.enemy_layer.removeAll();
             this.sign_layer.removeAll();
-            this.player.body.bounce.set(0.8);
             this.boss_HP.front.visible = true;
+            this.boss_HP.front.mask.visible = true;
             this.boss_HP.back.visible = true;
+        }
+    }
+    handle_boss_hit(boss, bullet) {
+        if (bullet.hit) {
+            boss.hp -= 10;
+            bullet.destroy();
         }
     }
 }
