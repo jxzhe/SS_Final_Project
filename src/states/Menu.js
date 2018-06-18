@@ -287,10 +287,10 @@ export default class Menu extends Phaser.State {
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
         });
         this.talk_sign_pumpgirl.btns.player1.events.onInputOver.add(() => {
-            this.add.tween(this.talk_sign_pumpgirl.btns.player1).to({ fontSize: 25 }, 100).start();
+            this.add.tween(this.talk_sign_pumpgirl.btns.player1).to({ fontSize: 22 }, 100).start();
         });
         this.talk_sign_pumpgirl.btns.player2.events.onInputOver.add(() => {
-            this.add.tween(this.talk_sign_pumpgirl.btns.player2).to({ fontSize: 25 }, 100).start();
+            this.add.tween(this.talk_sign_pumpgirl.btns.player2).to({ fontSize: 22 }, 100).start();
         });
         this.talk_sign_pumpgirl.btns.player1.events.onInputOut.add(() => {
             this.add.tween(this.talk_sign_pumpgirl.btns.player1).to({ fontSize: 20 }, 100).start();

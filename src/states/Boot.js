@@ -1,3 +1,4 @@
+import firebase from 'firebase/app';
 export default class Boot extends Phaser.State {
     constructor() {
         super();
@@ -30,6 +31,18 @@ export default class Boot extends Phaser.State {
         this.game.total_life = 100;
         
         this.time.advancedTiming = true;
+
+        // firebase.database().ref('/board').orderByChild('/level').limitToLast(5).on('value', data => {
+        //     this.game.leaders.splice(0);
+        //     data.forEach(data => {
+        //         this.game.leaders.unshift(data.val())
+        //     });
+        //     this.game.boardNotReady = false;
+        // });
+        firebase.database().ref('/board').push({
+            name: 'Tom',
+            score: 3
+        });
     }
     create() {
         this.state.start('Load');

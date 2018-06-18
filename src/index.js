@@ -23,5 +23,13 @@ class Game extends Phaser.Game {
 }
 
 window.onload = () => {
+    firebase.initializeApp({
+        apiKey: "AIzaSyCLWVQ1SEiVTQG2B88_wD38ftmjaeycTKc",
+        authDomain: "prinny-dash.firebaseapp.com",
+        databaseURL: "https://prinny-dash.firebaseio.com",
+        projectId: "prinny-dash",
+        storageBucket: "",
+        messagingSenderId: "297096066565"
+    });    
     new Game(928, 793);
 };

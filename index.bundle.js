@@ -162,7 +162,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function(firebase) {
 
 var _Boot = __webpack_require__(/*! states/Boot.js */ "./states/Boot.js");
 
@@ -228,8 +228,17 @@ var Game = function (_Phaser$Game) {
 }(Phaser.Game);
 
 window.onload = function () {
+    firebase.initializeApp({
+        apiKey: "AIzaSyCLWVQ1SEiVTQG2B88_wD38ftmjaeycTKc",
+        authDomain: "prinny-dash.firebaseapp.com",
+        databaseURL: "https://prinny-dash.firebaseio.com",
+        projectId: "prinny-dash",
+        storageBucket: "",
+        messagingSenderId: "297096066565"
+    });
     new Game(928, 793);
 };
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! firebase/app */ "../node_modules/firebase/app/dist/index.cjs.js")))
 
 /***/ }),
 
@@ -248,6 +257,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _app = __webpack_require__(/*! firebase/app */ "../node_modules/firebase/app/dist/index.cjs.js");
+
+var _app2 = _interopRequireDefault(_app);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -294,6 +309,18 @@ var Boot = function (_Phaser$State) {
             this.game.total_life = 100;
 
             this.time.advancedTiming = true;
+
+            // firebase.database().ref('/board').orderByChild('/level').limitToLast(5).on('value', data => {
+            //     this.game.leaders.splice(0);
+            //     data.forEach(data => {
+            //         this.game.leaders.unshift(data.val())
+            //     });
+            //     this.game.boardNotReady = false;
+            // });
+            _app2.default.database().ref('/board').push({
+                name: 'Tom',
+                score: 3
+            });
         }
     }, {
         key: 'create',
@@ -488,7 +515,7 @@ var Clear = function (_Phaser$State) {
                 var _cubeGeometry7 = new THREE.BoxGeometry(1, 1, 1);
                 var _cubeMaterial7 = new THREE.MeshStandardMaterial({ color: 0xfff00f });
                 var _cube7 = new THREE.Mesh(_cubeGeometry7, _cubeMaterial7);
-                _cube7.position.x = text_e[_i7][0] + 29;
+                _cube7.position.x = text_e[_i7][0] + 23;
                 _cube7.position.y = text_e[_i7][1] - 6;
                 _cube7.position.z = text_e[_i7][2];
                 group_e.add(_cube7);
@@ -500,7 +527,7 @@ var Clear = function (_Phaser$State) {
                 var _cubeGeometry8 = new THREE.BoxGeometry(1, 1, 1);
                 var _cubeMaterial8 = new THREE.MeshStandardMaterial({ color: 0xfff00f });
                 var _cube8 = new THREE.Mesh(_cubeGeometry8, _cubeMaterial8);
-                _cube8.position.x = text_a[_i8][0] + 23;
+                _cube8.position.x = text_a[_i8][0] + 29;
                 _cube8.position.y = text_a[_i8][1] - 6;
                 _cube8.position.z = text_a[_i8][2];
                 group_a.add(_cube8);
@@ -560,7 +587,7 @@ exports.default = Clear;
 
 
 Object.defineProperty(exports, "__esModule", {
-        value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -572,110 +599,112 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Load = function (_Phaser$State) {
-        _inherits(Load, _Phaser$State);
+    _inherits(Load, _Phaser$State);
 
-        function Load() {
-                _classCallCheck(this, Load);
+    function Load() {
+        _classCallCheck(this, Load);
 
-                return _possibleConstructorReturn(this, (Load.__proto__ || Object.getPrototypeOf(Load)).call(this));
+        return _possibleConstructorReturn(this, (Load.__proto__ || Object.getPrototypeOf(Load)).call(this));
+    }
+
+    _createClass(Load, [{
+        key: 'preload',
+        value: function preload() {
+            this.load.baseURL = 'src/assets/';
+
+            this.load.audio('melo00', 'audio/system00_melo00.wav');
+            this.load.audio('melo01', 'audio/system00_melo01.wav');
+            this.load.audio('melo02', 'audio/system00_melo02.wav');
+            this.load.audio('melo03', 'audio/system00_melo03.wav');
+
+            this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
+
+            this.load.image('tileset', 'map/tileset.png');
+            this.load.tilemap('map', 'map/map.json', null, Phaser.Tilemap.TILED_JSON);
+
+            this.load.image('Minimap_02', 'image/Minimap/Minimap_02.png');
+
+            this.load.image('Menu_Layer00', 'image/Menu/Menu_Layer_00.png');
+            this.load.image('Menu_Layer01', 'image/Menu/Menu_Layer_01.png');
+            this.load.image('Menu_Layer02', 'image/Menu/Menu_Layer_02.png');
+            this.load.image('Menu_Layer03', 'image/Menu/Menu_Layer_03.png');
+            this.load.image('Menu_Layer04', 'image/Menu/Menu_Layer_04.png');
+            this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
+            this.load.image('prist', 'image/Menu/prist.png');
+            this.load.image('info_back', 'image/Menu/info_back.png');
+            this.load.image('talk', 'image/Menu/talk.png');
+            this.load.spritesheet('bookgirl', 'image/Menu/bookgirlset.png', 66, 84);
+            this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
+            this.load.spritesheet('saveboy', 'image/Menu/saveset.png', 78, 119);
+            this.load.spritesheet('exitdoor', 'image/Menu/exitdoor.png', 58, 94);
+
+            this.load.image('Map01_Layer00', 'image/Map01/Map01_Layer00.png');
+            this.load.image('Map01_Layer01', 'image/Map01/Map01_Layer01.png');
+            this.load.image('Map01_Layer02', 'image/Map01/Map01_Layer02.png');
+            this.load.image('Map01_Layer03', 'image/Map01/Map01_Layer03.png');
+            this.load.image('Map01_Layer04', 'image/Map01/Map01_Layer04.png');
+            this.load.image('Map01_Layer05', 'image/Map01/Map01_Layer05.png');
+            this.load.image('Boundary', 'image/Map01/Boundary.png');
+
+            this.load.spritesheet('Map02_Layer0', 'image/Map02/Map02_Layer0.png', 950, 793);
+            this.load.spritesheet('Map02_Layer1', 'image/Map02/Map02_Layer1.png', 950, 793);
+            this.load.spritesheet('Map02_Layer2', 'image/Map02/Map02_Layer2.png', 950, 793);
+            this.load.spritesheet('Map02_Layer3', 'image/Map02/Map02_Layer3.png', 950, 793);
+            this.load.spritesheet('Map02_Layer4', 'image/Map02/Map02_Layer4.png', 950, 793);
+            this.load.image('HiddenBlock', 'image/Map02/HiddenBlock.png');
+
+            this.load.image('Particle00', 'image/Particle/Particle00.png');
+            this.load.image('Particle01', 'image/Particle/Particle01.png');
+            this.load.image('Particle02', 'image/Particle/Particle02.png');
+            this.load.image('Particle03', 'image/Particle/Particle03.png');
+            this.load.spritesheet('Mouse_Drag', 'image/Mouse_Drag.png', 160, 112);
+
+            this.load.spritesheet('Player00', 'image/Player/Player00.png', 45, 45);
+            this.load.spritesheet('Player01', 'image/Player/Player01.png', 45, 50);
+
+            this.load.spritesheet('Enemy00', 'image/Enemy/Enemy00.png', 31, 39);
+            this.load.spritesheet('Enemy01', 'image/Enemy/Enemy01.png', 45, 44);
+            this.load.spritesheet('Enemy02', 'image/Enemy/Enemy02.png', 42, 50);
+            this.load.spritesheet('Enemy03', 'image/Enemy/Enemy03.png', 40, 46);
+
+            this.load.spritesheet('Gravity00', 'image/Gravity/Gravity00.png', 40, 35);
+            this.load.spritesheet('Gravity01', 'image/Gravity/Gravity01.png', 40, 35);
+
+            this.load.image('Obstacle00', 'image/Obstacle/Obstacle00.png');
+            this.load.image('Obstacle01', 'image/Obstacle/Obstacle01.png');
+
+            this.load.image('Percentage_Back', 'image/Percentage/Percentage_Back.png');
+            this.load.image('Percentage_Front', 'image/Percentage/Percentage_Front.png');
+
+            this.load.image('Boss_Gate00', 'image/Boss_Gate/Boss_Gate00.png');
+            this.load.image('Boss_Gate01', 'image/Boss_Gate/Boss_Gate01.png');
+            this.load.image('Boss_Gate02', 'image/Boss_Gate/Boss_Gate02.png');
+            this.load.image('Boss_Gate03', 'image/Boss_Gate/Boss_Gate03.png');
+            this.load.image('Boss_Gate04', 'image/Boss_Gate/Boss_Gate04.png');
+            this.load.spritesheet('Boss_Gate_Sign00', 'image/Boss_Gate/Boss_Gate_Sign00.png', 54, 54);
+            this.load.spritesheet('Boss_Gate_Sign01', 'image/Boss_Gate/Boss_Gate_Sign01.png', 54, 40);
+
+            this.load.spritesheet('Boss00', 'image/Boss/Boss00.png', 400, 400);
+            this.load.spritesheet('Boss01', 'image/Boss/Boss01.png', 340, 400);
+
+            this.load.image('HP_Front', 'image/HP/HP_Front.png');
+            this.load.image('HP_Back', 'image/HP/HP_Back.png');
+
+            this.load.image('Target_Large00', 'image/Target/Target_Large00.png');
+            this.load.image('Target_Large01', 'image/Target/Target_Large01.png');
+
+            this.load.image('LifeIcon', 'image/Icon/LifeIcon.png');
+
+            this.load.image('favicon', 'image/Icon/favicon.png');
         }
+    }, {
+        key: 'create',
+        value: function create() {
+            this.state.start('Start');
+        }
+    }]);
 
-        _createClass(Load, [{
-                key: 'preload',
-                value: function preload() {
-                        this.load.baseURL = 'src/assets/';
-
-                        this.load.audio('melo00', 'audio/system00_melo00.wav');
-                        this.load.audio('melo01', 'audio/system00_melo01.wav');
-                        this.load.audio('melo02', 'audio/system00_melo02.wav');
-                        this.load.audio('melo03', 'audio/system00_melo03.wav');
-
-                        this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
-
-                        this.load.image('tileset', 'map/tileset.png');
-                        this.load.tilemap('map', 'map/map.json', null, Phaser.Tilemap.TILED_JSON);
-
-                        this.load.image('Minimap_02', 'image/Minimap/Minimap_02.png');
-
-                        this.load.image('Menu_Layer00', 'image/Menu/Menu_Layer_00.png');
-                        this.load.image('Menu_Layer01', 'image/Menu/Menu_Layer_01.png');
-                        this.load.image('Menu_Layer02', 'image/Menu/Menu_Layer_02.png');
-                        this.load.image('Menu_Layer03', 'image/Menu/Menu_Layer_03.png');
-                        this.load.image('Menu_Layer04', 'image/Menu/Menu_Layer_04.png');
-                        this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
-                        this.load.image('prist', 'image/Menu/prist.png');
-                        this.load.image('info_back', 'image/Menu/info_back.png');
-                        this.load.image('talk', 'image/Menu/talk.png');
-                        this.load.spritesheet('bookgirl', 'image/Menu/bookgirlset.png', 66, 84);
-                        this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
-                        this.load.spritesheet('saveboy', 'image/Menu/saveset.png', 78, 119);
-                        this.load.spritesheet('exitdoor', 'image/Menu/exitdoor.png', 58, 94);
-
-                        this.load.image('Map01_Layer00', 'image/Map01/Map01_Layer00.png');
-                        this.load.image('Map01_Layer01', 'image/Map01/Map01_Layer01.png');
-                        this.load.image('Map01_Layer02', 'image/Map01/Map01_Layer02.png');
-                        this.load.image('Map01_Layer03', 'image/Map01/Map01_Layer03.png');
-                        this.load.image('Map01_Layer04', 'image/Map01/Map01_Layer04.png');
-                        this.load.image('Map01_Layer05', 'image/Map01/Map01_Layer05.png');
-                        this.load.image('Boundary', 'image/Map01/Boundary.png');
-
-                        this.load.spritesheet('Map02_Layer0', 'image/Map02/Map02_Layer0.png', 950, 793);
-                        this.load.spritesheet('Map02_Layer1', 'image/Map02/Map02_Layer1.png', 950, 793);
-                        this.load.spritesheet('Map02_Layer2', 'image/Map02/Map02_Layer2.png', 950, 793);
-                        this.load.spritesheet('Map02_Layer3', 'image/Map02/Map02_Layer3.png', 950, 793);
-                        this.load.spritesheet('Map02_Layer4', 'image/Map02/Map02_Layer4.png', 950, 793);
-
-                        this.load.image('Particle00', 'image/Particle/Particle00.png');
-                        this.load.image('Particle01', 'image/Particle/Particle01.png');
-                        this.load.image('Particle02', 'image/Particle/Particle02.png');
-                        this.load.image('Particle03', 'image/Particle/Particle03.png');
-                        this.load.spritesheet('Mouse_Drag', 'image/Mouse_Drag.png', 160, 112);
-
-                        this.load.spritesheet('Player00', 'image/Player/Player00.png', 45, 45);
-                        this.load.spritesheet('Player01', 'image/Player/Player01.png', 45, 50);
-
-                        this.load.spritesheet('Enemy00', 'image/Enemy/Enemy00.png', 31, 39);
-                        this.load.spritesheet('Enemy01', 'image/Enemy/Enemy01.png', 45, 44);
-                        this.load.spritesheet('Enemy02', 'image/Enemy/Enemy02.png', 42, 50);
-                        this.load.spritesheet('Enemy03', 'image/Enemy/Enemy03.png', 40, 46);
-
-                        this.load.spritesheet('Gravity00', 'image/Gravity/Gravity00.png', 40, 35);
-                        this.load.spritesheet('Gravity01', 'image/Gravity/Gravity01.png', 40, 35);
-
-                        this.load.image('Obstacle00', 'image/Obstacle/Obstacle00.png');
-                        this.load.image('Obstacle01', 'image/Obstacle/Obstacle01.png');
-
-                        this.load.image('Percentage_Back', 'image/Percentage/Percentage_Back.png');
-                        this.load.image('Percentage_Front', 'image/Percentage/Percentage_Front.png');
-
-                        this.load.image('Boss_Gate00', 'image/Boss_Gate/Boss_Gate00.png');
-                        this.load.image('Boss_Gate01', 'image/Boss_Gate/Boss_Gate01.png');
-                        this.load.image('Boss_Gate02', 'image/Boss_Gate/Boss_Gate02.png');
-                        this.load.image('Boss_Gate03', 'image/Boss_Gate/Boss_Gate03.png');
-                        this.load.image('Boss_Gate04', 'image/Boss_Gate/Boss_Gate04.png');
-                        this.load.spritesheet('Boss_Gate_Sign00', 'image/Boss_Gate/Boss_Gate_Sign00.png', 54, 54);
-                        this.load.spritesheet('Boss_Gate_Sign01', 'image/Boss_Gate/Boss_Gate_Sign01.png', 54, 40);
-
-                        this.load.spritesheet('Boss00', 'image/Boss/Boss00.png', 400, 400);
-
-                        this.load.image('HP_Front', 'image/HP/HP_Front.png');
-                        this.load.image('HP_Back', 'image/HP/HP_Back.png');
-
-                        this.load.image('Target_Large00', 'image/Target/Target_Large00.png');
-                        this.load.image('Target_Large01', 'image/Target/Target_Large01.png');
-
-                        this.load.image('LifeIcon', 'image/Icon/LifeIcon.png');
-
-                        this.load.image('favicon', 'image/Icon/favicon.png');
-                }
-        }, {
-                key: 'create',
-                value: function create() {
-                        this.state.start('Menu');
-                }
-        }]);
-
-        return Load;
+    return Load;
 }(Phaser.State);
 
 exports.default = Load;
@@ -716,7 +745,6 @@ var Menu = function (_Phaser$State) {
     _createClass(Menu, [{
         key: 'create',
         value: function create() {
-
             this.create_layer_0();
             this.create_layer_1();
             this.create_layer_2();
@@ -812,9 +840,11 @@ var Menu = function (_Phaser$State) {
             this.talk_sign_pumpgirl.mask.beginFill(0x000000);
             this.talk_sign_pumpgirl.mask.drawRect(0, -33, 45, 33);
             this.talk_sign_pumpgirl.btns = {
-                'player1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', 'Player 1 (Beginner)'),
-                'player2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', 'Player 2 (Advanced)')
+                'player1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', 'Prinny'),
+                'player2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', 'Prince')
             };
+            this.talk_sign_pumpgirl.btns.player1.tint = 0x331111;
+            this.talk_sign_pumpgirl.btns.player2.tint = 0x331111;
             this.talk_sign_pumpgirl.btns.player1.anchor.set(0.5, 0);
             this.talk_sign_pumpgirl.btns.player2.anchor.set(0.5, 0);
             this.talk_sign_pumpgirl.btns.player1.visible = false;
@@ -866,6 +896,8 @@ var Menu = function (_Phaser$State) {
                 'stage1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', 'Stage 1 (Beginner)'),
                 'stage2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', 'Stage 2 (Advanced)')
             };
+            this.talk_sign_exitdoor.btns.stage1.tint = 0x331111;
+            this.talk_sign_exitdoor.btns.stage2.tint = 0x331111;
             this.talk_sign_exitdoor.btns.stage1.anchor.set(0.5, 0);
             this.talk_sign_exitdoor.btns.stage2.anchor.set(0.5, 0);
             this.talk_sign_exitdoor.btns.stage1.visible = false;
@@ -944,7 +976,23 @@ var Menu = function (_Phaser$State) {
             this.mouse_drag.frame = 0;
             this.mouse_drag.alpha = 0;
 
-            this.player = this.add.sprite(500, 500, 'Player00');
+            if (this.game.player_choice == 0) {
+                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+                this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
+                this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
+                this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
+                this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
+                this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            } else {
+                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+                this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
+                this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
+                this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
+                this.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
+                this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            }
             this.physics.arcade.enable(this.player);
             this.player.body.collideWorldBounds = true;
             this.player.is_touching = false;
@@ -952,12 +1000,6 @@ var Menu = function (_Phaser$State) {
             this.player.anchor.set(0.5);
             this.player.angle = 0;
             this.player.body.gravity.y = 300;
-            this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
-            this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
-            this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
-            this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
-            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
-            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
             this.player.inputEnabled = true;
             this.player.events.onInputDown.add(function (sprite, pointer) {
                 if (!_this3.game.mouse.is_down) {
@@ -1005,6 +1047,30 @@ var Menu = function (_Phaser$State) {
                 _this3.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
                 _this3.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
                 _this3.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            });
+            this.talk_sign_pumpgirl.btns.player1.events.onInputOver.add(function () {
+                _this3.add.tween(_this3.talk_sign_pumpgirl.btns.player1).to({ fontSize: 22 }, 100).start();
+            });
+            this.talk_sign_pumpgirl.btns.player2.events.onInputOver.add(function () {
+                _this3.add.tween(_this3.talk_sign_pumpgirl.btns.player2).to({ fontSize: 22 }, 100).start();
+            });
+            this.talk_sign_pumpgirl.btns.player1.events.onInputOut.add(function () {
+                _this3.add.tween(_this3.talk_sign_pumpgirl.btns.player1).to({ fontSize: 20 }, 100).start();
+            });
+            this.talk_sign_pumpgirl.btns.player2.events.onInputOut.add(function () {
+                _this3.add.tween(_this3.talk_sign_pumpgirl.btns.player2).to({ fontSize: 20 }, 100).start();
+            });
+            this.talk_sign_exitdoor.btns.stage1.events.onInputOver.add(function () {
+                _this3.add.tween(_this3.talk_sign_exitdoor.btns.stage1).to({ fontSize: 22 }, 100).start();
+            });
+            this.talk_sign_exitdoor.btns.stage2.events.onInputOver.add(function () {
+                _this3.add.tween(_this3.talk_sign_exitdoor.btns.stage2).to({ fontSize: 22 }, 100).start();
+            });
+            this.talk_sign_exitdoor.btns.stage1.events.onInputOut.add(function () {
+                _this3.add.tween(_this3.talk_sign_exitdoor.btns.stage1).to({ fontSize: 20 }, 100).start();
+            });
+            this.talk_sign_exitdoor.btns.stage2.events.onInputOut.add(function () {
+                _this3.add.tween(_this3.talk_sign_exitdoor.btns.stage2).to({ fontSize: 20 }, 100).start();
             });
 
             this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
@@ -2474,6 +2540,9 @@ var Stage1 = function (_Phaser$State) {
             if (this.player.body.touching.none) {
                 this.player.is_touching = false;
             }
+            if (this.game.total_life < 0.1) {
+                this.state.start('Over');
+            }
         }
     }, {
         key: 'handle_gravity',
@@ -2544,9 +2613,6 @@ var Stage1 = function (_Phaser$State) {
             if (!player.is_touching) {
                 this.game.total_life -= 2;
                 player.is_touching = true;
-            }
-            if (this.game.total_life < 0.1) {
-                this.state.start('Over');
             }
         }
     }, {
@@ -2639,11 +2705,13 @@ var Stage2 = function (_Phaser$State) {
             this.create_layer_1();
             this.create_layer_2();
             this.create_layer_3();
-            this.create_map();
             this.create_sign_layer();
             this.create_main_layer();
-            this.create_layer_4();
             this.create_enemy_layer();
+            this.create_map();
+            this.create_layer_4();
+            this.create_bullet_layer();
+            this.create_boss_layer();
             this.create_minimap_layer();
             this.create_board_layer();
             this.audio = {
@@ -2659,13 +2727,19 @@ var Stage2 = function (_Phaser$State) {
             this.tween_down = this.add.tween(this.player).to({ angle: 180 }, 250);
             this.tween_up = this.add.tween(this.player).to({ angle: 0 }, 250);
             this.destroy_emitter = this.add.group();
-            this.stage.backgroundColor = '#ffffff';
+            this.boss.move_effect = null;
+            this.boss.last_time = 0;
+            this.is_boss_state = false;
         }
     }, {
         key: 'create_layer_0',
         value: function create_layer_0() {
             this.layer_0 = this.add.image(0, 0, 'Map02_Layer0');
             this.layer_0.fixedToCamera = true;
+            this.purple = this.add.graphics(0, 0);
+            this.purple.beginFill(0x330033).drawRect(0, 0, 928, 793);
+            this.purple.alpha = 0;
+            this.purple.fixedToCamera = true;;
         }
     }, {
         key: 'create_layer_1',
@@ -2706,20 +2780,12 @@ var Stage2 = function (_Phaser$State) {
             this.layer_3.setAll('alpha', 0.75);
         }
     }, {
-        key: 'create_map',
-        value: function create_map() {
-            this.map = this.add.tilemap('map');
-            this.map.addTilesetImage('tileset');
-            this.map_layer = this.map.createLayer('Layer 1');
-            this.map_layer.resizeWorld();
-            this.map.setCollisionBetween(1, 76);
-        }
-    }, {
         key: 'create_sign_layer',
         value: function create_sign_layer() {
             this.sign_layer = this.add.group();
-            var x = 96 * 45,
-                y = 96 * 45;
+
+            var x = 4605,
+                y = 4325;
             this.boss_gate = {
                 'back': this.add.sprite(x + 63, y + 85, 'Boss_Gate03'),
                 'down': this.add.sprite(x, y, 'Boss_Gate02'),
@@ -2732,7 +2798,7 @@ var Stage2 = function (_Phaser$State) {
             this.boss_gate.door.body.setSize(46, 63, 34, 52);
 
             this.boss_gate.back.anchor.set(0.5);
-            this.boss_gate.back.mask = this.add.graphics(x + 63, x + 85);
+            this.boss_gate.back.mask = this.add.graphics(x + 63, y + 85);
             this.boss_gate.back.mask.anchor.set(0.5);
             this.boss_gate.back.mask.beginFill(0x000000);
             this.boss_gate.back.mask.drawRect(-42.5, -52.5, 85, 105);
@@ -2751,18 +2817,19 @@ var Stage2 = function (_Phaser$State) {
             this.boss_gate.down_effect = this.add.tween(this.boss_gate.down).to({ y: y + 200 }, 1500);
             this.boss_gate.back_effect = this.add.tween(this.boss_gate.back).to({ angle: 360 }, 4000).loop();
 
-            this.boss_gate_sign_bloom = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+            x = 4355, y = 4485;
+            this.boss_gate_sign_bloom = this.add.sprite(x, y, 'Boss_Gate_Sign01');
             this.boss_gate_sign_bloom.anchor.set(0.5);
             this.boss_gate_sign_bloom.alpha = 0.7;
             this.boss_gate_sign_bloom.frame = 2;
             this.boss_gate_sign_bloom.bloom_effect = this.add.tween(this.boss_gate_sign_bloom).to({ alpha: 0.1 }, 750).yoyo(true).loop().start();
 
-            this.boss_gate_sign = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+            this.boss_gate_sign = this.add.sprite(x, y, 'Boss_Gate_Sign01');
             this.physics.arcade.enable(this.boss_gate_sign);
             this.boss_gate_sign.body.immovable = true;
             this.boss_gate_sign.anchor.set(0.5);
 
-            this.boss_gate_sign00 = this.add.sprite(x + 530, y - 60 - 42, 'Boss_Gate_Sign00');
+            this.boss_gate_sign00 = this.add.sprite(x, y - 42, 'Boss_Gate_Sign00');
             this.boss_gate_sign00.anchor.set(0.5);
             this.boss_gate_sign00.animations.add('default', [0, 1, 2], 3, true);
             this.boss_gate_sign00.play('default');
@@ -2798,20 +2865,32 @@ var Stage2 = function (_Phaser$State) {
 
             this.init_pos = [{ x: 22, y: 25 }, { x: 208, y: 12 }, { x: 202, y: 150 }, { x: 26, y: 172 }, { x: 26, y: 172 }];
             var r = Math.floor(Math.random() * 4);
-            // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
-            this.player = this.add.sprite(101 * 45, 95 * 45, 'Player00');
+
+            if (this.game.player_choice == 0) {
+                // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
+                this.player = this.add.sprite(112 * 45, 84 * 45, 'Player00');
+                this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
+                this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
+                this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
+                this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
+                this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            } else {
+                // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player01');
+                this.player = this.add.sprite(112 * 45, 84 * 45, 'Player01');
+                this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
+                this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
+                this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
+                this.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
+                this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            }
             this.physics.arcade.enable(this.player);
             this.player.is_touching = false;
             this.player.body.bounce.set(0.3);
             this.player.anchor.set(0.5);
             this.player.angle = 0;
             this.player.body.gravity.y = 300;
-            this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
-            this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
-            this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
-            this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
-            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
-            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
             this.player.inputEnabled = true;
             this.player.events.onInputDown.add(function (sprite, pointer) {
                 if (!_this2.game.mouse.is_down) {
@@ -2844,6 +2923,20 @@ var Stage2 = function (_Phaser$State) {
             this.main_layer.addMultiple([this.mouse_drag, this.player, this.gravity_0, this.gravity_1]);
         }
     }, {
+        key: 'create_map',
+        value: function create_map() {
+            this.map = this.add.tilemap('map');
+            this.map.addTilesetImage('tileset');
+            this.map_layer = this.map.createLayer('Layer 1');
+            this.map_layer.resizeWorld();
+            this.map.setCollisionByExclusion(Array.from(Array(70 - 58 + 1).keys()).map(function (t) {
+                return t + 58;
+            }));
+
+            this.hidden_block = this.add.sprite(100 * 45, 87 * 45, 'HiddenBlock');
+            this.physics.arcade.enable(this.hidden_block);
+        }
+    }, {
         key: 'create_layer_4',
         value: function create_layer_4() {
             this.layer_4 = this.add.group();
@@ -2861,13 +2954,55 @@ var Stage2 = function (_Phaser$State) {
         value: function create_enemy_layer() {
             this.enemy_layer = this.add.physicsGroup(Phaser.Physics.ARCADE);
             for (var i = 0; i < 4; ++i) {
-                for (var j = 0; j < this.game.total_enemies * 4; ++j) {
+                for (var j = 0; j < this.game.total_enemies * 10; ++j) {
                     var enemy = this.enemy_layer.create(Math.random() * 9900, Math.random() * 8100, 'Enemy0' + i);
                     enemy.anchor.set(0.5);
                     enemy.angle = -90 + Math.random() * 180;
                 }
             }
             this.enemy_layer.setAll('body.gravity.y', 300);
+        }
+    }, {
+        key: 'create_bullet_layer',
+        value: function create_bullet_layer() {
+            this.bullet_layer = this.add.group();
+        }
+    }, {
+        key: 'create_boss_layer',
+        value: function create_boss_layer() {
+            this.boss_HP = {
+                'back': this.add.sprite(this.game.width * 0.06, this.game.height - 20, 'HP_Back'),
+                'front': this.add.sprite(this.game.width * 0.06, this.game.height - 20, 'HP_Front')
+            };
+            this.boss_HP.front.anchor.set(0, 0.5);
+            this.boss_HP.back.anchor.set(0, 0.5);
+
+            this.boss_HP.front.mask = this.add.graphics(this.game.width * 0.06, this.game.height - 20);
+            this.boss_HP.front.mask.beginFill(0xffffff);
+            this.boss_HP.front.mask.anchor.set(0, 0.5);
+            this.boss_HP.front.mask.drawRect(0, -15, 800, 30);
+
+            this.boss_HP.front.visible = false;
+            this.boss_HP.back.visible = false;
+
+            this.boss = this.add.sprite(this.player.x, this.player.y - 250, 'Boss01');
+            this.physics.arcade.enable(this.boss);
+            this.boss.body.setSize(250, 200, 45, 150);
+            this.boss.anchor.set(0.5);
+            this.boss.body.immovable = true;
+            this.boss.animations.add('walk', Array.from(Array(10).keys()), 3, true);
+            this.boss.animations.add('attack', Array.from(Array(6).keys()).map(function (x) {
+                return x + 11;
+            }), 8, false);
+            this.boss.visible = false;
+            this.boss.hp = 100;
+
+            this.boss_HP.front.fixedToCamera = true;
+            this.boss_HP.back.fixedToCamera = true;
+            this.boss_HP.front.mask.fixedToCamera = true;
+
+            // this.boss_layer = this.add.group();
+            // this.boss_layer.addMultiple([this.boss_HP, this.boss]);
         }
     }, {
         key: 'create_minimap_layer',
@@ -2955,44 +3090,89 @@ var Stage2 = function (_Phaser$State) {
     }, {
         key: 'update',
         value: function update() {
+            var _this3 = this;
+
             var cur_time = this.time.now;
 
             // Physics Controller
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            if (this.is_boss_state) {
+                if (!this.game.mouse.is_down) {
+                    var _iteratorNormalCompletion = true;
+                    var _didIteratorError = false;
+                    var _iteratorError = undefined;
+
+                    try {
+                        for (var _iterator = this.bullet_layer.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                            var child = _step.value;
+
+                            // if (this.board[`Enemy${child.key.substring(5, 7)}Ratio`].total_clear >= this.game.total_enemies) {
+                            this.physics.arcade.overlap(this.player, child, this.handle_player_hit.bind(this));
+                            this.physics.arcade.overlap(this.player, child, this.handle_destroy_bullet.bind(this));
+                            // } else {
+                            //     this.physics.arcade.collide(this.player, child, (player, child) => child.hit = true);
+                            // }
+                        }
+                    } catch (err) {
+                        _didIteratorError = true;
+                        _iteratorError = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion && _iterator.return) {
+                                _iterator.return();
+                            }
+                        } finally {
+                            if (_didIteratorError) {
+                                throw _iteratorError;
+                            }
+                        }
+                    }
+                }
+                this.physics.arcade.overlap(this.boss, this.bullet_layer, this.handle_boss_hit.bind(this));
+            }
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
             try {
-                for (var _iterator = this.enemy_layer.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var child = _step.value;
+                for (var _iterator2 = this.enemy_layer.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var _child = _step2.value;
 
-                    if (this.board['Enemy' + child.key.substring(5, 7) + 'Ratio'].total_clear >= this.game.total_enemies) {
-                        this.physics.arcade.collide(this.player, child, this.handle_obstacle_hit.bind(this));
+                    if (this.board['Enemy' + _child.key.substring(5, 7) + 'Ratio'].total_clear >= this.game.total_enemies) {
+                        this.physics.arcade.collide(this.player, _child, this.handle_obstacle_hit.bind(this));
                     } else {
-                        this.physics.arcade.overlap(this.player, child, this.handle_enemy_hit.bind(this));
+                        this.physics.arcade.overlap(this.player, _child, this.handle_enemy_hit.bind(this));
                     }
                 }
             } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
                     }
                 } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
                     }
                 }
             }
 
-            this.physics.arcade.collide(this.player, [this.main_layer], this.handle_gravity.bind(this));
-            this.physics.arcade.collide(this.player, [this.map_layer, this.map], this.handle_gravity.bind(this));
+            this.physics.arcade.collide(this.player, [this.main_layer, this.map_layer, this.map], this.handle_gravity.bind(this));
             this.physics.arcade.collide(this.enemy_layer, [this.map_layer, this.map]);
             this.physics.arcade.collide(this.enemy_layer);
             this.physics.arcade.collide(this.player, this.boss_gate_sign, this.handle_sign.bind(this));
             this.physics.arcade.overlap(this.player, this.boss_gate.door, this.handle_sign.bind(this));
+            this.physics.arcade.overlap(this.player, this.bullet_layer, this.handle_player_hit.bind(this));
+            this.physics.arcade.overlap(this.player, this.boss, this.handle_player_hit.bind(this));
+
+            this.physics.arcade.overlap(this.hidden_block, this.player, function (block) {
+                _this3.add.tween(_this3.hidden_block).to({ alpha: 0.5 }, 80).start();
+                _this3.hidden_block.last_overlapped = _this3.time.now + 80;
+            });
+            if (this.hidden_block.last_overlapped && this.time.now > this.hidden_block.last_overlapped) {
+                this.add.tween(this.hidden_block).to({ alpha: 1 }, 80).start();
+            }
 
             // Mouse Effect
             var angle = this.math.angleBetween(this.input.activePointer.x, this.input.activePointer.y, this.player.body.position.x + this.player.offsetX - this.camera.x, this.player.body.position.y + this.player.offsetY - this.camera.y);
@@ -3067,52 +3247,21 @@ var Stage2 = function (_Phaser$State) {
                 }
             }
 
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this.layer_1.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var _child = _step2.value;
-
-                    _child.x -= this.player.body.velocity.x * 0.0005;
-                    if (_child.x < this.camera.x - 950 * 2) {
-                        _child.x = this.camera.x + 950 * 2;
-                    } else if (_child.x > this.camera.x + 950 * 2) {
-                        _child.x = this.camera.x - 950 * 2;
-                    }
-                    _child.y = this.camera.y - 793;
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-
             var _iteratorNormalCompletion3 = true;
             var _didIteratorError3 = false;
             var _iteratorError3 = undefined;
 
             try {
-                for (var _iterator3 = this.layer_2.children[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                for (var _iterator3 = this.layer_1.children[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                     var _child2 = _step3.value;
 
-                    _child2.x -= this.player.body.velocity.x * 0.001;
-                    if (_child2.x < this.camera.x - 950) {
-                        _child2.x = this.camera.x + 950;
-                    } else if (_child2.x > this.camera.x + 950) {
-                        _child2.x = this.camera.x - 950;
+                    _child2.x -= this.player.body.velocity.x * 0.0005;
+                    if (_child2.x < this.camera.x - 950 * 2) {
+                        _child2.x = this.camera.x + 950 * 2;
+                    } else if (_child2.x > this.camera.x + 950 * 2) {
+                        _child2.x = this.camera.x - 950 * 2;
                     }
-                    _child2.y = this.camera.y;
+                    _child2.y = this.camera.y - 793;
                 }
             } catch (err) {
                 _didIteratorError3 = true;
@@ -3134,16 +3283,16 @@ var Stage2 = function (_Phaser$State) {
             var _iteratorError4 = undefined;
 
             try {
-                for (var _iterator4 = this.layer_3.children[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                for (var _iterator4 = this.layer_2.children[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                     var _child3 = _step4.value;
 
-                    _child3.x -= this.player.body.velocity.x * 0.005;
+                    _child3.x -= this.player.body.velocity.x * 0.001;
                     if (_child3.x < this.camera.x - 950) {
                         _child3.x = this.camera.x + 950;
                     } else if (_child3.x > this.camera.x + 950) {
                         _child3.x = this.camera.x - 950;
                     }
-                    _child3.y = this.camera.y + 40;
+                    _child3.y = this.camera.y;
                 }
             } catch (err) {
                 _didIteratorError4 = true;
@@ -3165,19 +3314,17 @@ var Stage2 = function (_Phaser$State) {
             var _iteratorError5 = undefined;
 
             try {
-                for (var _iterator5 = this.layer_4.children[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                for (var _iterator5 = this.layer_3.children[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
                     var _child4 = _step5.value;
 
-                    _child4.x -= this.player.body.velocity.x * 0.01;
+                    _child4.x -= this.player.body.velocity.x * 0.005;
                     if (_child4.x < this.camera.x - 950) {
                         _child4.x = this.camera.x + 950;
                     } else if (_child4.x > this.camera.x + 950) {
                         _child4.x = this.camera.x - 950;
                     }
-                    _child4.y = this.camera.y + 770;
+                    _child4.y = this.camera.y + 40;
                 }
-
-                // Update minimap
             } catch (err) {
                 _didIteratorError5 = true;
                 _iteratorError5 = err;
@@ -3189,6 +3336,39 @@ var Stage2 = function (_Phaser$State) {
                 } finally {
                     if (_didIteratorError5) {
                         throw _iteratorError5;
+                    }
+                }
+            }
+
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+                for (var _iterator6 = this.layer_4.children[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var _child5 = _step6.value;
+
+                    _child5.x -= this.player.body.velocity.x * 0.01;
+                    if (_child5.x < this.camera.x - 950) {
+                        _child5.x = this.camera.x + 950;
+                    } else if (_child5.x > this.camera.x + 950) {
+                        _child5.x = this.camera.x - 950;
+                    }
+                    _child5.y = this.camera.y + 770;
+                }
+
+                // Update minimap
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
                     }
                 }
             }
@@ -3211,11 +3391,69 @@ var Stage2 = function (_Phaser$State) {
                 this.board['Enemy0' + _i2 + 'Ratio'].mask.scale.set(percent, 1);
             }
 
+            // Boss functions
+            if (this.is_boss_state) {
+                if (this.boss.hp < 0.01) {
+                    this.state.start('Clear');
+                }
+                this.boss_HP.front.mask.scale.set(this.boss.hp / 100, 1);
+                // Boss attack bahavior
+                if (this.boss.last_time + 5000 < cur_time) {
+                    if (this.player.x > this.boss.x) {
+                        this.boss.animations.play('walk');
+                        this.boss.scale.set(-1, 1);
+                    } else {
+                        this.boss.animations.play('walk');
+                        this.boss.scale.set(1, 1);
+                    }
+
+                    this.boss.last_time = cur_time;
+                    if (this.boss.move_effect) {
+                        this.boss.move_effect.stop();
+                        this.tweens.remove(this.boss.move_effect);
+                    }
+                    this.boss.move_effect = this.add.tween(this.boss).to({ x: this.player.x, y: this.player.y - 250 }, 2000).start();
+                    this.boss.move_effect.onComplete.add(function () {
+                        _this3.tweens.remove(_this3.boss.move_effect);
+                        _this3.boss.animations.play('attack');
+                        setTimeout(function () {
+                            _this3.boss.frame = 2;
+                        }, 1000);
+                        _this3.time.events.repeat(Phaser.Timer.SECOND * 0.75, 3, function () {
+                            for (var _i3 = 0; _i3 < 6; ++_i3) {
+                                var bullet = _this3.add.sprite(_this3.boss.x + (_i3 < 3 ? 136 : -145), _this3.boss.y + 52, 'Enemy0' + Math.floor(Math.random() * 3.99), 0, _this3.bullet_layer);
+                                bullet.angle = -90 + Math.random() * 180;
+                                _this3.physics.arcade.enable(bullet);
+                                bullet.body.mass = 0.25;
+                                bullet.body.bounce.set(1);
+                                bullet.body.velocity.x = (_i3 - (_i3 < 3 ? 1 : 4)) * 80;
+                                bullet.body.velocity.y = 200;
+                                bullet.hit = false;
+                                // if (this.board[`Enemy${bullet.key.substring(5, 7)}Ratio`].total_clear > this.game.total_enemies - 1) {
+                                // bullet.body.immovable = true;
+                                // bullet.body.moves = false;
+                                // }
+                            }
+                        }, _this3);
+                        _this3.world.bringToTop(_this3.bullet_layer);
+                    });
+                }
+                this.bullet_layer.forEach(function (bullet) {
+                    if (bullet.x < _this3.camera.x || bullet.x > _this3.camera.x + 928 || bullet.y < _this3.camera.y || bullet.y > _this3.camera.y + 793) {
+                        bullet.destroy();
+                    }
+                });
+            }
+
             // Life window
             this.life_text.text = 'x' + this.game.total_life;
 
             if (this.player.body.touching.none) {
                 this.player.is_touching = false;
+            }
+
+            if (this.game.total_life < 0.1) {
+                this.state.start('Over');
             }
         }
     }, {
@@ -3234,42 +3472,42 @@ var Stage2 = function (_Phaser$State) {
     }, {
         key: 'handle_enemy_hit',
         value: function handle_enemy_hit(player, enemy) {
-            var _this3 = this;
+            var _this4 = this;
 
             enemy.body.enable = false;
             this.board[enemy.key + 'Ratio'].cover.animations.play('kill');
             var tween = this.add.tween(enemy.scale).to({ x: 1.75, y: 1.75 }, 175).start();
             tween.onComplete.add(function () {
-                if (_this3.counter.lastType == enemy.key) {
-                    _this3.counter.combo += 1;
-                    _this3.audio['melo0' + _this3.counter.combo % 3].play();
+                if (_this4.counter.lastType == enemy.key) {
+                    _this4.counter.combo += 1;
+                    _this4.audio['melo0' + _this4.counter.combo % 3].play();
                 } else {
-                    _this3.counter.combo = 1;
-                    _this3.counter.lastType = enemy.key;
-                    _this3.audio['melo00'].play();
+                    _this4.counter.combo = 1;
+                    _this4.counter.lastType = enemy.key;
+                    _this4.audio['melo00'].play();
                 }
-                _this3.tweens.remove(tween);
-                var particle_size = _this3.counter.combo / 5;
-                var emitter = _this3.add.emitter(enemy.x, enemy.y, particle_size);
+                _this4.tweens.remove(tween);
+                var particle_size = _this4.counter.combo / 5;
+                var emitter = _this4.add.emitter(enemy.x, enemy.y, particle_size);
                 emitter.gravity = 0;
                 emitter.makeParticles('Particle' + enemy.key.substring(5, 7));
                 emitter.setXSpeed(-150, 150);
                 emitter.setYSpeed(-150, 150);
                 emitter.setScale(1, 0.5, 1, 0.5, 800);
                 emitter.start(true, 800, null, particle_size);
-                _this3.destroy_emitter.add(emitter);
-                _this3.enemy_layer.remove(enemy);
+                _this4.destroy_emitter.add(emitter);
+                _this4.enemy_layer.remove(enemy);
                 enemy.destroy();
                 setTimeout(function () {
                     emitter.forEach(function (particle) {
-                        var moveTo = _this3.add.tween(particle).to({ x: _this3.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.x, y: _this3.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.y }, 400).start();
+                        var moveTo = _this4.add.tween(particle).to({ x: _this4.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.x, y: _this4.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.y }, 400).start();
                         moveTo.onComplete.add(function () {
-                            _this3.tweens.remove(moveTo);
+                            _this4.tweens.remove(moveTo);
                         });
                     });
                 }, 200);
                 setTimeout(function () {
-                    _this3.destroy_emitter.remove(emitter);emitter.destroy();
+                    _this4.destroy_emitter.remove(emitter);emitter.destroy();
                 }, 600);
             }, this);
             this.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].total_clear += 1;
@@ -3289,14 +3527,11 @@ var Stage2 = function (_Phaser$State) {
                 this.game.total_life -= 2;
                 player.is_touching = true;
             }
-            if (this.game.total_life < 0.1) {
-                this.state.start('Over');
-            }
         }
     }, {
         key: 'handle_sign',
         value: function handle_sign(player, sign) {
-            var _this4 = this;
+            var _this5 = this;
 
             if (sign.key == 'Boss_Gate_Sign01' && sign.body.touching.up) {
                 this.boss_gate_sign_bloom.bloom_effect.stop();
@@ -3309,23 +3544,62 @@ var Stage2 = function (_Phaser$State) {
                 this.boss_gate.down_effect.start();
                 this.boss_gate.back_effect.start();
                 this.boss_gate.up_effect.onComplete.add(function () {
-                    _this4.boss_gate.valid = true;
-                    _this4.boss_gate.up.mask.destroy();
-                    _this4.boss_gate.up.destroy();
-                    _this4.boss_gate.down.mask.destroy();
-                    _this4.boss_gate.down.destroy();
+                    _this5.boss_gate.valid = true;
+                    _this5.boss_gate.up.mask.destroy();
+                    _this5.boss_gate.up.destroy();
+                    _this5.boss_gate.down.mask.destroy();
+                    _this5.boss_gate.down.destroy();
                 });
                 this.boss_gate.front_effect.start();
+                this.add.tween(this.purple).to({ alpha: 0.6 }, 1000).start();
             } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
                 this.is_boss_state = true;
                 this.boss.visible = true;
                 this.boss.animations.play('walk');
                 this.enemy_layer.removeAll();
                 this.sign_layer.removeAll();
-                this.player.body.bounce.set(0.8);
                 this.boss_HP.front.visible = true;
+                this.boss_HP.front.mask.visible = true;
                 this.boss_HP.back.visible = true;
             }
+        }
+    }, {
+        key: 'handle_boss_hit',
+        value: function handle_boss_hit(boss, bullet, overlap) {
+            if (bullet.hit) {
+                boss.hp -= 5;
+                bullet.destroy();
+            }
+        }
+    }, {
+        key: 'handle_player_hit',
+        value: function handle_player_hit(player) {
+            if (!player.is_touching) {
+                this.game.total_life -= 2;
+                player.is_touching = true;
+            }
+        }
+    }, {
+        key: 'handle_destroy_bullet',
+        value: function handle_destroy_bullet(player, bullet) {
+            var _this6 = this;
+
+            bullet.body.enable = false;
+            this.board[bullet.key + 'Ratio'].cover.animations.play('kill');
+            var tween = this.add.tween(bullet.scale).to({ x: 1.75, y: 1.75 }, 175).start();
+            tween.onComplete.add(function () {
+                if (_this6.counter.lastType == bullet.key) {
+                    _this6.counter.combo += 1;
+                    _this6.audio['melo0' + _this6.counter.combo % 3].play();
+                } else {
+                    _this6.counter.combo = 1;
+                    _this6.counter.lastType = bullet.key;
+                    _this6.audio['melo00'].play();
+                }
+                _this6.tweens.remove(tween);
+                _this6.bullet_layer.remove(bullet);
+                bullet.destroy();
+            }, this);
         }
     }]);
 
@@ -3347,7 +3621,7 @@ exports.default = Stage2;
 
 
 Object.defineProperty(exports, "__esModule", {
-        value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3359,210 +3633,210 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Start = function (_Phaser$State) {
-        _inherits(Start, _Phaser$State);
+    _inherits(Start, _Phaser$State);
 
-        function Start() {
-                _classCallCheck(this, Start);
+    function Start() {
+        _classCallCheck(this, Start);
 
-                return _possibleConstructorReturn(this, (Start.__proto__ || Object.getPrototypeOf(Start)).call(this));
+        return _possibleConstructorReturn(this, (Start.__proto__ || Object.getPrototypeOf(Start)).call(this));
+    }
+
+    _createClass(Start, [{
+        key: 'create',
+        value: function create() {
+            var _this2 = this;
+
+            this.Text3D();
+            this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', 'Click To Start');
+            this.start_text.anchor.set(0.5, 0);
+            this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
+            this.start_text.fontSize = 40;
+            this.start_text.inputEnabled = true;
+            this.start_text.input.useHandCursor = true;
+            this.start_text.events.onInputUp.add(function () {
+                var elem = document.getElementById('dd');
+                elem.parentNode.removeChild(elem);
+                _this2.state.start('Menu');
+            }, this);
         }
+    }, {
+        key: 'Text3D',
+        value: function Text3D() {
+            var width = 928;
+            var height = 600;
 
-        _createClass(Start, [{
-                key: 'create',
-                value: function create() {
-                        var _this2 = this;
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(width, height);
+            renderer.domElement.id = 'dd';
+            renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
+            document.body.appendChild(renderer.domElement);
 
-                        this.Text3D();
-                        this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', 'Click To Start');
-                        this.start_text.anchor.set(0.5, 0);
-                        this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
-                        this.start_text.fontSize = 40;
-                        this.start_text.inputEnabled = true;
-                        this.start_text.input.useHandCursor = true;
-                        this.start_text.events.onInputUp.add(function () {
-                                var elem = document.getElementById('dd');
-                                elem.parentNode.removeChild(elem);
-                                _this2.state.start('Menu');
-                        }, this);
-                }
-        }, {
-                key: 'Text3D',
-                value: function Text3D() {
-                        var width = 928;
-                        var height = 600;
+            var scene = new THREE.Scene();
 
-                        var renderer = new THREE.WebGLRenderer();
-                        renderer.setSize(width, height);
-                        renderer.domElement.id = 'dd';
-                        renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
-                        document.body.appendChild(renderer.domElement);
+            var camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+            camera.position.set(+24, 0, +40);
 
-                        var scene = new THREE.Scene();
+            var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+            scene.add(ambientLight);
 
-                        var camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
-                        camera.position.set(+24, 0, +40);
+            var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
 
-                        var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-                        scene.add(ambientLight);
+            var text_p = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+            var text_r = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [4, 0, 0], [3, 1, 0]];
+            var text_i = [[0, 0, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
+            var text_n = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 3, 0], [2, 2, 0], [3, 1, 0]];
+            var text_y = [[0, 4, 0], [1, 3, 0], [2, 2, 0], [2, 1, 0], [2, 0, 0], [3, 3, 0], [4, 4, 0]];
+            var text_d = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0]];
+            var text_a = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+            var text_s = [[0, 0, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+            var text_h = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0]];
 
-                        var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
-                        directionalLight.position.set(1, 1, 1);
-                        scene.add(directionalLight);
+            var group_p = new THREE.Group();
+            for (var i = 0; i < text_p.length; i++) {
+                var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                cube.position.x = text_p[i][0];
+                cube.position.y = text_p[i][1];
+                cube.position.z = text_p[i][2];
+                group_p.add(cube);
+            }
+            scene.add(group_p);
 
-                        var text_p = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
-                        var text_r = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [4, 0, 0], [3, 1, 0]];
-                        var text_i = [[0, 0, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
-                        var text_n = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 3, 0], [2, 2, 0], [3, 1, 0]];
-                        var text_y = [[0, 4, 0], [1, 3, 0], [2, 2, 0], [2, 1, 0], [2, 0, 0], [3, 3, 0], [4, 4, 0]];
-                        var text_d = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0]];
-                        var text_a = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
-                        var text_s = [[0, 0, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
-                        var text_h = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0]];
+            var group_r = new THREE.Group();
+            for (var _i = 0; _i < text_r.length; _i++) {
+                var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
+                _cube.position.x = text_r[_i][0] + 6;
+                _cube.position.y = text_r[_i][1];
+                _cube.position.z = text_r[_i][2];
+                group_r.add(_cube);
+            }
+            scene.add(group_r);
 
-                        var group_p = new THREE.Group();
-                        for (var i = 0; i < text_p.length; i++) {
-                                var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-                                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-                                cube.position.x = text_p[i][0];
-                                cube.position.y = text_p[i][1];
-                                cube.position.z = text_p[i][2];
-                                group_p.add(cube);
-                        }
-                        scene.add(group_p);
+            var group_i = new THREE.Group();
+            for (var _i2 = 0; _i2 < text_i.length; _i2++) {
+                var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
+                _cube2.position.x = text_i[_i2][0] + 12;
+                _cube2.position.y = text_i[_i2][1];
+                _cube2.position.z = text_i[_i2][2];
+                group_i.add(_cube2);
+            }
+            scene.add(group_i);
 
-                        var group_r = new THREE.Group();
-                        for (var _i = 0; _i < text_r.length; _i++) {
-                                var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
-                                _cube.position.x = text_r[_i][0] + 6;
-                                _cube.position.y = text_r[_i][1];
-                                _cube.position.z = text_r[_i][2];
-                                group_r.add(_cube);
-                        }
-                        scene.add(group_r);
+            var group_n1 = new THREE.Group();
+            for (var _i3 = 0; _i3 < text_n.length; _i3++) {
+                var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
+                _cube3.position.x = text_n[_i3][0] + 18;
+                _cube3.position.y = text_n[_i3][1];
+                _cube3.position.z = text_n[_i3][2];
+                group_n1.add(_cube3);
+            }
+            scene.add(group_n1);
 
-                        var group_i = new THREE.Group();
-                        for (var _i2 = 0; _i2 < text_i.length; _i2++) {
-                                var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
-                                _cube2.position.x = text_i[_i2][0] + 12;
-                                _cube2.position.y = text_i[_i2][1];
-                                _cube2.position.z = text_i[_i2][2];
-                                group_i.add(_cube2);
-                        }
-                        scene.add(group_i);
+            var group_n2 = new THREE.Group();
+            for (var _i4 = 0; _i4 < text_n.length; _i4++) {
+                var _cubeGeometry4 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube4 = new THREE.Mesh(_cubeGeometry4, _cubeMaterial4);
+                _cube4.position.x = text_n[_i4][0] + 24;
+                _cube4.position.y = text_n[_i4][1];
+                _cube4.position.z = text_n[_i4][2];
+                group_n2.add(_cube4);
+            }
+            scene.add(group_n2);
 
-                        var group_n1 = new THREE.Group();
-                        for (var _i3 = 0; _i3 < text_n.length; _i3++) {
-                                var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
-                                _cube3.position.x = text_n[_i3][0] + 18;
-                                _cube3.position.y = text_n[_i3][1];
-                                _cube3.position.z = text_n[_i3][2];
-                                group_n1.add(_cube3);
-                        }
-                        scene.add(group_n1);
+            var group_y = new THREE.Group();
+            for (var _i5 = 0; _i5 < text_y.length; _i5++) {
+                var _cubeGeometry5 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube5 = new THREE.Mesh(_cubeGeometry5, _cubeMaterial5);
+                _cube5.position.x = text_y[_i5][0] + 30;
+                _cube5.position.y = text_y[_i5][1];
+                _cube5.position.z = text_y[_i5][2];
+                group_y.add(_cube5);
+            }
+            scene.add(group_y);
 
-                        var group_n2 = new THREE.Group();
-                        for (var _i4 = 0; _i4 < text_n.length; _i4++) {
-                                var _cubeGeometry4 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube4 = new THREE.Mesh(_cubeGeometry4, _cubeMaterial4);
-                                _cube4.position.x = text_n[_i4][0] + 24;
-                                _cube4.position.y = text_n[_i4][1];
-                                _cube4.position.z = text_n[_i4][2];
-                                group_n2.add(_cube4);
-                        }
-                        scene.add(group_n2);
+            var group_d = new THREE.Group();
+            for (var _i6 = 0; _i6 < text_d.length; _i6++) {
+                var _cubeGeometry6 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial6 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube6 = new THREE.Mesh(_cubeGeometry6, _cubeMaterial6);
+                _cube6.position.x = text_d[_i6][0] + 17;
+                _cube6.position.y = text_d[_i6][1] - 6;
+                _cube6.position.z = text_d[_i6][2];
+                group_d.add(_cube6);
+            }
+            scene.add(group_d);
 
-                        var group_y = new THREE.Group();
-                        for (var _i5 = 0; _i5 < text_y.length; _i5++) {
-                                var _cubeGeometry5 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube5 = new THREE.Mesh(_cubeGeometry5, _cubeMaterial5);
-                                _cube5.position.x = text_y[_i5][0] + 30;
-                                _cube5.position.y = text_y[_i5][1];
-                                _cube5.position.z = text_y[_i5][2];
-                                group_y.add(_cube5);
-                        }
-                        scene.add(group_y);
+            var group_a = new THREE.Group();
+            for (var _i7 = 0; _i7 < text_a.length; _i7++) {
+                var _cubeGeometry7 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial7 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube7 = new THREE.Mesh(_cubeGeometry7, _cubeMaterial7);
+                _cube7.position.x = text_a[_i7][0] + 23;
+                _cube7.position.y = text_a[_i7][1] - 6;
+                _cube7.position.z = text_a[_i7][2];
+                group_a.add(_cube7);
+            }
+            scene.add(group_a);
 
-                        var group_d = new THREE.Group();
-                        for (var _i6 = 0; _i6 < text_d.length; _i6++) {
-                                var _cubeGeometry6 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial6 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube6 = new THREE.Mesh(_cubeGeometry6, _cubeMaterial6);
-                                _cube6.position.x = text_d[_i6][0] + 17;
-                                _cube6.position.y = text_d[_i6][1] - 6;
-                                _cube6.position.z = text_d[_i6][2];
-                                group_d.add(_cube6);
-                        }
-                        scene.add(group_d);
+            var group_s = new THREE.Group();
+            for (var _i8 = 0; _i8 < text_s.length; _i8++) {
+                var _cubeGeometry8 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial8 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube8 = new THREE.Mesh(_cubeGeometry8, _cubeMaterial8);
+                _cube8.position.x = text_s[_i8][0] + 29;
+                _cube8.position.y = text_s[_i8][1] - 6;
+                _cube8.position.z = text_s[_i8][2];
+                group_s.add(_cube8);
+            }
+            scene.add(group_s);
 
-                        var group_a = new THREE.Group();
-                        for (var _i7 = 0; _i7 < text_a.length; _i7++) {
-                                var _cubeGeometry7 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial7 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube7 = new THREE.Mesh(_cubeGeometry7, _cubeMaterial7);
-                                _cube7.position.x = text_a[_i7][0] + 23;
-                                _cube7.position.y = text_a[_i7][1] - 6;
-                                _cube7.position.z = text_a[_i7][2];
-                                group_a.add(_cube7);
-                        }
-                        scene.add(group_a);
+            var group_h = new THREE.Group();
+            for (var _i9 = 0; _i9 < text_h.length; _i9++) {
+                var _cubeGeometry9 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial9 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                var _cube9 = new THREE.Mesh(_cubeGeometry9, _cubeMaterial9);
+                _cube9.position.x = text_h[_i9][0] + 35;
+                _cube9.position.y = text_h[_i9][1] - 6;
+                _cube9.position.z = text_h[_i9][2];
+                group_h.add(_cube9);
+            }
+            scene.add(group_h);
 
-                        var group_s = new THREE.Group();
-                        for (var _i8 = 0; _i8 < text_s.length; _i8++) {
-                                var _cubeGeometry8 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial8 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube8 = new THREE.Mesh(_cubeGeometry8, _cubeMaterial8);
-                                _cube8.position.x = text_s[_i8][0] + 29;
-                                _cube8.position.y = text_s[_i8][1] - 6;
-                                _cube8.position.z = text_s[_i8][2];
-                                group_s.add(_cube8);
-                        }
-                        scene.add(group_s);
+            var render = function render() {
+                var time = new Date();
+                requestAnimationFrame(render);
 
-                        var group_h = new THREE.Group();
-                        for (var _i9 = 0; _i9 < text_h.length; _i9++) {
-                                var _cubeGeometry9 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial9 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                                var _cube9 = new THREE.Mesh(_cubeGeometry9, _cubeMaterial9);
-                                _cube9.position.x = text_h[_i9][0] + 35;
-                                _cube9.position.y = text_h[_i9][1] - 6;
-                                _cube9.position.z = text_h[_i9][2];
-                                group_h.add(_cube9);
-                        }
-                        scene.add(group_h);
+                group_p.rotation.x -= 0.005;
+                group_r.rotation.x -= 0.01;
+                group_i.rotation.x -= 0.015;
+                group_n1.rotation.x -= 0.02;
+                group_n2.rotation.x -= 0.025;
+                group_y.rotation.x -= 0.03;
 
-                        var render = function render() {
-                                var time = new Date();
-                                requestAnimationFrame(render);
+                group_d.rotation.x -= 0.015;
+                group_a.rotation.x -= 0.02;
+                group_s.rotation.x -= 0.025;
+                group_h.rotation.x -= 0.03;
 
-                                group_p.rotation.x -= 0.005;
-                                group_r.rotation.x -= 0.01;
-                                group_i.rotation.x -= 0.015;
-                                group_n1.rotation.x -= 0.02;
-                                group_n2.rotation.x -= 0.025;
-                                group_y.rotation.x -= 0.03;
+                renderer.render(scene, camera);
+                directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
+            };
+            render();
+        }
+    }]);
 
-                                group_d.rotation.x -= 0.015;
-                                group_a.rotation.x -= 0.02;
-                                group_s.rotation.x -= 0.025;
-                                group_h.rotation.x -= 0.03;
-
-                                renderer.render(scene, camera);
-                                directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
-                        };
-                        render();
-                }
-        }]);
-
-        return Start;
+    return Start;
 }(Phaser.State);
 
 exports.default = Start;

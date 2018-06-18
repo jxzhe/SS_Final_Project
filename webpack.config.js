@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const srcPath = path.resolve(__dirname, 'src');
 module.exports = {
@@ -55,6 +56,9 @@ module.exports = {
             favicon: 'assets/image/Icon/favicon.png',
             template: 'index.html',
             hash: true
+        }),
+        new webpack.ProvidePlugin({
+            firebase: 'firebase/app'
         })
     ],
     devServer: {
