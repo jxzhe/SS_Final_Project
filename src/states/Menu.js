@@ -12,28 +12,29 @@ export default class Menu extends Phaser.State {
         this.create_layer_5();
     }
     create_layer_0() {
-        this.layer_0 = this.add.image(0, 0, 'Menu_Layer00');
+        this.layer_0 = this.add.sprite(0, 0, 'Menu_Layer00');
         this.layer_0.fixedToCamera = true;
     }
     create_layer_1() {
-        this.layer_1 = this.add.image(0, 0, 'Menu_Layer01');
+        this.layer_1 = this.add.sprite(0, 0, 'Menu_Layer01');
     }
     create_layer_2() {
-        this.layer_2 = this.add.image(0, 0, 'Menu_Layer02');
+        this.layer_2 = this.add.sprite(0, 0, 'Menu_Layer02');
     }
     create_layer_3() {
-        this.layer_3 = this.add.image(0, 0, 'Menu_Layer03');
+        this.layer_3 = this.add.sprite(0, 0, 'Menu_Layer03');
     }
     create_layer_4() {
         this.border_layer = this.add.group();
         this.border_layer.enableBody = true;
-        this.layer_4 = this.add.image(0, 0, 'Menu_Layer04');
+        this.layer_4 = this.add.sprite(0, 0, 'Menu_Layer04');
         this.physics.arcade.enable(this.layer_4);
+        this.layer_4.body.setSize(1586, 62, 0, 732);
         this.border_layer.addMultiple([this.layer_4]);
         this.border_layer.setAll('body.immovable', true);
     }
     create_layer_5() {
-        this.layer_5 = this.add.image(0, 0, 'Menu_Layer05');
+        this.layer_5 = this.add.sprite(0, 0, 'Menu_Layer05');
     }
     create_main_layer() {
         this.main_layer = this.add.group();

@@ -508,7 +508,6 @@ var Menu = function (_Phaser$State) {
     _createClass(Menu, [{
         key: 'create',
         value: function create() {
-            this.create_layers();
             this.create_layer_0();
             this.create_layer_1();
             this.create_layer_2();
@@ -518,50 +517,48 @@ var Menu = function (_Phaser$State) {
             this.create_layer_5();
         }
     }, {
-        key: 'create_layers',
-        value: function create_layers() {
-            this.border_layer = this.add.group();
-            // this.main_layer = this.add.group();
-        }
-    }, {
         key: 'create_layer_0',
         value: function create_layer_0() {
-            this.layer_0 = this.add.image(0, 0, 'Menu_Layer00');
+            this.layer_0 = this.add.sprite(0, 0, 'Menu_Layer00');
             this.layer_0.fixedToCamera = true;
         }
     }, {
         key: 'create_layer_1',
         value: function create_layer_1() {
-            this.layer_1 = this.add.image(0, 0, 'Menu_Layer01');
+            this.layer_1 = this.add.sprite(0, 0, 'Menu_Layer01');
         }
     }, {
         key: 'create_layer_2',
         value: function create_layer_2() {
-            this.layer_2 = this.add.image(0, 0, 'Menu_Layer02');
+            this.layer_2 = this.add.sprite(0, 0, 'Menu_Layer02');
         }
     }, {
         key: 'create_layer_3',
         value: function create_layer_3() {
-            this.layer_3 = this.add.image(0, 0, 'Menu_Layer03');
+            this.layer_3 = this.add.sprite(0, 0, 'Menu_Layer03');
         }
     }, {
         key: 'create_layer_4',
         value: function create_layer_4() {
+            this.border_layer = this.add.group();
             this.border_layer.enableBody = true;
-            this.layer_4 = this.add.image(0, 0, 'Menu_Layer04');
+            this.layer_4 = this.add.sprite(0, 0, 'Menu_Layer04');
             this.physics.arcade.enable(this.layer_4);
+            this.layer_4.body.setSize(1586, 62, 0, 732);
             this.border_layer.addMultiple([this.layer_4]);
             this.border_layer.setAll('body.immovable', true);
         }
     }, {
         key: 'create_layer_5',
         value: function create_layer_5() {
-            this.layer_5 = this.add.image(0, 0, 'Menu_Layer05');
+            this.layer_5 = this.add.sprite(0, 0, 'Menu_Layer05');
         }
     }, {
         key: 'create_main_layer',
         value: function create_main_layer() {
             var _this2 = this;
+
+            this.main_layer = this.add.group();
 
             this.mouse_drag = this.add.sprite(0, 0, 'Mouse_Drag');
             this.mouse_drag.anchor.set(0.5);
@@ -611,6 +608,8 @@ var Menu = function (_Phaser$State) {
                 _this2.player.body.gravity.y = _this2.player.body.gravity.y > 0 ? 300 : -300;
             }, this);
             this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+
+            this.main_layer.addMultiple([this.mouse_drag, this.player]);
         }
     }, {
         key: 'update',
