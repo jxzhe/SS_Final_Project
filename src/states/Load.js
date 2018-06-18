@@ -15,6 +15,19 @@ export default class Load extends Phaser.State {
 
         this.load.image('Minimap_02', 'image/Minimap/Minimap_02.png');
 
+        this.load.image('Menu_Layer00', 'image/Menu/Menu_Layer_00.png');
+        this.load.image('Menu_Layer01', 'image/Menu/Menu_Layer_01.png');
+        this.load.image('Menu_Layer02', 'image/Menu/Menu_Layer_02.png');
+        this.load.image('Menu_Layer03', 'image/Menu/Menu_Layer_03.png');
+        this.load.image('Menu_Layer04', 'image/Menu/Menu_Layer_04.png');
+        this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
+        this.load.image('prist', 'image/Menu/prist.png');
+        this.load.image('talk', 'image/Menu/talk.png');
+        this.load.spritesheet('bookgirlset', 'image/Menu/bookgirlset.png', 44, 56);
+        this.load.spritesheet('pumpgirlset', 'image/Menu/pumpgirlset.png', 31, 54);
+        this.load.spritesheet('saveset', 'image/Menu/saveset.png', 52, 79);
+
+
         this.load.image('Map01_Layer00', 'image/Map01/Map01_Layer00.png');
         this.load.image('Map01_Layer01', 'image/Map01/Map01_Layer01.png');
         this.load.image('Map01_Layer02', 'image/Map01/Map01_Layer02.png');
