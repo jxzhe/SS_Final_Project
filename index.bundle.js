@@ -176,6 +176,10 @@ var _Menu = __webpack_require__(/*! states/Menu.js */ "./states/Menu.js");
 
 var _Menu2 = _interopRequireDefault(_Menu);
 
+var _Start = __webpack_require__(/*! states/Start.js */ "./states/Start.js");
+
+var _Start2 = _interopRequireDefault(_Start);
+
 var _Stage = __webpack_require__(/*! states/Stage1.js */ "./states/Stage1.js");
 
 var _Stage2 = _interopRequireDefault(_Stage);
@@ -210,6 +214,7 @@ var Game = function (_Phaser$Game) {
 
         _this.state.add('Boot', _Boot2.default);
         _this.state.add('Load', _Load2.default);
+        _this.state.add('Start', _Start2.default);
         _this.state.add('Menu', _Menu2.default);
         _this.state.add('Stage1', _Stage2.default);
         _this.state.add('Stage2', _Stage4.default);
@@ -262,6 +267,7 @@ var Boot = function (_Phaser$State) {
     _createClass(Boot, [{
         key: 'init',
         value: function init() {
+            this.game.player_choice = 0;
             this.game.settings = {
                 border_top_offset_y: 195,
                 border_top_y: 277,
@@ -285,7 +291,7 @@ var Boot = function (_Phaser$State) {
             this.game.total_enemies = 25;
             this.game.time_angle = 0;
             this.game.last_time = 0;
-            this.game.total_life = 1000;
+            this.game.total_life = 100;
 
             this.time.advancedTiming = true;
         }
@@ -335,8 +341,205 @@ var Clear = function (_Phaser$State) {
     }
 
     _createClass(Clear, [{
-        key: "create",
-        value: function create() {}
+        key: 'create',
+        value: function create() {
+            var _this2 = this;
+
+            this.angle = 0;
+            this.Text3D();
+            this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', 'Click To Menu');
+            this.start_text.anchor.set(0.5, 0);
+            this.start_text.fontSize = 40;
+            this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
+            this.start_text.inputEnabled = true;
+            this.start_text.input.useHandCursor = true;
+            this.start_text.events.onInputUp.add(function () {
+                var elem = document.getElementById('cc');
+                elem.parentNode.removeChild(elem);
+                _this2.state.start('Menu');
+            }, this);
+        }
+    }, {
+        key: 'Text3D',
+        value: function Text3D() {
+            var width = 928;
+            var height = 600;
+
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(width, height);
+            renderer.domElement.id = 'cc';
+            renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
+            document.body.appendChild(renderer.domElement);
+
+            var scene = new THREE.Scene();
+
+            var camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+            camera.position.set(+24, 0, +40);
+
+            var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+            scene.add(ambientLight);
+
+            var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+
+            var text_p = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+            var text_r = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [4, 0, 0], [3, 1, 0]];
+            var text_i = [[0, 0, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
+            var text_n = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 3, 0], [2, 2, 0], [3, 1, 0]];
+            var text_y = [[0, 4, 0], [1, 3, 0], [2, 2, 0], [2, 1, 0], [2, 0, 0], [3, 3, 0], [4, 4, 0]];
+            var text_d = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0]];
+            var text_a = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+            var text_s = [[0, 0, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+            var text_h = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0]];
+            var text_q = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [3, 1, 0]];
+            var text_u = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0]];
+            var text_e = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0]];
+            var text_c = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0]];
+            var text_l = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0]];
+            var text_t = [[2, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
+
+            var group_q = new THREE.Group();
+            for (var i = 0; i < text_q.length; i++) {
+                var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0ff0 });
+                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                cube.position.x = text_q[i][0];
+                cube.position.y = text_q[i][1];
+                cube.position.z = text_q[i][2];
+                group_q.add(cube);
+            }
+            scene.add(group_q);
+
+            var group_u = new THREE.Group();
+            for (var _i = 0; _i < text_u.length; _i++) {
+                var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0ff0 });
+                var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
+                _cube.position.x = text_u[_i][0] + 6;
+                _cube.position.y = text_u[_i][1];
+                _cube.position.z = text_u[_i][2];
+                group_u.add(_cube);
+            }
+            scene.add(group_u);
+
+            var group_e1 = new THREE.Group();
+            for (var _i2 = 0; _i2 < text_e.length; _i2++) {
+                var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xff0ff0 });
+                var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
+                _cube2.position.x = text_e[_i2][0] + 12;
+                _cube2.position.y = text_e[_i2][1];
+                _cube2.position.z = text_e[_i2][2];
+                group_e1.add(_cube2);
+            }
+            scene.add(group_e1);
+
+            var group_s = new THREE.Group();
+            for (var _i3 = 0; _i3 < text_s.length; _i3++) {
+                var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xff0ff0 });
+                var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
+                _cube3.position.x = text_s[_i3][0] + 18;
+                _cube3.position.y = text_s[_i3][1];
+                _cube3.position.z = text_s[_i3][2];
+                group_s.add(_cube3);
+            }
+            scene.add(group_s);
+
+            var group_t = new THREE.Group();
+            for (var _i4 = 0; _i4 < text_t.length; _i4++) {
+                var _cubeGeometry4 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0xff0ff0 });
+                var _cube4 = new THREE.Mesh(_cubeGeometry4, _cubeMaterial4);
+                _cube4.position.x = text_t[_i4][0] + 24;
+                _cube4.position.y = text_t[_i4][1];
+                _cube4.position.z = text_t[_i4][2];
+                group_t.add(_cube4);
+            }
+            scene.add(group_t);
+
+            var group_c = new THREE.Group();
+            for (var _i5 = 0; _i5 < text_c.length; _i5++) {
+                var _cubeGeometry5 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0xfff00f });
+                var _cube5 = new THREE.Mesh(_cubeGeometry5, _cubeMaterial5);
+                _cube5.position.x = text_c[_i5][0] + 11;
+                _cube5.position.y = text_c[_i5][1] - 6;
+                _cube5.position.z = text_c[_i5][2];
+                group_c.add(_cube5);
+            }
+            scene.add(group_c);
+
+            var group_l = new THREE.Group();
+            for (var _i6 = 0; _i6 < text_l.length; _i6++) {
+                var _cubeGeometry6 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial6 = new THREE.MeshStandardMaterial({ color: 0xfff00f });
+                var _cube6 = new THREE.Mesh(_cubeGeometry6, _cubeMaterial6);
+                _cube6.position.x = text_l[_i6][0] + 17;
+                _cube6.position.y = text_l[_i6][1] - 6;
+                _cube6.position.z = text_l[_i6][2];
+                group_l.add(_cube6);
+            }
+            scene.add(group_l);
+
+            var group_e = new THREE.Group();
+            for (var _i7 = 0; _i7 < text_e.length; _i7++) {
+                var _cubeGeometry7 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial7 = new THREE.MeshStandardMaterial({ color: 0xfff00f });
+                var _cube7 = new THREE.Mesh(_cubeGeometry7, _cubeMaterial7);
+                _cube7.position.x = text_e[_i7][0] + 29;
+                _cube7.position.y = text_e[_i7][1] - 6;
+                _cube7.position.z = text_e[_i7][2];
+                group_e.add(_cube7);
+            }
+            scene.add(group_e);
+
+            var group_a = new THREE.Group();
+            for (var _i8 = 0; _i8 < text_a.length; _i8++) {
+                var _cubeGeometry8 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial8 = new THREE.MeshStandardMaterial({ color: 0xfff00f });
+                var _cube8 = new THREE.Mesh(_cubeGeometry8, _cubeMaterial8);
+                _cube8.position.x = text_a[_i8][0] + 23;
+                _cube8.position.y = text_a[_i8][1] - 6;
+                _cube8.position.z = text_a[_i8][2];
+                group_a.add(_cube8);
+            }
+            scene.add(group_a);
+
+            var group_r = new THREE.Group();
+            for (var _i9 = 0; _i9 < text_r.length; _i9++) {
+                var _cubeGeometry9 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial9 = new THREE.MeshStandardMaterial({ color: 0xfff00f });
+                var _cube9 = new THREE.Mesh(_cubeGeometry9, _cubeMaterial9);
+                _cube9.position.x = text_r[_i9][0] + 35;
+                _cube9.position.y = text_r[_i9][1] - 6;
+                _cube9.position.z = text_r[_i9][2];
+                group_r.add(_cube9);
+            }
+            scene.add(group_r);
+
+            var render = function () {
+                var time = new Date();
+                requestAnimationFrame(render);
+                this.angle += 0.01;
+
+                group_q.position.x = Math.cos(this.angle) * 1;
+                group_u.position.x = Math.cos(this.angle) * 1;
+                group_e1.position.x = Math.cos(this.angle) * 1;
+                group_s.position.x = Math.cos(this.angle) * 1;
+                group_t.position.x = Math.cos(this.angle) * 1;
+
+                group_c.position.x = Math.cos(this.angle) * 2;
+                group_l.position.x = Math.cos(this.angle) * 2;
+                group_e.position.x = Math.cos(this.angle) * 2;
+                group_a.position.x = Math.cos(this.angle) * 2;
+                group_r.position.x = Math.cos(this.angle) * 2;
+                renderer.render(scene, camera);
+                directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
+            }.bind(this);
+            render();
+        }
     }]);
 
     return Clear;
@@ -387,6 +590,8 @@ var Load = function (_Phaser$State) {
                         this.load.audio('melo02', 'audio/system00_melo02.wav');
                         this.load.audio('melo03', 'audio/system00_melo03.wav');
 
+                        this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
+
                         this.load.image('tileset', 'map/tileset.png');
                         this.load.tilemap('map', 'map/map.json', null, Phaser.Tilemap.TILED_JSON);
 
@@ -399,6 +604,7 @@ var Load = function (_Phaser$State) {
                         this.load.image('Menu_Layer04', 'image/Menu/Menu_Layer_04.png');
                         this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
                         this.load.image('prist', 'image/Menu/prist.png');
+                        this.load.image('info_back', 'image/Menu/info_back.png');
                         this.load.image('talk', 'image/Menu/talk.png');
                         this.load.spritesheet('bookgirl', 'image/Menu/bookgirlset.png', 66, 84);
                         this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
@@ -426,6 +632,7 @@ var Load = function (_Phaser$State) {
                         this.load.spritesheet('Mouse_Drag', 'image/Mouse_Drag.png', 160, 112);
 
                         this.load.spritesheet('Player00', 'image/Player/Player00.png', 45, 45);
+                        this.load.spritesheet('Player01', 'image/Player/Player01.png', 45, 50);
 
                         this.load.spritesheet('Enemy00', 'image/Enemy/Enemy00.png', 31, 39);
                         this.load.spritesheet('Enemy01', 'image/Enemy/Enemy01.png', 45, 44);
@@ -573,6 +780,15 @@ var Menu = function (_Phaser$State) {
 
             this.npc_layer = this.add.group();
 
+            this.info_back = this.add.sprite(928 * 0.5, 0, 'info_back');
+            this.info_back.anchor.set(0.5, 0);
+            this.info_back.alpha = 0.6;
+            this.info_back.fixedToCamera = true;
+            this.info_back.text = this.add.bitmapText(928 * 0.5, 80, 'carrier_command', 'PRINNY DASH');
+            this.info_back.text.anchor.set(0.5, 0);
+            this.info_back.text.fontSize = 40;
+            this.info_back.text.fixedToCamera = true;
+
             this.talk_sign_prist = this.add.sprite(312, 745 - 112 + 40, 'talk');
             this.talk_sign_prist.visible = false;
             this.talk_sign_prist.inputEnabled = true;
@@ -588,13 +804,40 @@ var Menu = function (_Phaser$State) {
 
             this.talk_sign_pumpgirl = this.add.sprite(613, 745 - 92 + 40, 'talk');
             this.talk_sign_pumpgirl.anchor.set(0, 1);
+            this.talk_sign_pumpgirl.visible = false;
+            this.talk_sign_pumpgirl.inputEnabled = true;
+            this.talk_sign_pumpgirl.input.useHandCursor = true;
             this.talk_sign_pumpgirl.mask = this.add.graphics(613, 745 - 92);
             this.talk_sign_pumpgirl.mask.anchor.set(0, 1);
             this.talk_sign_pumpgirl.mask.beginFill(0x000000);
             this.talk_sign_pumpgirl.mask.drawRect(0, -33, 45, 33);
+            this.talk_sign_pumpgirl.btns = {
+                'player1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', 'Player 1 (Beginner)'),
+                'player2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', 'Player 2 (Advanced)')
+            };
+            this.talk_sign_pumpgirl.btns.player1.anchor.set(0.5, 0);
+            this.talk_sign_pumpgirl.btns.player2.anchor.set(0.5, 0);
+            this.talk_sign_pumpgirl.btns.player1.visible = false;
+            this.talk_sign_pumpgirl.btns.player2.visible = false;
+            this.talk_sign_pumpgirl.btns.player1.fontSize = 20;
+            this.talk_sign_pumpgirl.btns.player2.fontSize = 20;
+            this.talk_sign_pumpgirl.btns.player1.fixedToCamera = true;
+            this.talk_sign_pumpgirl.btns.player2.fixedToCamera = true;
+            this.talk_sign_pumpgirl.btns.player1.inputEnabled = true;
+            this.talk_sign_pumpgirl.btns.player1.input.useHandCursor = true;
+            this.talk_sign_pumpgirl.btns.player2.inputEnabled = true;
+            this.talk_sign_pumpgirl.btns.player2.input.useHandCursor = true;
+            this.talk_sign_pumpgirl.events.onInputUp.add(function () {
+                _this2.info_back.text.visible = false;
+                _this2.talk_sign_pumpgirl.btns.player1.visible = true;
+                _this2.talk_sign_pumpgirl.btns.player2.visible = true;
+            }, this);
 
             this.talk_sign_bookgirl = this.add.sprite(851, 745 - 92 + 40, 'talk');
             this.talk_sign_bookgirl.anchor.set(0, 1);
+            this.talk_sign_bookgirl.visible = false;
+            this.talk_sign_bookgirl.inputEnabled = true;
+            this.talk_sign_bookgirl.input.useHandCursor = true;
             this.talk_sign_bookgirl.mask = this.add.graphics(851, 745 - 92);
             this.talk_sign_bookgirl.mask.anchor.set(0, 1);
             this.talk_sign_bookgirl.mask.beginFill(0x000000);
@@ -602,6 +845,9 @@ var Menu = function (_Phaser$State) {
 
             this.talk_sign_save = this.add.sprite(1211, 745 - 132 + 40, 'talk');
             this.talk_sign_save.anchor.set(0, 1);
+            this.talk_sign_save.visible = false;
+            this.talk_sign_save.inputEnabled = true;
+            this.talk_sign_save.input.useHandCursor = true;
             this.talk_sign_save.mask = this.add.graphics(1211, 745 - 132);
             this.talk_sign_save.mask.anchor.set(0, 1);
             this.talk_sign_save.mask.beginFill(0x000000);
@@ -616,8 +862,32 @@ var Menu = function (_Phaser$State) {
             this.talk_sign_exitdoor.mask.anchor.set(0, 1);
             this.talk_sign_exitdoor.mask.beginFill(0x000000);
             this.talk_sign_exitdoor.mask.drawRect(0, -33, 45, 33);
-            this.talk_sign_exitdoor.events.onInputUp.add(function () {
+            this.talk_sign_exitdoor.btns = {
+                'stage1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', 'Stage 1 (Beginner)'),
+                'stage2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', 'Stage 2 (Advanced)')
+            };
+            this.talk_sign_exitdoor.btns.stage1.anchor.set(0.5, 0);
+            this.talk_sign_exitdoor.btns.stage2.anchor.set(0.5, 0);
+            this.talk_sign_exitdoor.btns.stage1.visible = false;
+            this.talk_sign_exitdoor.btns.stage2.visible = false;
+            this.talk_sign_exitdoor.btns.stage1.fontSize = 20;
+            this.talk_sign_exitdoor.btns.stage2.fontSize = 20;
+            this.talk_sign_exitdoor.btns.stage1.fixedToCamera = true;
+            this.talk_sign_exitdoor.btns.stage2.fixedToCamera = true;
+            this.talk_sign_exitdoor.btns.stage1.inputEnabled = true;
+            this.talk_sign_exitdoor.btns.stage1.input.useHandCursor = true;
+            this.talk_sign_exitdoor.btns.stage1.events.onInputUp.add(function () {
                 _this2.state.start('Stage1');
+            });
+            this.talk_sign_exitdoor.btns.stage2.inputEnabled = true;
+            this.talk_sign_exitdoor.btns.stage2.input.useHandCursor = true;
+            this.talk_sign_exitdoor.btns.stage2.events.onInputUp.add(function () {
+                _this2.state.start('Stage2');
+            });
+            this.talk_sign_exitdoor.events.onInputUp.add(function () {
+                _this2.info_back.text.visible = false;
+                _this2.talk_sign_exitdoor.btns.stage1.visible = true;
+                _this2.talk_sign_exitdoor.btns.stage2.visible = true;
             }, this);
 
             this.prist = this.add.sprite(312, 745, 'prist');
@@ -715,6 +985,28 @@ var Menu = function (_Phaser$State) {
                 });
                 _this3.player.body.gravity.y = _this3.player.body.gravity.y > 0 ? 300 : -300;
             }, this);
+
+            this.talk_sign_pumpgirl.btns.player1.events.onInputUp.add(function () {
+                _this3.game.player_choice = 0;
+                _this3.player.loadTexture('Player00');
+                _this3.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
+                _this3.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
+                _this3.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
+                _this3.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
+                _this3.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                _this3.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            });
+            this.talk_sign_pumpgirl.btns.player2.events.onInputUp.add(function () {
+                _this3.game.player_choice = 1;
+                _this3.player.loadTexture('Player01');
+                _this3.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
+                _this3.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
+                _this3.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
+                _this3.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
+                _this3.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                _this3.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            });
+
             this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
             this.main_layer.addMultiple([this.mouse_drag, this.player]);
@@ -758,15 +1050,24 @@ var Menu = function (_Phaser$State) {
             }
 
             // NPC effect
+            var flag = 0;
 
             var _loop = function _loop(child) {
                 if (_this4.player.x > child.x - 25 && _this4.player.x < child.x + 75) {
                     child.sign.visible = true;
                     child.tween.start();
                 } else {
+                    ++flag;
                     child.tween_back.start().onComplete.add(function () {
                         child.sign.visible = false;
                     });
+                    if (child.key == 'exitdoor') {
+                        _this4.talk_sign_exitdoor.btns.stage1.visible = false;
+                        _this4.talk_sign_exitdoor.btns.stage2.visible = false;
+                    } else if (child.key == 'pumpgirl') {
+                        _this4.talk_sign_pumpgirl.btns.player1.visible = false;
+                        _this4.talk_sign_pumpgirl.btns.player2.visible = false;
+                    }
                 }
             };
 
@@ -780,8 +1081,6 @@ var Menu = function (_Phaser$State) {
 
                     _loop(child);
                 }
-
-                // Layer effect
             } catch (err) {
                 _didIteratorError = true;
                 _iteratorError = err;
@@ -797,6 +1096,11 @@ var Menu = function (_Phaser$State) {
                 }
             }
 
+            if (flag == this.npc_layer.length) {
+                this.info_back.text.visible = true;
+            }
+
+            // Layer effect
             if (this.player.x > 928 * 0.5 && this.player.x < 1586 - 928 * 0.5) {
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
@@ -960,8 +1264,116 @@ var Over = function (_Phaser$State) {
     }
 
     _createClass(Over, [{
-        key: "create",
-        value: function create() {}
+        key: 'create',
+        value: function create() {
+            var _this2 = this;
+
+            this.angle = 0;
+            this.Text3D();
+            this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', 'Click To Menu');
+            this.start_text.anchor.set(0.5, 0);
+            this.start_text.fontSize = 40;
+            this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
+            this.start_text.inputEnabled = true;
+            this.start_text.input.useHandCursor = true;
+            this.start_text.events.onInputUp.add(function () {
+                var elem = document.getElementById('cc');
+                elem.parentNode.removeChild(elem);
+                _this2.state.start('Menu');
+            }, this);
+        }
+    }, {
+        key: 'Text3D',
+        value: function Text3D() {
+            var width = 928;
+            var height = 600;
+
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(width, height);
+            renderer.domElement.id = 'cc';
+            renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
+            document.body.appendChild(renderer.domElement);
+
+            var scene = new THREE.Scene();
+
+            var camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+            camera.position.set(+24, 0, +40);
+
+            var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+            scene.add(ambientLight);
+
+            var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+
+            var text_r = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [4, 0, 0], [3, 1, 0]];
+            var text_e = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0]];
+            var text_o = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0]];
+            var text_v = [[0, 4, 0], [0, 3, 0], [1, 2, 0], [1, 1, 0], [2, 0, 0], [3, 1, 0], [3, 2, 0], [4, 3, 0], [4, 4, 0]];
+
+            var group_o = new THREE.Group();
+            for (var i = 0; i < text_o.length; i++) {
+                var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xf0fff0 });
+                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                cube.position.x = text_o[i][0] + 12;
+                cube.position.y = text_o[i][1];
+                cube.position.z = text_o[i][2];
+                group_o.add(cube);
+            }
+            scene.add(group_o);
+
+            var group_v = new THREE.Group();
+            for (var _i = 0; _i < text_v.length; _i++) {
+                var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xf0fff0 });
+                var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
+                _cube.position.x = text_v[_i][0] + 18;
+                _cube.position.y = text_v[_i][1];
+                _cube.position.z = text_v[_i][2];
+                group_v.add(_cube);
+            }
+            scene.add(group_v);
+
+            var group_e = new THREE.Group();
+            for (var _i2 = 0; _i2 < text_e.length; _i2++) {
+                var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xf0fff0 });
+                var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
+                _cube2.position.x = text_e[_i2][0] + 24;
+                _cube2.position.y = text_e[_i2][1];
+                _cube2.position.z = text_e[_i2][2];
+                group_e.add(_cube2);
+            }
+            scene.add(group_e);
+
+            var group_r = new THREE.Group();
+            for (var _i3 = 0; _i3 < text_r.length; _i3++) {
+                var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
+                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xf0fff0 });
+                var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
+                _cube3.position.x = text_r[_i3][0] + 30;
+                _cube3.position.y = text_r[_i3][1];
+                _cube3.position.z = text_r[_i3][2];
+                group_r.add(_cube3);
+            }
+            scene.add(group_r);
+
+            var render = function () {
+                var time = new Date();
+                requestAnimationFrame(render);
+                this.angle += 0.01;
+
+                group_o.rotation.x -= 0.015;
+                group_v.rotation.x -= 0.02;
+                group_e.rotation.x -= 0.025;
+                group_r.rotation.x -= 0.03;
+
+                renderer.render(scene, camera);
+                directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
+            }.bind(this);
+            render();
+        }
     }]);
 
     return Over;
@@ -1235,25 +1647,35 @@ var Stage1 = function (_Phaser$State) {
             this.mouse_drag.frame = 0;
             this.mouse_drag.alpha = 0;
 
-            this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+            if (this.game.player_choice == 0) {
+                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+                this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
+                this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
+                this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
+                this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
+                this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            } else {
+                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+                this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
+                this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
+                this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
+                this.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
+                this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+                this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            }
             this.physics.arcade.enable(this.player);
             this.player.is_touching = false;
             this.player.body.bounce.set(0.3);
             this.player.anchor.set(0.5);
             this.player.angle = 0;
             this.player.body.gravity.y = 300;
-            this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
-            this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
-            this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
-            this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
-            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
-            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
 
-            this.dbg = this.add.text(5, 5, '');
-            this.dbg.fontSize = 20;
-            this.dbg.fill = '#000';
+            // this.dbg = this.add.text(5, 5, ``);
+            // this.dbg.fontSize = 20;
+            // this.dbg.fill = '#000';
 
-            this.main_layer.addMultiple([this.dbg, this.mouse_drag, this.player, this.gravity_0, this.gravity_1]);
+            this.main_layer.addMultiple([/*this.dbg, */this.mouse_drag, this.player, this.gravity_0, this.gravity_1]);
 
             this.back_layer_0.create(0, 0, 'Map01_Layer03');
             this.back_layer_0.create(this.game.width, 0, 'Map01_Layer03');
@@ -1331,7 +1753,7 @@ var Stage1 = function (_Phaser$State) {
 
             this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
             this.life_icon.anchor.set(0.5);
-            this.life_text = this.add.text(this.game.width * 0.12, this.game.height * 0.035, 'x' + this.game.total_life);
+            this.life_text = this.add.bitmapText(this.game.width * 0.15, this.game.height * 0.035, 'carrier_command', 'x' + this.game.total_life);
             this.life_text.anchor.set(0.5);
         }
     }, {
@@ -1941,7 +2363,7 @@ var Stage1 = function (_Phaser$State) {
             if (this.is_boss_state) {
                 // Boss check clear
                 if (this.boss.hp < 0.01) {
-                    this.state.start('clear');
+                    this.state.start('Clear');
                 }
                 this.boss_HP.front.mask.scale.set(this.boss.hp / 100, 1);
                 // Boss attack bahavior
@@ -2047,7 +2469,7 @@ var Stage1 = function (_Phaser$State) {
             // Life window
             this.life_text.text = 'x' + this.game.total_life;
             // debug window
-            this.dbg.text = 'FPS: ' + this.time.fps + '\nCurrent Mouse: (' + this.input.activePointer.x + ', ' + this.input.activePointer.y + ')\nLast Mouse: (' + this.game.mouse.x + ', ' + this.game.mouse.y + ')\nCombo: ' + this.counter.combo + '\n';
+            // this.dbg.text = `FPS: ${this.time.fps}\nCurrent Mouse: (${this.input.activePointer.x}, ${this.input.activePointer.y})\nLast Mouse: (${this.game.mouse.x}, ${this.game.mouse.y})\nCombo: ${this.counter.combo}\n`;
 
             if (this.player.body.touching.none) {
                 this.player.is_touching = false;
@@ -2129,14 +2551,14 @@ var Stage1 = function (_Phaser$State) {
         }
     }, {
         key: 'handle_sign',
-        value: function handle_sign(player, p_Sign) {
+        value: function handle_sign(player, sign) {
             var _this5 = this;
 
-            if (p_Sign.key == 'Boss_Gate_Sign01' && p_Sign.body.touching.up) {
+            if (sign.key == 'Boss_Gate_Sign01' && sign.body.touching.up) {
                 this.boss_gate_sign_bloom.bloom_effect.stop();
                 this.boss_gate_sign_bloom.destroy();
-                p_Sign.frame = 1;
-                p_Sign.body.enable = false;
+                sign.frame = 1;
+                sign.body.enable = false;
                 this.boss_gate.front.visible = true;
                 this.camera.shake(0.0035, 800);
                 this.boss_gate.up_effect.start();
@@ -2150,7 +2572,7 @@ var Stage1 = function (_Phaser$State) {
                     _this5.boss_gate.down.destroy();
                 });
                 this.boss_gate.front_effect.start();
-            } else if (this.boss_gate.valid && p_Sign.key == 'Boss_Gate00') {
+            } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
                 this.is_boss_state = true;
                 this.boss.visible = true;
                 this.boss.animations.play('walk');
@@ -2214,11 +2636,11 @@ var Stage2 = function (_Phaser$State) {
         key: 'create',
         value: function create() {
             this.create_layer_0();
-            this.create_sign_layer();
             this.create_layer_1();
             this.create_layer_2();
             this.create_layer_3();
             this.create_map();
+            this.create_sign_layer();
             this.create_main_layer();
             this.create_layer_4();
             this.create_enemy_layer();
@@ -2244,11 +2666,6 @@ var Stage2 = function (_Phaser$State) {
         value: function create_layer_0() {
             this.layer_0 = this.add.image(0, 0, 'Map02_Layer0');
             this.layer_0.fixedToCamera = true;
-        }
-    }, {
-        key: 'create_sign_layer',
-        value: function create_sign_layer() {
-            this.sign_layer = this.add.group();
         }
     }, {
         key: 'create_layer_1',
@@ -2298,6 +2715,61 @@ var Stage2 = function (_Phaser$State) {
             this.map.setCollisionBetween(1, 76);
         }
     }, {
+        key: 'create_sign_layer',
+        value: function create_sign_layer() {
+            this.sign_layer = this.add.group();
+            var x = 96 * 45,
+                y = 96 * 45;
+            this.boss_gate = {
+                'back': this.add.sprite(x + 63, y + 85, 'Boss_Gate03'),
+                'down': this.add.sprite(x, y, 'Boss_Gate02'),
+                'up': this.add.sprite(x, y, 'Boss_Gate01'),
+                'door': this.add.sprite(x, y, 'Boss_Gate00'),
+                'front': this.add.sprite(x, y, 'Boss_Gate04'),
+                'valid': false
+            };
+            this.physics.arcade.enable(this.boss_gate.door);
+            this.boss_gate.door.body.setSize(46, 63, 34, 52);
+
+            this.boss_gate.back.anchor.set(0.5);
+            this.boss_gate.back.mask = this.add.graphics(x + 63, x + 85);
+            this.boss_gate.back.mask.anchor.set(0.5);
+            this.boss_gate.back.mask.beginFill(0x000000);
+            this.boss_gate.back.mask.drawRect(-42.5, -52.5, 85, 105);
+
+            this.boss_gate.up.mask = this.add.graphics(x, y);
+            this.boss_gate.up.mask.beginFill(0x000000);
+            this.boss_gate.up.mask.drawRect(23, 39, 82, 71);
+
+            this.boss_gate.down.mask = this.add.graphics(x, y);
+            this.boss_gate.down.mask.beginFill(0x000000);
+            this.boss_gate.down.mask.drawRect(13, 77, 102, 71);
+
+            this.boss_gate.front.visible = false;
+            this.boss_gate.front_effect = this.add.tween(this.boss_gate.front).to({ alpha: 0.3 }, 750).yoyo(true).loop();
+            this.boss_gate.up_effect = this.add.tween(this.boss_gate.up).to({ y: y - 100 }, 1500);
+            this.boss_gate.down_effect = this.add.tween(this.boss_gate.down).to({ y: y + 200 }, 1500);
+            this.boss_gate.back_effect = this.add.tween(this.boss_gate.back).to({ angle: 360 }, 4000).loop();
+
+            this.boss_gate_sign_bloom = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+            this.boss_gate_sign_bloom.anchor.set(0.5);
+            this.boss_gate_sign_bloom.alpha = 0.7;
+            this.boss_gate_sign_bloom.frame = 2;
+            this.boss_gate_sign_bloom.bloom_effect = this.add.tween(this.boss_gate_sign_bloom).to({ alpha: 0.1 }, 750).yoyo(true).loop().start();
+
+            this.boss_gate_sign = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+            this.physics.arcade.enable(this.boss_gate_sign);
+            this.boss_gate_sign.body.immovable = true;
+            this.boss_gate_sign.anchor.set(0.5);
+
+            this.boss_gate_sign00 = this.add.sprite(x + 530, y - 60 - 42, 'Boss_Gate_Sign00');
+            this.boss_gate_sign00.anchor.set(0.5);
+            this.boss_gate_sign00.animations.add('default', [0, 1, 2], 3, true);
+            this.boss_gate_sign00.play('default');
+
+            this.sign_layer.addMultiple([this.boss_gate.back, this.boss_gate.back.mask, this.boss_gate.down, this.boss_gate.down.mask, this.boss_gate.up, this.boss_gate.up.mask, this.boss_gate.door, this.boss_gate.front, this.boss_gate_sign, this.boss_gate_sign00, this.boss_gate_sign_bloom]);
+        }
+    }, {
         key: 'create_main_layer',
         value: function create_main_layer() {
             var _this2 = this;
@@ -2324,9 +2796,10 @@ var Stage2 = function (_Phaser$State) {
             this.mouse_drag.frame = 0;
             this.mouse_drag.alpha = 0;
 
-            this.init_pos = [{ x: 11, y: 22 }, { x: 203, y: 7 }, { x: 208, y: 172 }, { x: 3, y: 168 }, { x: 3, y: 168 }];
+            this.init_pos = [{ x: 22, y: 25 }, { x: 208, y: 12 }, { x: 202, y: 150 }, { x: 26, y: 172 }, { x: 26, y: 172 }];
             var r = Math.floor(Math.random() * 4);
-            this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
+            // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
+            this.player = this.add.sprite(101 * 45, 95 * 45, 'Player00');
             this.physics.arcade.enable(this.player);
             this.player.is_touching = false;
             this.player.body.bounce.set(0.3);
@@ -2388,11 +2861,10 @@ var Stage2 = function (_Phaser$State) {
         value: function create_enemy_layer() {
             this.enemy_layer = this.add.physicsGroup(Phaser.Physics.ARCADE);
             for (var i = 0; i < 4; ++i) {
-                for (var j = 0; j < this.game.total_enemies * 10; ++j) {
+                for (var j = 0; j < this.game.total_enemies * 4; ++j) {
                     var enemy = this.enemy_layer.create(Math.random() * 9900, Math.random() * 8100, 'Enemy0' + i);
                     enemy.anchor.set(0.5);
-                    enemy.scale.set(1.2);
-                    enemy.angle = Math.random() * 180;
+                    enemy.angle = -90 + Math.random() * 180;
                 }
             }
             this.enemy_layer.setAll('body.gravity.y', 300);
@@ -2400,18 +2872,18 @@ var Stage2 = function (_Phaser$State) {
     }, {
         key: 'create_minimap_layer',
         value: function create_minimap_layer() {
-            this.minimap = this.add.image(0, 0, 'Minimap_02');
+            this.minimap_layer = this.add.group();
+
+            this.minimap = this.add.image(0, 0, 'Minimap_02', 0, this.minimap_layer);
             this.minimap.alpha = 0.6;
 
-            this.minimap.mask = this.add.graphics(0, 0);
+            this.minimap.mask = this.add.graphics(0, 0, this.minimap_layer);
             this.minimap.mask.beginFill();
             this.minimap.mask.drawRoundedRect(0, 0, 310, 310, 9);
 
-            this.dot = this.add.image(0, 0, 'favicon');
-            this.dot.anchor.set(0.5);
-
-            this.minimap_layer = this.add.group();
-            this.minimap_layer.addMultiple([this.minimap, this.minimap.mask, this.dot]);
+            this.player.dot = this.add.image(0, 0, 'favicon', 0, this.minimap_layer);
+            this.player.dot.anchor.set(0.5);
+            this.player.dot.scale.set(0.8);
         }
     }, {
         key: 'create_board_layer',
@@ -2470,10 +2942,11 @@ var Stage2 = function (_Phaser$State) {
             this.board['Enemy02Ratio'].cover.animations.add('kill', [0, 1, 2, 3, 4], 8, false);
             this.board['Enemy03Ratio'].cover.animations.add('kill', [0, 1, 2, 3, 4, 5], 8, false);
 
-            this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
-            this.life_icon.anchor.set(0.5);
-            this.life_text = this.add.text(this.game.width * 0.12, this.game.height * 0.035, 'x' + this.game.total_life);
-            this.life_text.anchor.set(0.5);
+            this.life_icon = this.add.image(10, 10, 'LifeIcon');
+            this.life_icon.scale.set(0.7);
+            this.life_text = this.add.bitmapText(70, 15, 'carrier_command', 'x' + this.game.total_life);
+            this.life_text.scale.set(0.6);
+            this.life_text.tint = 0x220000;
 
             this.board_layer.addMultiple([this.life_icon, this.life_text]);
 
@@ -2518,6 +2991,8 @@ var Stage2 = function (_Phaser$State) {
             this.physics.arcade.collide(this.player, [this.map_layer, this.map], this.handle_gravity.bind(this));
             this.physics.arcade.collide(this.enemy_layer, [this.map_layer, this.map]);
             this.physics.arcade.collide(this.enemy_layer);
+            this.physics.arcade.collide(this.player, this.boss_gate_sign, this.handle_sign.bind(this));
+            this.physics.arcade.overlap(this.player, this.boss_gate.door, this.handle_sign.bind(this));
 
             // Mouse Effect
             var angle = this.math.angleBetween(this.input.activePointer.x, this.input.activePointer.y, this.player.body.position.x + this.player.offsetX - this.camera.x, this.player.body.position.y + this.player.offsetY - this.camera.y);
@@ -2548,10 +3023,10 @@ var Stage2 = function (_Phaser$State) {
             // Player animations controller
             if (this.player.body.velocity.x < 0) {
                 this.player.animations.play('' + (this.player.body.gravity.y < 0 ? 'rightrun' : 'leftrun'));
-                this.dot.scale.x = -1;
+                this.player.dot.scale.x = -0.8;
             } else if (this.player.body.velocity.x > 0) {
                 this.player.animations.play('' + (this.player.body.gravity.y < 0 ? 'leftrun' : 'rightrun'));
-                this.dot.scale.x = 1;
+                this.player.dot.scale.x = 0.8;
             } else if (!this.game.mouse.is_down) {
                 this.player.frame = 0;
                 this.player.animations.stop();
@@ -2561,6 +3036,7 @@ var Stage2 = function (_Phaser$State) {
                 this.gravity_1.animations.play('active');
                 this.gravity_0.frame = 0;
                 this.gravity_0.animations.stop();
+                this.player.dot.scale.y = -0.8;
 
                 if (this.player.angle == 0) {
                     this.tween_down.start();
@@ -2569,6 +3045,7 @@ var Stage2 = function (_Phaser$State) {
                 this.gravity_0.animations.play('active');
                 this.gravity_1.frame = 0;
                 this.gravity_1.animations.stop();
+                this.player.dot.scale.y = 0.8;
 
                 if (this.player.angle != 0) {
                     this.tween_up.start();
@@ -2666,7 +3143,7 @@ var Stage2 = function (_Phaser$State) {
                     } else if (_child3.x > this.camera.x + 950) {
                         _child3.x = this.camera.x - 950;
                     }
-                    _child3.y = this.camera.y;
+                    _child3.y = this.camera.y + 40;
                 }
             } catch (err) {
                 _didIteratorError4 = true;
@@ -2723,8 +3200,8 @@ var Stage2 = function (_Phaser$State) {
             var ty = -this.player.y / 9900 * 930 + 160;
             this.minimap.x = tx > 0 ? 0 : tx < -620 ? -620 : tx;
             this.minimap.y = ty > 0 ? 0 : ty < -451 ? -451 : ty;
-            this.dot.x = tx > 0 ? 160 - tx : tx < -620 ? 160 - 620 - tx : 160;
-            this.dot.y = ty > 0 ? 160 - ty : ty < -451 ? 160 - 451 - ty : 160;
+            this.player.dot.x = tx > 0 ? 160 - tx : tx < -620 ? 160 - 620 - tx : 160;
+            this.player.dot.y = ty > 0 ? 160 - ty : ty < -451 ? 160 - 451 - ty : 160;
 
             // Update board status
             for (var _i2 = 0; _i2 < this.game.settings.total_enemy_types; ++_i2) {
@@ -2816,12 +3293,279 @@ var Stage2 = function (_Phaser$State) {
                 this.state.start('Over');
             }
         }
+    }, {
+        key: 'handle_sign',
+        value: function handle_sign(player, sign) {
+            var _this4 = this;
+
+            if (sign.key == 'Boss_Gate_Sign01' && sign.body.touching.up) {
+                this.boss_gate_sign_bloom.bloom_effect.stop();
+                this.boss_gate_sign_bloom.destroy();
+                sign.frame = 1;
+                sign.body.enable = false;
+                this.boss_gate.front.visible = true;
+                this.camera.shake(0.0035, 800);
+                this.boss_gate.up_effect.start();
+                this.boss_gate.down_effect.start();
+                this.boss_gate.back_effect.start();
+                this.boss_gate.up_effect.onComplete.add(function () {
+                    _this4.boss_gate.valid = true;
+                    _this4.boss_gate.up.mask.destroy();
+                    _this4.boss_gate.up.destroy();
+                    _this4.boss_gate.down.mask.destroy();
+                    _this4.boss_gate.down.destroy();
+                });
+                this.boss_gate.front_effect.start();
+            } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
+                this.is_boss_state = true;
+                this.boss.visible = true;
+                this.boss.animations.play('walk');
+                this.enemy_layer.removeAll();
+                this.sign_layer.removeAll();
+                this.player.body.bounce.set(0.8);
+                this.boss_HP.front.visible = true;
+                this.boss_HP.back.visible = true;
+            }
+        }
     }]);
 
     return Stage2;
 }(Phaser.State);
 
 exports.default = Stage2;
+
+/***/ }),
+
+/***/ "./states/Start.js":
+/*!*************************!*\
+  !*** ./states/Start.js ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+        value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Start = function (_Phaser$State) {
+        _inherits(Start, _Phaser$State);
+
+        function Start() {
+                _classCallCheck(this, Start);
+
+                return _possibleConstructorReturn(this, (Start.__proto__ || Object.getPrototypeOf(Start)).call(this));
+        }
+
+        _createClass(Start, [{
+                key: 'create',
+                value: function create() {
+                        var _this2 = this;
+
+                        this.Text3D();
+                        this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', 'Click To Start');
+                        this.start_text.anchor.set(0.5, 0);
+                        this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
+                        this.start_text.fontSize = 40;
+                        this.start_text.inputEnabled = true;
+                        this.start_text.input.useHandCursor = true;
+                        this.start_text.events.onInputUp.add(function () {
+                                var elem = document.getElementById('dd');
+                                elem.parentNode.removeChild(elem);
+                                _this2.state.start('Menu');
+                        }, this);
+                }
+        }, {
+                key: 'Text3D',
+                value: function Text3D() {
+                        var width = 928;
+                        var height = 600;
+
+                        var renderer = new THREE.WebGLRenderer();
+                        renderer.setSize(width, height);
+                        renderer.domElement.id = 'dd';
+                        renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
+                        document.body.appendChild(renderer.domElement);
+
+                        var scene = new THREE.Scene();
+
+                        var camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+                        camera.position.set(+24, 0, +40);
+
+                        var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+                        scene.add(ambientLight);
+
+                        var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
+                        directionalLight.position.set(1, 1, 1);
+                        scene.add(directionalLight);
+
+                        var text_p = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+                        var text_r = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [4, 0, 0], [3, 1, 0]];
+                        var text_i = [[0, 0, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
+                        var text_n = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 3, 0], [2, 2, 0], [3, 1, 0]];
+                        var text_y = [[0, 4, 0], [1, 3, 0], [2, 2, 0], [2, 1, 0], [2, 0, 0], [3, 3, 0], [4, 4, 0]];
+                        var text_d = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0]];
+                        var text_a = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+                        var text_s = [[0, 0, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+                        var text_h = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0]];
+
+                        var group_p = new THREE.Group();
+                        for (var i = 0; i < text_p.length; i++) {
+                                var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                                cube.position.x = text_p[i][0];
+                                cube.position.y = text_p[i][1];
+                                cube.position.z = text_p[i][2];
+                                group_p.add(cube);
+                        }
+                        scene.add(group_p);
+
+                        var group_r = new THREE.Group();
+                        for (var _i = 0; _i < text_r.length; _i++) {
+                                var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
+                                _cube.position.x = text_r[_i][0] + 6;
+                                _cube.position.y = text_r[_i][1];
+                                _cube.position.z = text_r[_i][2];
+                                group_r.add(_cube);
+                        }
+                        scene.add(group_r);
+
+                        var group_i = new THREE.Group();
+                        for (var _i2 = 0; _i2 < text_i.length; _i2++) {
+                                var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
+                                _cube2.position.x = text_i[_i2][0] + 12;
+                                _cube2.position.y = text_i[_i2][1];
+                                _cube2.position.z = text_i[_i2][2];
+                                group_i.add(_cube2);
+                        }
+                        scene.add(group_i);
+
+                        var group_n1 = new THREE.Group();
+                        for (var _i3 = 0; _i3 < text_n.length; _i3++) {
+                                var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
+                                _cube3.position.x = text_n[_i3][0] + 18;
+                                _cube3.position.y = text_n[_i3][1];
+                                _cube3.position.z = text_n[_i3][2];
+                                group_n1.add(_cube3);
+                        }
+                        scene.add(group_n1);
+
+                        var group_n2 = new THREE.Group();
+                        for (var _i4 = 0; _i4 < text_n.length; _i4++) {
+                                var _cubeGeometry4 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube4 = new THREE.Mesh(_cubeGeometry4, _cubeMaterial4);
+                                _cube4.position.x = text_n[_i4][0] + 24;
+                                _cube4.position.y = text_n[_i4][1];
+                                _cube4.position.z = text_n[_i4][2];
+                                group_n2.add(_cube4);
+                        }
+                        scene.add(group_n2);
+
+                        var group_y = new THREE.Group();
+                        for (var _i5 = 0; _i5 < text_y.length; _i5++) {
+                                var _cubeGeometry5 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube5 = new THREE.Mesh(_cubeGeometry5, _cubeMaterial5);
+                                _cube5.position.x = text_y[_i5][0] + 30;
+                                _cube5.position.y = text_y[_i5][1];
+                                _cube5.position.z = text_y[_i5][2];
+                                group_y.add(_cube5);
+                        }
+                        scene.add(group_y);
+
+                        var group_d = new THREE.Group();
+                        for (var _i6 = 0; _i6 < text_d.length; _i6++) {
+                                var _cubeGeometry6 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial6 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube6 = new THREE.Mesh(_cubeGeometry6, _cubeMaterial6);
+                                _cube6.position.x = text_d[_i6][0] + 17;
+                                _cube6.position.y = text_d[_i6][1] - 6;
+                                _cube6.position.z = text_d[_i6][2];
+                                group_d.add(_cube6);
+                        }
+                        scene.add(group_d);
+
+                        var group_a = new THREE.Group();
+                        for (var _i7 = 0; _i7 < text_a.length; _i7++) {
+                                var _cubeGeometry7 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial7 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube7 = new THREE.Mesh(_cubeGeometry7, _cubeMaterial7);
+                                _cube7.position.x = text_a[_i7][0] + 23;
+                                _cube7.position.y = text_a[_i7][1] - 6;
+                                _cube7.position.z = text_a[_i7][2];
+                                group_a.add(_cube7);
+                        }
+                        scene.add(group_a);
+
+                        var group_s = new THREE.Group();
+                        for (var _i8 = 0; _i8 < text_s.length; _i8++) {
+                                var _cubeGeometry8 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial8 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube8 = new THREE.Mesh(_cubeGeometry8, _cubeMaterial8);
+                                _cube8.position.x = text_s[_i8][0] + 29;
+                                _cube8.position.y = text_s[_i8][1] - 6;
+                                _cube8.position.z = text_s[_i8][2];
+                                group_s.add(_cube8);
+                        }
+                        scene.add(group_s);
+
+                        var group_h = new THREE.Group();
+                        for (var _i9 = 0; _i9 < text_h.length; _i9++) {
+                                var _cubeGeometry9 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial9 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube9 = new THREE.Mesh(_cubeGeometry9, _cubeMaterial9);
+                                _cube9.position.x = text_h[_i9][0] + 35;
+                                _cube9.position.y = text_h[_i9][1] - 6;
+                                _cube9.position.z = text_h[_i9][2];
+                                group_h.add(_cube9);
+                        }
+                        scene.add(group_h);
+
+                        var render = function render() {
+                                var time = new Date();
+                                requestAnimationFrame(render);
+
+                                group_p.rotation.x -= 0.005;
+                                group_r.rotation.x -= 0.01;
+                                group_i.rotation.x -= 0.015;
+                                group_n1.rotation.x -= 0.02;
+                                group_n2.rotation.x -= 0.025;
+                                group_y.rotation.x -= 0.03;
+
+                                group_d.rotation.x -= 0.015;
+                                group_a.rotation.x -= 0.02;
+                                group_s.rotation.x -= 0.025;
+                                group_h.rotation.x -= 0.03;
+
+                                renderer.render(scene, camera);
+                                directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
+                        };
+                        render();
+                }
+        }]);
+
+        return Start;
+}(Phaser.State);
+
+exports.default = Start;
 
 /***/ }),
 

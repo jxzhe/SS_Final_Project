@@ -51,6 +51,15 @@ export default class Menu extends Phaser.State {
     create_npc_layer() {
         this.npc_layer = this.add.group();
 
+        this.info_back = this.add.sprite(928 * 0.5, 0, 'info_back');
+        this.info_back.anchor.set(0.5, 0);
+        this.info_back.alpha = 0.6;
+        this.info_back.fixedToCamera = true;
+        this.info_back.text = this.add.bitmapText(928 * 0.5, 80, 'carrier_command', `PRINNY DASH`);
+        this.info_back.text.anchor.set(0.5, 0);
+        this.info_back.text.fontSize = 40;
+        this.info_back.text.fixedToCamera = true;
+
         this.talk_sign_prist = this.add.sprite(312, 745 - 112 + 40, 'talk');
         this.talk_sign_prist.visible = false;
         this.talk_sign_prist.inputEnabled = true;
@@ -66,13 +75,40 @@ export default class Menu extends Phaser.State {
 
         this.talk_sign_pumpgirl = this.add.sprite(613, 745 - 92 + 40, 'talk');
         this.talk_sign_pumpgirl.anchor.set(0, 1);
+        this.talk_sign_pumpgirl.visible = false;
+        this.talk_sign_pumpgirl.inputEnabled = true;
+        this.talk_sign_pumpgirl.input.useHandCursor = true;
         this.talk_sign_pumpgirl.mask = this.add.graphics(613, 745 - 92);
         this.talk_sign_pumpgirl.mask.anchor.set(0, 1);
         this.talk_sign_pumpgirl.mask.beginFill(0x000000);
         this.talk_sign_pumpgirl.mask.drawRect(0, -33, 45, 33);
+        this.talk_sign_pumpgirl.btns = {
+            'player1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', `Player 1 (Beginner)`),
+            'player2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', `Player 2 (Advanced)`),
+        };
+        this.talk_sign_pumpgirl.btns.player1.anchor.set(0.5, 0);
+        this.talk_sign_pumpgirl.btns.player2.anchor.set(0.5, 0);
+        this.talk_sign_pumpgirl.btns.player1.visible = false;
+        this.talk_sign_pumpgirl.btns.player2.visible = false;
+        this.talk_sign_pumpgirl.btns.player1.fontSize = 20;
+        this.talk_sign_pumpgirl.btns.player2.fontSize = 20;
+        this.talk_sign_pumpgirl.btns.player1.fixedToCamera = true;
+        this.talk_sign_pumpgirl.btns.player2.fixedToCamera = true;
+        this.talk_sign_pumpgirl.btns.player1.inputEnabled = true;
+        this.talk_sign_pumpgirl.btns.player1.input.useHandCursor = true;
+        this.talk_sign_pumpgirl.btns.player2.inputEnabled = true;
+        this.talk_sign_pumpgirl.btns.player2.input.useHandCursor = true;
+        this.talk_sign_pumpgirl.events.onInputUp.add(() => {
+            this.info_back.text.visible = false;
+            this.talk_sign_pumpgirl.btns.player1.visible = true;
+            this.talk_sign_pumpgirl.btns.player2.visible = true;
+        }, this);
 
         this.talk_sign_bookgirl = this.add.sprite(851, 745 - 92 + 40, 'talk');
         this.talk_sign_bookgirl.anchor.set(0, 1);
+        this.talk_sign_bookgirl.visible = false;
+        this.talk_sign_bookgirl.inputEnabled = true;
+        this.talk_sign_bookgirl.input.useHandCursor = true;
         this.talk_sign_bookgirl.mask = this.add.graphics(851, 745 - 92);
         this.talk_sign_bookgirl.mask.anchor.set(0, 1);
         this.talk_sign_bookgirl.mask.beginFill(0x000000);
@@ -80,6 +116,9 @@ export default class Menu extends Phaser.State {
 
         this.talk_sign_save = this.add.sprite(1211, 745 - 132 + 40, 'talk');
         this.talk_sign_save.anchor.set(0, 1);
+        this.talk_sign_save.visible = false;
+        this.talk_sign_save.inputEnabled = true;
+        this.talk_sign_save.input.useHandCursor = true;
         this.talk_sign_save.mask = this.add.graphics(1211, 745 - 132);
         this.talk_sign_save.mask.anchor.set(0, 1);
         this.talk_sign_save.mask.beginFill(0x000000);
@@ -94,8 +133,32 @@ export default class Menu extends Phaser.State {
         this.talk_sign_exitdoor.mask.anchor.set(0, 1);
         this.talk_sign_exitdoor.mask.beginFill(0x000000);
         this.talk_sign_exitdoor.mask.drawRect(0, -33, 45, 33);
-        this.talk_sign_exitdoor.events.onInputUp.add(() => {
+        this.talk_sign_exitdoor.btns = {
+            'stage1': this.add.bitmapText(928 * 0.5, 60, 'carrier_command', `Stage 1 (Beginner)`),
+            'stage2': this.add.bitmapText(928 * 0.5, 120, 'carrier_command', `Stage 2 (Advanced)`),
+        };
+        this.talk_sign_exitdoor.btns.stage1.anchor.set(0.5, 0);
+        this.talk_sign_exitdoor.btns.stage2.anchor.set(0.5, 0);
+        this.talk_sign_exitdoor.btns.stage1.visible = false;
+        this.talk_sign_exitdoor.btns.stage2.visible = false;
+        this.talk_sign_exitdoor.btns.stage1.fontSize = 20;
+        this.talk_sign_exitdoor.btns.stage2.fontSize = 20;
+        this.talk_sign_exitdoor.btns.stage1.fixedToCamera = true;
+        this.talk_sign_exitdoor.btns.stage2.fixedToCamera = true;
+        this.talk_sign_exitdoor.btns.stage1.inputEnabled = true;
+        this.talk_sign_exitdoor.btns.stage1.input.useHandCursor = true;
+        this.talk_sign_exitdoor.btns.stage1.events.onInputUp.add(() => {
             this.state.start('Stage1');
+        });
+        this.talk_sign_exitdoor.btns.stage2.inputEnabled = true;
+        this.talk_sign_exitdoor.btns.stage2.input.useHandCursor = true;
+        this.talk_sign_exitdoor.btns.stage2.events.onInputUp.add(() => {
+            this.state.start('Stage2');
+        });
+        this.talk_sign_exitdoor.events.onInputUp.add(() => {
+            this.info_back.text.visible = false;
+            this.talk_sign_exitdoor.btns.stage1.visible = true;
+            this.talk_sign_exitdoor.btns.stage2.visible = true;
         }, this);
 
         this.prist = this.add.sprite(312, 745, 'prist');
@@ -187,6 +250,28 @@ export default class Menu extends Phaser.State {
             this.mouse_drag.animations.play('fire').onComplete.add(() => { this.mouse_drag.frame = 0; this.mouse_drag.alpha = 0; });
             this.player.body.gravity.y = (this.player.body.gravity.y > 0) ? 300 : -300;
         }, this);
+
+        this.talk_sign_pumpgirl.btns.player1.events.onInputUp.add(() => {
+            this.game.player_choice = 0;
+            this.player.loadTexture('Player00');
+            this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
+            this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
+            this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
+            this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
+            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+        });
+        this.talk_sign_pumpgirl.btns.player2.events.onInputUp.add(() => {
+            this.game.player_choice = 1;
+            this.player.loadTexture('Player01');
+            this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
+            this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
+            this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
+            this.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
+            this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
+            this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+        });
+
         this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
         this.main_layer.addMultiple([this.mouse_drag, this.player]);
@@ -226,13 +311,28 @@ export default class Menu extends Phaser.State {
         }
 
         // NPC effect
+        let flag = 0;
         for(let child of this.npc_layer.children) {
             if(this.player.x > child.x - 25 && this.player.x < child.x + 75) {
                 child.sign.visible = true;
                 child.tween.start();
             } else {
-                child.tween_back.start().onComplete.add(() => { child.sign.visible = false;});
+                ++flag;
+                child.tween_back.start().onComplete.add(() => { 
+                    child.sign.visible = false;
+                });
+                if(child.key == 'exitdoor') {
+                    this.talk_sign_exitdoor.btns.stage1.visible = false;
+                    this.talk_sign_exitdoor.btns.stage2.visible = false;
+                }
+                else if(child.key == 'pumpgirl') {
+                    this.talk_sign_pumpgirl.btns.player1.visible = false;
+                    this.talk_sign_pumpgirl.btns.player2.visible = false;
+                }
             }
+        }
+        if(flag == this.npc_layer.length) {
+            this.info_back.text.visible = true;
         }
 
         // Layer effect
