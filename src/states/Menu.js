@@ -55,6 +55,7 @@ export default class Menu extends Phaser.State {
         this.info_back.alpha = 0.6;
         this.info_back.fixedToCamera = true;
         this.info_back.text = this.add.bitmapText(928 * 0.5, 80, 'carrier_command', `PRINNY DASH`);
+        this.info_back.text.tint = 0x331111;
         this.info_back.text.anchor.set(0.5, 0);
         this.info_back.text.fontSize = 40;
         this.info_back.text.fixedToCamera = true;
@@ -91,8 +92,8 @@ export default class Menu extends Phaser.State {
         this.talk_sign_pumpgirl.btns.player2.anchor.set(0.5, 0);
         this.talk_sign_pumpgirl.btns.player1.visible = false;
         this.talk_sign_pumpgirl.btns.player2.visible = false;
-        this.talk_sign_pumpgirl.btns.player1.fontSize = 20;
-        this.talk_sign_pumpgirl.btns.player2.fontSize = 20;
+        this.talk_sign_pumpgirl.btns.player1.fontSize = 30;
+        this.talk_sign_pumpgirl.btns.player2.fontSize = 30;
         this.talk_sign_pumpgirl.btns.player1.fixedToCamera = true;
         this.talk_sign_pumpgirl.btns.player2.fixedToCamera = true;
         this.talk_sign_pumpgirl.btns.player1.inputEnabled = true;
@@ -145,8 +146,8 @@ export default class Menu extends Phaser.State {
         this.talk_sign_exitdoor.btns.stage2.anchor.set(0.5, 0);
         this.talk_sign_exitdoor.btns.stage1.visible = false;
         this.talk_sign_exitdoor.btns.stage2.visible = false;
-        this.talk_sign_exitdoor.btns.stage1.fontSize = 20;
-        this.talk_sign_exitdoor.btns.stage2.fontSize = 20;
+        this.talk_sign_exitdoor.btns.stage1.fontSize = 24;
+        this.talk_sign_exitdoor.btns.stage2.fontSize = 24;
         this.talk_sign_exitdoor.btns.stage1.fixedToCamera = true;
         this.talk_sign_exitdoor.btns.stage2.fixedToCamera = true;
         this.talk_sign_exitdoor.btns.stage1.inputEnabled = true;
@@ -287,28 +288,28 @@ export default class Menu extends Phaser.State {
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
         });
         this.talk_sign_pumpgirl.btns.player1.events.onInputOver.add(() => {
-            this.add.tween(this.talk_sign_pumpgirl.btns.player1).to({ fontSize: 22 }, 100).start();
+            this.talk_sign_pumpgirl.btns.player1.tint = 0x553333;
         });
         this.talk_sign_pumpgirl.btns.player2.events.onInputOver.add(() => {
-            this.add.tween(this.talk_sign_pumpgirl.btns.player2).to({ fontSize: 22 }, 100).start();
+            this.talk_sign_pumpgirl.btns.player2.tint = 0x553333;
         });
         this.talk_sign_pumpgirl.btns.player1.events.onInputOut.add(() => {
-            this.add.tween(this.talk_sign_pumpgirl.btns.player1).to({ fontSize: 20 }, 100).start();
+            this.talk_sign_pumpgirl.btns.player1.tint = 0x331111;
         });
         this.talk_sign_pumpgirl.btns.player2.events.onInputOut.add(() => {
-            this.add.tween(this.talk_sign_pumpgirl.btns.player2).to({ fontSize: 20 }, 100).start();
+            this.talk_sign_pumpgirl.btns.player2.tint = 0x331111;
         });
         this.talk_sign_exitdoor.btns.stage1.events.onInputOver.add(() => {
-            this.add.tween(this.talk_sign_exitdoor.btns.stage1).to({ fontSize: 22 }, 100).start();
+            this.talk_sign_exitdoor.btns.stage1.tint = 0x553333;
         });
         this.talk_sign_exitdoor.btns.stage2.events.onInputOver.add(() => {
-            this.add.tween(this.talk_sign_exitdoor.btns.stage2).to({ fontSize: 22 }, 100).start();
+            this.talk_sign_exitdoor.btns.stage2.tint = 0x553333;
         });
         this.talk_sign_exitdoor.btns.stage1.events.onInputOut.add(() => {
-            this.add.tween(this.talk_sign_exitdoor.btns.stage1).to({ fontSize: 20 }, 100).start();
+            this.talk_sign_exitdoor.btns.stage1.tint = 0x331111;
         });
         this.talk_sign_exitdoor.btns.stage2.events.onInputOut.add(() => {
-            this.add.tween(this.talk_sign_exitdoor.btns.stage2).to({ fontSize: 20 }, 100).start();
+            this.talk_sign_exitdoor.btns.stage2.tint = 0x331111;
         });
 
         this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);

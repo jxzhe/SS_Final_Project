@@ -52,7 +52,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Final_Project',
+            title: 'Prinny Dash',
             favicon: 'assets/image/Icon/favicon.png',
             template: 'index.html',
             hash: true

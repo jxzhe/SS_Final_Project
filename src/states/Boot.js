@@ -33,16 +33,15 @@ export default class Boot extends Phaser.State {
         this.time.advancedTiming = true;
 
         // firebase.database().ref('/board').orderByChild('/level').limitToLast(5).on('value', data => {
-        //     this.game.leaders.splice(0);
         //     data.forEach(data => {
         //         this.game.leaders.unshift(data.val())
         //     });
-        //     this.game.boardNotReady = false;
         // });
-        firebase.database().ref('/board').push({
-            name: 'Tom',
-            score: 3
-        });
+
+        // firebase.database().ref('/board').push({
+        //     name: 'Tom',
+        //     score: 3
+        // });
     }
     preload() {
         this.load.baseURL = 'src/assets/';

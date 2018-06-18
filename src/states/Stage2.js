@@ -371,12 +371,12 @@ export default class Stage2 extends Phaser.State {
         if (this.is_boss_state) {
             if (!this.game.mouse.is_down) {
                 for (let child of this.bullet_layer.children) {
-                    // if (this.board[`Enemy${child.key.substring(5, 7)}Ratio`].total_clear >= this.game.total_enemies) {
+                    if (this.board[`Enemy${child.key.substring(5, 7)}Ratio`].total_clear >= this.game.total_enemies) {
                         this.physics.arcade.overlap(this.player, child, this.handle_player_hit.bind(this));
                         this.physics.arcade.overlap(this.player, child, this.handle_destroy_bullet.bind(this));
-                    // } else {
-                    //     this.physics.arcade.collide(this.player, child, (player, child) => child.hit = true);
-                    // }
+                    } else {
+                        this.physics.arcade.collide(this.player, child, (player, child) => child.hit = true);
+                    }
                 }
             }
             this.physics.arcade.overlap(this.boss, this.bullet_layer, this.handle_boss_hit.bind(this));
@@ -571,18 +571,14 @@ export default class Stage2 extends Phaser.State {
                             bullet.body.velocity.x = (i - (i < 3 ? 1 : 4)) * 80;
                             bullet.body.velocity.y = 200;
                             bullet.hit = false;
-                            // if (this.board[`Enemy${bullet.key.substring(5, 7)}Ratio`].total_clear > this.game.total_enemies - 1) {
-                            // bullet.body.immovable = true;
-                            // bullet.body.moves = false;
-                            // }
                         }
                     }, this);
                     this.world.bringToTop(this.bullet_layer);
                 });
             }
             this.bullet_layer.forEach(bullet => {
-                if (bullet.x < this.camera.x || bullet.x > this.camera.x + 928 ||
-                    bullet.y < this.camera.y || bullet.y > this.camera.y + 793) {
+                if (bullet.x < 0 || bullet.x > this.world.width ||
+                    bullet.y < 0 || bullet.y > this.world.height) {
                     bullet.destroy();
                 }
             });
@@ -707,21 +703,22 @@ export default class Stage2 extends Phaser.State {
         }
     }
     handle_destroy_bullet(player, bullet) {
-        bullet.body.enable = false;
-        this.board[`${bullet.key}Ratio`].cover.animations.play('kill');
-        let tween = this.add.tween(bullet.scale).to({ x: 1.75, y: 1.75 }, 175).start();
-        tween.onComplete.add(() => {
-            if (this.counter.lastType == bullet.key) {
-                this.counter.combo += 1;
-                this.audio[`melo0${this.counter.combo % 3}`].play();
-            } else {
-                this.counter.combo = 1;
-                this.counter.lastType = bullet.key;
-                this.audio[`melo00`].play();
-            }
-            this.tweens.remove(tween);
-            this.bullet_layer.remove(bullet);
-            bullet.destroy();
-        }, this);
+        bullet.destroy();
+        // bullet.body.enable = false;
+        // this.board[`${bullet.key}Ratio`].cover.animations.play('kill');
+        // let tween = this.add.tween(bullet.scale).to({ x: 1.75, y: 1.75 }, 175).start();
+        // tween.onComplete.add(() => {
+        //     if (this.counter.lastType == bullet.key) {
+        //         this.counter.combo += 1;
+        //         this.audio[`melo0${this.counter.combo % 3}`].play();
+        //     } else {
+        //         this.counter.combo = 1;
+        //         this.counter.lastType = bullet.key;
+        //         this.audio[`melo00`].play();
+        //     }
+        //     this.tweens.remove(tween);
+        //     this.bullet_layer.remove(bullet);
+        //     bullet.destroy();
+        // }, this);
     }
 }
