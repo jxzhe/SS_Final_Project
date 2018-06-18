@@ -227,6 +227,11 @@ var Game = function (_Phaser$Game) {
     return Game;
 }(Phaser.Game);
 
+document.body.onkeypress = function (e) {
+    if (e.keyCode == 8) {
+        e.preventDefault();
+    }
+};
 window.onload = function () {
     firebase.initializeApp({
         apiKey: "AIzaSyCLWVQ1SEiVTQG2B88_wD38ftmjaeycTKc",
@@ -282,6 +287,7 @@ var Boot = function (_Phaser$State) {
     _createClass(Boot, [{
         key: 'init',
         value: function init() {
+            this.game.inputBuffer = '';
             this.game.player_choice = 0;
             this.game.settings = {
                 border_top_offset_y: 195,
@@ -595,7 +601,7 @@ exports.default = Clear;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+        value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -607,119 +613,119 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Load = function (_Phaser$State) {
-    _inherits(Load, _Phaser$State);
+        _inherits(Load, _Phaser$State);
 
-    function Load() {
-        _classCallCheck(this, Load);
+        function Load() {
+                _classCallCheck(this, Load);
 
-        return _possibleConstructorReturn(this, (Load.__proto__ || Object.getPrototypeOf(Load)).call(this));
-    }
-
-    _createClass(Load, [{
-        key: 'preload',
-        value: function preload() {
-            var progressLabel = this.add.bitmapText(928 * 0.5 + 50, 793 * 0.5 - 50, 'carrier_command', 'Loading...');
-            progressLabel.anchor.setTo(0.5, 0.5);
-            progressLabel.fontSize = 40;
-            progressLabel.tint = 0xfcfcfc;
-
-            var progressBarContent = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarContent');
-            var progressBarBorder = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarBorder');
-            this.load.setPreloadSprite(progressBarContent);
-
-            this.load.audio('melo00', 'audio/system00_melo00.wav');
-            this.load.audio('melo01', 'audio/system00_melo01.wav');
-            this.load.audio('melo02', 'audio/system00_melo02.wav');
-            this.load.audio('melo03', 'audio/system00_melo03.wav');
-
-            this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
-
-            this.load.image('tileset', 'map/tileset.png');
-            this.load.tilemap('map', 'map/map.json', null, Phaser.Tilemap.TILED_JSON);
-
-            this.load.image('Minimap_02', 'image/Minimap/Minimap_02.png');
-
-            this.load.image('Menu_Layer00', 'image/Menu/Menu_Layer_00.png');
-            this.load.image('Menu_Layer01', 'image/Menu/Menu_Layer_01.png');
-            this.load.image('Menu_Layer02', 'image/Menu/Menu_Layer_02.png');
-            this.load.image('Menu_Layer03', 'image/Menu/Menu_Layer_03.png');
-            this.load.image('Menu_Layer04', 'image/Menu/Menu_Layer_04.png');
-            this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
-            this.load.image('prist', 'image/Menu/prist.png');
-            this.load.image('info_back', 'image/Menu/info_back.png');
-            this.load.image('talk', 'image/Menu/talk.png');
-            this.load.spritesheet('bookgirl', 'image/Menu/bookgirlset.png', 66, 84);
-            this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
-            this.load.spritesheet('saveboy', 'image/Menu/saveset.png', 78, 119);
-            this.load.spritesheet('exitdoor', 'image/Menu/exitdoor.png', 58, 94);
-
-            this.load.image('Map01_Layer00', 'image/Map01/Map01_Layer00.png');
-            this.load.image('Map01_Layer01', 'image/Map01/Map01_Layer01.png');
-            this.load.image('Map01_Layer02', 'image/Map01/Map01_Layer02.png');
-            this.load.image('Map01_Layer03', 'image/Map01/Map01_Layer03.png');
-            this.load.image('Map01_Layer04', 'image/Map01/Map01_Layer04.png');
-            this.load.image('Map01_Layer05', 'image/Map01/Map01_Layer05.png');
-            this.load.image('Boundary', 'image/Map01/Boundary.png');
-
-            this.load.spritesheet('Map02_Layer0', 'image/Map02/Map02_Layer0.png', 950, 793);
-            this.load.spritesheet('Map02_Layer1', 'image/Map02/Map02_Layer1.png', 950, 793);
-            this.load.spritesheet('Map02_Layer2', 'image/Map02/Map02_Layer2.png', 950, 793);
-            this.load.spritesheet('Map02_Layer3', 'image/Map02/Map02_Layer3.png', 950, 793);
-            this.load.spritesheet('Map02_Layer4', 'image/Map02/Map02_Layer4.png', 950, 793);
-            this.load.image('HiddenBlock', 'image/Map02/HiddenBlock.png');
-
-            this.load.image('Particle00', 'image/Particle/Particle00.png');
-            this.load.image('Particle01', 'image/Particle/Particle01.png');
-            this.load.image('Particle02', 'image/Particle/Particle02.png');
-            this.load.image('Particle03', 'image/Particle/Particle03.png');
-            this.load.spritesheet('Mouse_Drag', 'image/Mouse_Drag.png', 160, 112);
-
-            this.load.spritesheet('Player00', 'image/Player/Player00.png', 45, 45);
-            this.load.spritesheet('Player01', 'image/Player/Player01.png', 45, 50);
-
-            this.load.spritesheet('Enemy00', 'image/Enemy/Enemy00.png', 31, 39);
-            this.load.spritesheet('Enemy01', 'image/Enemy/Enemy01.png', 45, 44);
-            this.load.spritesheet('Enemy02', 'image/Enemy/Enemy02.png', 42, 50);
-            this.load.spritesheet('Enemy03', 'image/Enemy/Enemy03.png', 40, 46);
-
-            this.load.spritesheet('Gravity00', 'image/Gravity/Gravity00.png', 40, 35);
-            this.load.spritesheet('Gravity01', 'image/Gravity/Gravity01.png', 40, 35);
-
-            this.load.image('Obstacle00', 'image/Obstacle/Obstacle00.png');
-            this.load.image('Obstacle01', 'image/Obstacle/Obstacle01.png');
-
-            this.load.image('Percentage_Back', 'image/Percentage/Percentage_Back.png');
-            this.load.image('Percentage_Front', 'image/Percentage/Percentage_Front.png');
-
-            this.load.image('Boss_Gate00', 'image/Boss_Gate/Boss_Gate00.png');
-            this.load.image('Boss_Gate01', 'image/Boss_Gate/Boss_Gate01.png');
-            this.load.image('Boss_Gate02', 'image/Boss_Gate/Boss_Gate02.png');
-            this.load.image('Boss_Gate03', 'image/Boss_Gate/Boss_Gate03.png');
-            this.load.image('Boss_Gate04', 'image/Boss_Gate/Boss_Gate04.png');
-            this.load.spritesheet('Boss_Gate_Sign00', 'image/Boss_Gate/Boss_Gate_Sign00.png', 54, 54);
-            this.load.spritesheet('Boss_Gate_Sign01', 'image/Boss_Gate/Boss_Gate_Sign01.png', 54, 40);
-
-            this.load.spritesheet('Boss00', 'image/Boss/Boss00.png', 400, 400);
-            this.load.spritesheet('Boss01', 'image/Boss/Boss01.png', 340, 400);
-
-            this.load.image('HP_Front', 'image/HP/HP_Front.png');
-            this.load.image('HP_Back', 'image/HP/HP_Back.png');
-
-            this.load.image('Target_Large00', 'image/Target/Target_Large00.png');
-            this.load.image('Target_Large01', 'image/Target/Target_Large01.png');
-
-            this.load.image('LifeIcon', 'image/Icon/LifeIcon.png');
-
-            this.load.image('favicon', 'image/Icon/favicon.png');
+                return _possibleConstructorReturn(this, (Load.__proto__ || Object.getPrototypeOf(Load)).call(this));
         }
-    }, {
-        key: 'create',
-        value: function create() {
-            this.state.start('Start');
-        }
-    }]);
 
-    return Load;
+        _createClass(Load, [{
+                key: 'preload',
+                value: function preload() {
+                        var progressLabel = this.add.bitmapText(928 * 0.5 + 50, 793 * 0.5 - 50, 'carrier_command', 'Loading...');
+                        progressLabel.anchor.setTo(0.5, 0.5);
+                        progressLabel.fontSize = 40;
+                        progressLabel.tint = 0xfcfcfc;
+
+                        var progressBarContent = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarContent');
+                        var progressBarBorder = this.add.sprite(928 * 0.5 - 300, 793 * 0.5, 'progressBarBorder');
+                        this.load.setPreloadSprite(progressBarContent);
+
+                        this.load.audio('melo00', 'audio/system00_melo00.wav');
+                        this.load.audio('melo01', 'audio/system00_melo01.wav');
+                        this.load.audio('melo02', 'audio/system00_melo02.wav');
+                        this.load.audio('melo03', 'audio/system00_melo03.wav');
+
+                        this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
+
+                        this.load.image('tileset', 'map/tileset.png');
+                        this.load.tilemap('map', 'map/map.json', null, Phaser.Tilemap.TILED_JSON);
+
+                        this.load.image('Minimap_02', 'image/Minimap/Minimap_02.png');
+
+                        this.load.image('Menu_Layer00', 'image/Menu/Menu_Layer_00.png');
+                        this.load.image('Menu_Layer01', 'image/Menu/Menu_Layer_01.png');
+                        this.load.image('Menu_Layer02', 'image/Menu/Menu_Layer_02.png');
+                        this.load.image('Menu_Layer03', 'image/Menu/Menu_Layer_03.png');
+                        this.load.image('Menu_Layer04', 'image/Menu/Menu_Layer_04.png');
+                        this.load.image('Menu_Layer05', 'image/Menu/Menu_Layer_05.png');
+                        this.load.image('prist', 'image/Menu/prist.png');
+                        this.load.image('info_back', 'image/Menu/info_back.png');
+                        this.load.image('talk', 'image/Menu/talk.png');
+                        this.load.spritesheet('bookgirl', 'image/Menu/bookgirlset.png', 66, 84);
+                        this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
+                        this.load.spritesheet('saveboy', 'image/Menu/saveset.png', 78, 119);
+                        this.load.spritesheet('exitdoor', 'image/Menu/exitdoor.png', 58, 94);
+
+                        this.load.image('Map01_Layer00', 'image/Map01/Map01_Layer00.png');
+                        this.load.image('Map01_Layer01', 'image/Map01/Map01_Layer01.png');
+                        this.load.image('Map01_Layer02', 'image/Map01/Map01_Layer02.png');
+                        this.load.image('Map01_Layer03', 'image/Map01/Map01_Layer03.png');
+                        this.load.image('Map01_Layer04', 'image/Map01/Map01_Layer04.png');
+                        this.load.image('Map01_Layer05', 'image/Map01/Map01_Layer05.png');
+                        this.load.image('Boundary', 'image/Map01/Boundary.png');
+
+                        this.load.spritesheet('Map02_Layer0', 'image/Map02/Map02_Layer0.png', 950, 793);
+                        this.load.spritesheet('Map02_Layer1', 'image/Map02/Map02_Layer1.png', 950, 793);
+                        this.load.spritesheet('Map02_Layer2', 'image/Map02/Map02_Layer2.png', 950, 793);
+                        this.load.spritesheet('Map02_Layer3', 'image/Map02/Map02_Layer3.png', 950, 793);
+                        this.load.spritesheet('Map02_Layer4', 'image/Map02/Map02_Layer4.png', 950, 793);
+                        this.load.image('HiddenBlock', 'image/Map02/HiddenBlock.png');
+
+                        this.load.image('Particle00', 'image/Particle/Particle00.png');
+                        this.load.image('Particle01', 'image/Particle/Particle01.png');
+                        this.load.image('Particle02', 'image/Particle/Particle02.png');
+                        this.load.image('Particle03', 'image/Particle/Particle03.png');
+                        this.load.spritesheet('Mouse_Drag', 'image/Mouse_Drag.png', 160, 112);
+
+                        this.load.spritesheet('Player00', 'image/Player/Player00.png', 45, 45);
+                        this.load.spritesheet('Player01', 'image/Player/Player01.png', 45, 50);
+
+                        this.load.spritesheet('Enemy00', 'image/Enemy/Enemy00.png', 31, 39);
+                        this.load.spritesheet('Enemy01', 'image/Enemy/Enemy01.png', 45, 44);
+                        this.load.spritesheet('Enemy02', 'image/Enemy/Enemy02.png', 42, 50);
+                        this.load.spritesheet('Enemy03', 'image/Enemy/Enemy03.png', 40, 46);
+
+                        this.load.spritesheet('Gravity00', 'image/Gravity/Gravity00.png', 40, 35);
+                        this.load.spritesheet('Gravity01', 'image/Gravity/Gravity01.png', 40, 35);
+
+                        this.load.image('Obstacle00', 'image/Obstacle/Obstacle00.png');
+                        this.load.image('Obstacle01', 'image/Obstacle/Obstacle01.png');
+
+                        this.load.image('Percentage_Back', 'image/Percentage/Percentage_Back.png');
+                        this.load.image('Percentage_Front', 'image/Percentage/Percentage_Front.png');
+
+                        this.load.image('Boss_Gate00', 'image/Boss_Gate/Boss_Gate00.png');
+                        this.load.image('Boss_Gate01', 'image/Boss_Gate/Boss_Gate01.png');
+                        this.load.image('Boss_Gate02', 'image/Boss_Gate/Boss_Gate02.png');
+                        this.load.image('Boss_Gate03', 'image/Boss_Gate/Boss_Gate03.png');
+                        this.load.image('Boss_Gate04', 'image/Boss_Gate/Boss_Gate04.png');
+                        this.load.spritesheet('Boss_Gate_Sign00', 'image/Boss_Gate/Boss_Gate_Sign00.png', 54, 54);
+                        this.load.spritesheet('Boss_Gate_Sign01', 'image/Boss_Gate/Boss_Gate_Sign01.png', 54, 40);
+
+                        this.load.spritesheet('Boss00', 'image/Boss/Boss00.png', 400, 400);
+                        this.load.spritesheet('Boss01', 'image/Boss/Boss01.png', 340, 400);
+
+                        this.load.image('HP_Front', 'image/HP/HP_Front.png');
+                        this.load.image('HP_Back', 'image/HP/HP_Back.png');
+
+                        this.load.image('Target_Large00', 'image/Target/Target_Large00.png');
+                        this.load.image('Target_Large01', 'image/Target/Target_Large01.png');
+
+                        this.load.image('LifeIcon', 'image/Icon/LifeIcon.png');
+
+                        this.load.image('favicon', 'image/Icon/favicon.png');
+                }
+        }, {
+                key: 'create',
+                value: function create() {
+                        this.state.start('Start');
+                }
+        }]);
+
+        return Load;
 }(Phaser.State);
 
 exports.default = Load;
@@ -888,6 +894,15 @@ var Menu = function (_Phaser$State) {
             this.talk_sign_bookgirl.mask.beginFill(0x000000);
             this.talk_sign_bookgirl.mask.drawRect(0, -33, 45, 33);
 
+            this.sign_input = {
+                'name': this.add.bitmapText(928 * 0.4, 90, 'carrier_command', '' + this.game.inputBuffer),
+                'isPassword': false
+            };
+            this.sign_input.name_title = this.add.bitmapText(928 * 0.18, 90, 'carrier_command', 'NAME: ');
+            this.sign_input.name_title.fixedToCamera = true;
+            this.sign_input.name_title.visible = false;
+            this.sign_input.name.fixedToCamera = true;
+            this.sign_input.name.visible = false;
             this.talk_sign_save = this.add.sprite(1211, 745 - 132 + 40, 'talk');
             this.talk_sign_save.anchor.set(0, 1);
             this.talk_sign_save.visible = false;
@@ -897,6 +912,11 @@ var Menu = function (_Phaser$State) {
             this.talk_sign_save.mask.anchor.set(0, 1);
             this.talk_sign_save.mask.beginFill(0x000000);
             this.talk_sign_save.mask.drawRect(0, -33, 45, 33);
+            this.talk_sign_save.events.onInputUp.add(function () {
+                _this2.info_back.text.visible = false;
+                _this2.sign_input.name.visible = true;
+                _this2.sign_input.name_title.visible = true;
+            });
 
             this.talk_sign_exitdoor = this.add.sprite(1501, 745 - 102 + 40, 'talk');
             this.talk_sign_exitdoor.anchor.set(0, 1);
@@ -976,6 +996,8 @@ var Menu = function (_Phaser$State) {
             this.exitdoor.tween_back = this.add.tween(this.talk_sign_exitdoor).to({ y: 745 - 102 + 40 }, 300);
 
             this.npc_layer.addMultiple([this.prist, this.pumpgirl, this.bookgirl, this.save, this.exitdoor]);
+
+            this.input.keyboard.onPressCallback = this.processKey.bind(this);
         }
     }, {
         key: 'create_main_layer',
@@ -1148,6 +1170,9 @@ var Menu = function (_Phaser$State) {
                     } else if (child.key == 'pumpgirl') {
                         _this4.talk_sign_pumpgirl.btns.player1.visible = false;
                         _this4.talk_sign_pumpgirl.btns.player2.visible = false;
+                    } else if (child.key == 'saveboy') {
+                        _this4.sign_input.name_title.visible = false;
+                        _this4.sign_input.name.visible = false;
                     }
                 }
             };
@@ -1301,6 +1326,30 @@ var Menu = function (_Phaser$State) {
                             throw _iteratorError5;
                         }
                     }
+                }
+            }
+            this.sign_input.name.text = '' + this.game.inputBuffer;
+        }
+    }, {
+        key: 'processKey',
+        value: function processKey(key) {
+            if (this.game.input.keyboard.lastKey.keyCode == Phaser.Keyboard.ENTER) {
+                if (this.game.inputBuffer !== '') {
+                    // firebase.database().ref(`m_leaderboard${bgIdx}`).push({
+                    //     name: `${this.game.inputBuffer}`,
+                    //     score: `${this.global.score}`,
+                    // });
+                    this.game.inputBuffer = '';
+                    this.sign_input.name_title.text = 'PSWD: ';
+                    this.sign_input.isPassword = true;
+                }
+            } else if (this.game.input.keyboard.lastKey.keyCode == Phaser.Keyboard.BACKSPACE) {
+                this.game.inputBuffer = this.game.inputBuffer.slice(0, -1);
+            } else {
+                if (!this.sign_input.isPassword && this.game.inputBuffer.length < 10) {
+                    this.game.inputBuffer += String(key);
+                } else if (this.sign_input.isPassword && this.game.inputBuffer.length < 4) {
+                    this.game.inputBuffer += String(key);
                 }
             }
         }
@@ -3636,7 +3685,7 @@ exports.default = Stage2;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+        value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3648,210 +3697,210 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Start = function (_Phaser$State) {
-    _inherits(Start, _Phaser$State);
+        _inherits(Start, _Phaser$State);
 
-    function Start() {
-        _classCallCheck(this, Start);
+        function Start() {
+                _classCallCheck(this, Start);
 
-        return _possibleConstructorReturn(this, (Start.__proto__ || Object.getPrototypeOf(Start)).call(this));
-    }
-
-    _createClass(Start, [{
-        key: 'create',
-        value: function create() {
-            var _this2 = this;
-
-            this.Text3D();
-            this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', 'Click To Start');
-            this.start_text.anchor.set(0.5, 0);
-            this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
-            this.start_text.fontSize = 40;
-            this.start_text.inputEnabled = true;
-            this.start_text.input.useHandCursor = true;
-            this.start_text.events.onInputUp.add(function () {
-                var elem = document.getElementById('dd');
-                elem.parentNode.removeChild(elem);
-                _this2.state.start('Menu');
-            }, this);
+                return _possibleConstructorReturn(this, (Start.__proto__ || Object.getPrototypeOf(Start)).call(this));
         }
-    }, {
-        key: 'Text3D',
-        value: function Text3D() {
-            var width = 928;
-            var height = 600;
 
-            var renderer = new THREE.WebGLRenderer();
-            renderer.setSize(width, height);
-            renderer.domElement.id = 'dd';
-            renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
-            document.body.appendChild(renderer.domElement);
+        _createClass(Start, [{
+                key: 'create',
+                value: function create() {
+                        var _this2 = this;
 
-            var scene = new THREE.Scene();
+                        this.Text3D();
+                        this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', 'Click To Start');
+                        this.start_text.anchor.set(0.5, 0);
+                        this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
+                        this.start_text.fontSize = 40;
+                        this.start_text.inputEnabled = true;
+                        this.start_text.input.useHandCursor = true;
+                        this.start_text.events.onInputUp.add(function () {
+                                var elem = document.getElementById('dd');
+                                elem.parentNode.removeChild(elem);
+                                _this2.state.start('Menu');
+                        }, this);
+                }
+        }, {
+                key: 'Text3D',
+                value: function Text3D() {
+                        var width = 928;
+                        var height = 600;
 
-            var camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
-            camera.position.set(+24, 0, +40);
+                        var renderer = new THREE.WebGLRenderer();
+                        renderer.setSize(width, height);
+                        renderer.domElement.id = 'dd';
+                        renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
+                        document.body.appendChild(renderer.domElement);
 
-            var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-            scene.add(ambientLight);
+                        var scene = new THREE.Scene();
 
-            var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
-            directionalLight.position.set(1, 1, 1);
-            scene.add(directionalLight);
+                        var camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+                        camera.position.set(+24, 0, +40);
 
-            var text_p = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
-            var text_r = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [4, 0, 0], [3, 1, 0]];
-            var text_i = [[0, 0, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
-            var text_n = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 3, 0], [2, 2, 0], [3, 1, 0]];
-            var text_y = [[0, 4, 0], [1, 3, 0], [2, 2, 0], [2, 1, 0], [2, 0, 0], [3, 3, 0], [4, 4, 0]];
-            var text_d = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0]];
-            var text_a = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
-            var text_s = [[0, 0, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
-            var text_h = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0]];
+                        var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+                        scene.add(ambientLight);
 
-            var group_p = new THREE.Group();
-            for (var i = 0; i < text_p.length; i++) {
-                var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-                cube.position.x = text_p[i][0];
-                cube.position.y = text_p[i][1];
-                cube.position.z = text_p[i][2];
-                group_p.add(cube);
-            }
-            scene.add(group_p);
+                        var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
+                        directionalLight.position.set(1, 1, 1);
+                        scene.add(directionalLight);
 
-            var group_r = new THREE.Group();
-            for (var _i = 0; _i < text_r.length; _i++) {
-                var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
-                _cube.position.x = text_r[_i][0] + 6;
-                _cube.position.y = text_r[_i][1];
-                _cube.position.z = text_r[_i][2];
-                group_r.add(_cube);
-            }
-            scene.add(group_r);
+                        var text_p = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+                        var text_r = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [4, 0, 0], [3, 1, 0]];
+                        var text_i = [[0, 0, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
+                        var text_n = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 3, 0], [2, 2, 0], [3, 1, 0]];
+                        var text_y = [[0, 4, 0], [1, 3, 0], [2, 2, 0], [2, 1, 0], [2, 0, 0], [3, 3, 0], [4, 4, 0]];
+                        var text_d = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0]];
+                        var text_a = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+                        var text_s = [[0, 0, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0]];
+                        var text_h = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [4, 0, 0], [4, 1, 0], [4, 2, 0], [4, 3, 0], [4, 4, 0], [1, 2, 0], [2, 2, 0], [3, 2, 0]];
 
-            var group_i = new THREE.Group();
-            for (var _i2 = 0; _i2 < text_i.length; _i2++) {
-                var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
-                _cube2.position.x = text_i[_i2][0] + 12;
-                _cube2.position.y = text_i[_i2][1];
-                _cube2.position.z = text_i[_i2][2];
-                group_i.add(_cube2);
-            }
-            scene.add(group_i);
+                        var group_p = new THREE.Group();
+                        for (var i = 0; i < text_p.length; i++) {
+                                var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                                cube.position.x = text_p[i][0];
+                                cube.position.y = text_p[i][1];
+                                cube.position.z = text_p[i][2];
+                                group_p.add(cube);
+                        }
+                        scene.add(group_p);
 
-            var group_n1 = new THREE.Group();
-            for (var _i3 = 0; _i3 < text_n.length; _i3++) {
-                var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
-                _cube3.position.x = text_n[_i3][0] + 18;
-                _cube3.position.y = text_n[_i3][1];
-                _cube3.position.z = text_n[_i3][2];
-                group_n1.add(_cube3);
-            }
-            scene.add(group_n1);
+                        var group_r = new THREE.Group();
+                        for (var _i = 0; _i < text_r.length; _i++) {
+                                var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
+                                _cube.position.x = text_r[_i][0] + 6;
+                                _cube.position.y = text_r[_i][1];
+                                _cube.position.z = text_r[_i][2];
+                                group_r.add(_cube);
+                        }
+                        scene.add(group_r);
 
-            var group_n2 = new THREE.Group();
-            for (var _i4 = 0; _i4 < text_n.length; _i4++) {
-                var _cubeGeometry4 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube4 = new THREE.Mesh(_cubeGeometry4, _cubeMaterial4);
-                _cube4.position.x = text_n[_i4][0] + 24;
-                _cube4.position.y = text_n[_i4][1];
-                _cube4.position.z = text_n[_i4][2];
-                group_n2.add(_cube4);
-            }
-            scene.add(group_n2);
+                        var group_i = new THREE.Group();
+                        for (var _i2 = 0; _i2 < text_i.length; _i2++) {
+                                var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
+                                _cube2.position.x = text_i[_i2][0] + 12;
+                                _cube2.position.y = text_i[_i2][1];
+                                _cube2.position.z = text_i[_i2][2];
+                                group_i.add(_cube2);
+                        }
+                        scene.add(group_i);
 
-            var group_y = new THREE.Group();
-            for (var _i5 = 0; _i5 < text_y.length; _i5++) {
-                var _cubeGeometry5 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube5 = new THREE.Mesh(_cubeGeometry5, _cubeMaterial5);
-                _cube5.position.x = text_y[_i5][0] + 30;
-                _cube5.position.y = text_y[_i5][1];
-                _cube5.position.z = text_y[_i5][2];
-                group_y.add(_cube5);
-            }
-            scene.add(group_y);
+                        var group_n1 = new THREE.Group();
+                        for (var _i3 = 0; _i3 < text_n.length; _i3++) {
+                                var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
+                                _cube3.position.x = text_n[_i3][0] + 18;
+                                _cube3.position.y = text_n[_i3][1];
+                                _cube3.position.z = text_n[_i3][2];
+                                group_n1.add(_cube3);
+                        }
+                        scene.add(group_n1);
 
-            var group_d = new THREE.Group();
-            for (var _i6 = 0; _i6 < text_d.length; _i6++) {
-                var _cubeGeometry6 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial6 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube6 = new THREE.Mesh(_cubeGeometry6, _cubeMaterial6);
-                _cube6.position.x = text_d[_i6][0] + 17;
-                _cube6.position.y = text_d[_i6][1] - 6;
-                _cube6.position.z = text_d[_i6][2];
-                group_d.add(_cube6);
-            }
-            scene.add(group_d);
+                        var group_n2 = new THREE.Group();
+                        for (var _i4 = 0; _i4 < text_n.length; _i4++) {
+                                var _cubeGeometry4 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube4 = new THREE.Mesh(_cubeGeometry4, _cubeMaterial4);
+                                _cube4.position.x = text_n[_i4][0] + 24;
+                                _cube4.position.y = text_n[_i4][1];
+                                _cube4.position.z = text_n[_i4][2];
+                                group_n2.add(_cube4);
+                        }
+                        scene.add(group_n2);
 
-            var group_a = new THREE.Group();
-            for (var _i7 = 0; _i7 < text_a.length; _i7++) {
-                var _cubeGeometry7 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial7 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube7 = new THREE.Mesh(_cubeGeometry7, _cubeMaterial7);
-                _cube7.position.x = text_a[_i7][0] + 23;
-                _cube7.position.y = text_a[_i7][1] - 6;
-                _cube7.position.z = text_a[_i7][2];
-                group_a.add(_cube7);
-            }
-            scene.add(group_a);
+                        var group_y = new THREE.Group();
+                        for (var _i5 = 0; _i5 < text_y.length; _i5++) {
+                                var _cubeGeometry5 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube5 = new THREE.Mesh(_cubeGeometry5, _cubeMaterial5);
+                                _cube5.position.x = text_y[_i5][0] + 30;
+                                _cube5.position.y = text_y[_i5][1];
+                                _cube5.position.z = text_y[_i5][2];
+                                group_y.add(_cube5);
+                        }
+                        scene.add(group_y);
 
-            var group_s = new THREE.Group();
-            for (var _i8 = 0; _i8 < text_s.length; _i8++) {
-                var _cubeGeometry8 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial8 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube8 = new THREE.Mesh(_cubeGeometry8, _cubeMaterial8);
-                _cube8.position.x = text_s[_i8][0] + 29;
-                _cube8.position.y = text_s[_i8][1] - 6;
-                _cube8.position.z = text_s[_i8][2];
-                group_s.add(_cube8);
-            }
-            scene.add(group_s);
+                        var group_d = new THREE.Group();
+                        for (var _i6 = 0; _i6 < text_d.length; _i6++) {
+                                var _cubeGeometry6 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial6 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube6 = new THREE.Mesh(_cubeGeometry6, _cubeMaterial6);
+                                _cube6.position.x = text_d[_i6][0] + 17;
+                                _cube6.position.y = text_d[_i6][1] - 6;
+                                _cube6.position.z = text_d[_i6][2];
+                                group_d.add(_cube6);
+                        }
+                        scene.add(group_d);
 
-            var group_h = new THREE.Group();
-            for (var _i9 = 0; _i9 < text_h.length; _i9++) {
-                var _cubeGeometry9 = new THREE.BoxGeometry(1, 1, 1);
-                var _cubeMaterial9 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                var _cube9 = new THREE.Mesh(_cubeGeometry9, _cubeMaterial9);
-                _cube9.position.x = text_h[_i9][0] + 35;
-                _cube9.position.y = text_h[_i9][1] - 6;
-                _cube9.position.z = text_h[_i9][2];
-                group_h.add(_cube9);
-            }
-            scene.add(group_h);
+                        var group_a = new THREE.Group();
+                        for (var _i7 = 0; _i7 < text_a.length; _i7++) {
+                                var _cubeGeometry7 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial7 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube7 = new THREE.Mesh(_cubeGeometry7, _cubeMaterial7);
+                                _cube7.position.x = text_a[_i7][0] + 23;
+                                _cube7.position.y = text_a[_i7][1] - 6;
+                                _cube7.position.z = text_a[_i7][2];
+                                group_a.add(_cube7);
+                        }
+                        scene.add(group_a);
 
-            var render = function render() {
-                var time = new Date();
-                requestAnimationFrame(render);
+                        var group_s = new THREE.Group();
+                        for (var _i8 = 0; _i8 < text_s.length; _i8++) {
+                                var _cubeGeometry8 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial8 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube8 = new THREE.Mesh(_cubeGeometry8, _cubeMaterial8);
+                                _cube8.position.x = text_s[_i8][0] + 29;
+                                _cube8.position.y = text_s[_i8][1] - 6;
+                                _cube8.position.z = text_s[_i8][2];
+                                group_s.add(_cube8);
+                        }
+                        scene.add(group_s);
 
-                group_p.rotation.x -= 0.005;
-                group_r.rotation.x -= 0.01;
-                group_i.rotation.x -= 0.015;
-                group_n1.rotation.x -= 0.02;
-                group_n2.rotation.x -= 0.025;
-                group_y.rotation.x -= 0.03;
+                        var group_h = new THREE.Group();
+                        for (var _i9 = 0; _i9 < text_h.length; _i9++) {
+                                var _cubeGeometry9 = new THREE.BoxGeometry(1, 1, 1);
+                                var _cubeMaterial9 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cube9 = new THREE.Mesh(_cubeGeometry9, _cubeMaterial9);
+                                _cube9.position.x = text_h[_i9][0] + 35;
+                                _cube9.position.y = text_h[_i9][1] - 6;
+                                _cube9.position.z = text_h[_i9][2];
+                                group_h.add(_cube9);
+                        }
+                        scene.add(group_h);
 
-                group_d.rotation.x -= 0.015;
-                group_a.rotation.x -= 0.02;
-                group_s.rotation.x -= 0.025;
-                group_h.rotation.x -= 0.03;
+                        var render = function render() {
+                                var time = new Date();
+                                requestAnimationFrame(render);
 
-                renderer.render(scene, camera);
-                directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
-            };
-            render();
-        }
-    }]);
+                                group_p.rotation.x -= 0.005;
+                                group_r.rotation.x -= 0.01;
+                                group_i.rotation.x -= 0.015;
+                                group_n1.rotation.x -= 0.02;
+                                group_n2.rotation.x -= 0.025;
+                                group_y.rotation.x -= 0.03;
 
-    return Start;
+                                group_d.rotation.x -= 0.015;
+                                group_a.rotation.x -= 0.02;
+                                group_s.rotation.x -= 0.025;
+                                group_h.rotation.x -= 0.03;
+
+                                renderer.render(scene, camera);
+                                directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
+                        };
+                        render();
+                }
+        }]);
+
+        return Start;
 }(Phaser.State);
 
 exports.default = Start;
