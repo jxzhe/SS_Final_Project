@@ -4,11 +4,11 @@ export default class Stage2 extends Phaser.State {
     }
     create() {
         this.create_layer_0();
-        this.create_sign_layer();
         this.create_layer_1();
         this.create_layer_2();
         this.create_layer_3();
         this.create_map();
+        this.create_sign_layer();
         this.create_main_layer();
         this.create_layer_4();
         this.create_enemy_layer();
@@ -32,9 +32,6 @@ export default class Stage2 extends Phaser.State {
     create_layer_0() {
         this.layer_0 = this.add.image(0, 0, 'Map02_Layer0');
         this.layer_0.fixedToCamera = true;
-    }
-    create_sign_layer() {
-        this.sign_layer = this.add.group();
     }
     create_layer_1() {
         this.layer_1 = this.add.group();
@@ -75,6 +72,64 @@ export default class Stage2 extends Phaser.State {
         this.map_layer.resizeWorld();
         this.map.setCollisionBetween(1, 76);
     }
+    create_sign_layer() {
+        this.sign_layer = this.add.group();
+        let x = 96 * 45, y = 96 * 45;
+        this.boss_gate = {
+            'back': this.add.sprite(x + 63, y + 85, 'Boss_Gate03'),
+            'down': this.add.sprite(x, y, 'Boss_Gate02'),
+            'up': this.add.sprite(x, y, 'Boss_Gate01'),
+            'door': this.add.sprite(x, y, 'Boss_Gate00'),
+            'front': this.add.sprite(x, y, 'Boss_Gate04'),
+            'valid': false,
+        };
+        this.physics.arcade.enable(this.boss_gate.door);
+        this.boss_gate.door.body.setSize(46, 63, 34, 52);
+
+        this.boss_gate.back.anchor.set(0.5);
+        this.boss_gate.back.mask = this.add.graphics(x + 63, x + 85);
+        this.boss_gate.back.mask.anchor.set(0.5);
+        this.boss_gate.back.mask.beginFill(0x000000);
+        this.boss_gate.back.mask.drawRect(-42.5, -52.5, 85, 105);
+
+        this.boss_gate.up.mask = this.add.graphics(x, y);
+        this.boss_gate.up.mask.beginFill(0x000000);
+        this.boss_gate.up.mask.drawRect(23, 39, 82, 71);
+
+        this.boss_gate.down.mask = this.add.graphics(x, y);
+        this.boss_gate.down.mask.beginFill(0x000000);
+        this.boss_gate.down.mask.drawRect(13, 77, 102, 71);
+
+        this.boss_gate.front.visible = false;
+        this.boss_gate.front_effect = this.add.tween(this.boss_gate.front).to({ alpha: 0.3 }, 750).yoyo(true).loop();
+        this.boss_gate.up_effect = this.add.tween(this.boss_gate.up).to({ y: y - 100 }, 1500);
+        this.boss_gate.down_effect = this.add.tween(this.boss_gate.down).to({ y: y + 200 }, 1500);
+        this.boss_gate.back_effect = this.add.tween(this.boss_gate.back).to({ angle: 360 }, 4000).loop();
+
+        this.boss_gate_sign_bloom = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+        this.boss_gate_sign_bloom.anchor.set(0.5);
+        this.boss_gate_sign_bloom.alpha = 0.7;
+        this.boss_gate_sign_bloom.frame = 2;
+        this.boss_gate_sign_bloom.bloom_effect = this.add.tween(this.boss_gate_sign_bloom).to({ alpha: 0.1 }, 750).yoyo(true).loop().start();
+
+        this.boss_gate_sign = this.add.sprite(x + 530, y - 60, 'Boss_Gate_Sign01');
+        this.physics.arcade.enable(this.boss_gate_sign);
+        this.boss_gate_sign.body.immovable = true;
+        this.boss_gate_sign.anchor.set(0.5);
+
+        this.boss_gate_sign00 = this.add.sprite(x + 530, y - 60 - 42, 'Boss_Gate_Sign00');
+        this.boss_gate_sign00.anchor.set(0.5);
+        this.boss_gate_sign00.animations.add('default', [0, 1, 2], 3, true);
+        this.boss_gate_sign00.play('default');
+
+        this.sign_layer.addMultiple([
+            this.boss_gate.back, this.boss_gate.back.mask,
+            this.boss_gate.down, this.boss_gate.down.mask,
+            this.boss_gate.up, this.boss_gate.up.mask,
+            this.boss_gate.door, this.boss_gate.front,
+            this.boss_gate_sign, this.boss_gate_sign00, this.boss_gate_sign_bloom
+        ]);
+    }
     create_main_layer() {
         this.main_layer = this.add.group();
 
@@ -99,11 +154,12 @@ export default class Stage2 extends Phaser.State {
         this.mouse_drag.alpha = 0;
 
         this.init_pos = [
-            { x: 11, y: 22 }, { x: 203, y: 7 },
-            { x: 208, y: 172 }, { x: 3, y: 168 }, { x: 3, y: 168 }
+            { x: 22, y: 25 }, { x: 208, y: 12 },
+            { x: 202, y: 150 }, { x: 26, y: 172 }, { x: 26, y: 172 }
         ];
         let r = Math.floor(Math.random() * 4);
-        this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
+        // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
+        this.player = this.add.sprite(101 * 45, 95 * 45, 'Player00');
         this.physics.arcade.enable(this.player);
         this.player.is_touching = false;
         this.player.body.bounce.set(0.3);
@@ -159,28 +215,27 @@ export default class Stage2 extends Phaser.State {
     create_enemy_layer() {
         this.enemy_layer = this.add.physicsGroup(Phaser.Physics.ARCADE);
         for (let i = 0; i < 4; ++i) {
-            for (let j = 0; j < this.game.total_enemies * 10; ++j) {
+            for (let j = 0; j < this.game.total_enemies * 4; ++j) {
                 let enemy = this.enemy_layer.create(Math.random() * 9900, Math.random() * 8100, `Enemy0${i}`);
                 enemy.anchor.set(0.5);
-                enemy.scale.set(1.2);
-                enemy.angle = Math.random() * 180;
+                enemy.angle = -90 + Math.random() * 180;
             }
         }
         this.enemy_layer.setAll('body.gravity.y', 300);
     }
     create_minimap_layer() {
-        this.minimap = this.add.image(0, 0, 'Minimap_02');
+        this.minimap_layer = this.add.group();
+
+        this.minimap = this.add.image(0, 0, 'Minimap_02', 0, this.minimap_layer);
         this.minimap.alpha = 0.6;
 
-        this.minimap.mask = this.add.graphics(0, 0);
+        this.minimap.mask = this.add.graphics(0, 0, this.minimap_layer);
         this.minimap.mask.beginFill();
         this.minimap.mask.drawRoundedRect(0, 0, 310, 310, 9);
 
-        this.dot = this.add.image(0, 0, 'favicon');
-        this.dot.anchor.set(0.5);
-
-        this.minimap_layer = this.add.group();
-        this.minimap_layer.addMultiple([this.minimap, this.minimap.mask, this.dot]);
+        this.player.dot = this.add.image(0, 0, 'favicon', 0, this.minimap_layer);
+        this.player.dot.anchor.set(0.5);
+        this.player.dot.scale.set(0.8);
     }
     create_board_layer() {
         this.board_layer = this.add.group();
@@ -237,10 +292,11 @@ export default class Stage2 extends Phaser.State {
         this.board[`Enemy02Ratio`].cover.animations.add('kill', [0, 1, 2, 3, 4], 8, false);
         this.board[`Enemy03Ratio`].cover.animations.add('kill', [0, 1, 2, 3, 4, 5], 8, false);
 
-        this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
-        this.life_icon.anchor.set(0.5);
-        this.life_text = this.add.text(this.game.width * 0.12, this.game.height * 0.035, `x${this.game.total_life}`);
-        this.life_text.anchor.set(0.5);
+        this.life_icon = this.add.image(10, 10, 'LifeIcon');
+        this.life_icon.scale.set(0.7);
+        this.life_text = this.add.bitmapText(70, 15, 'carrier_command', `x${this.game.total_life}`);
+        this.life_text.scale.set(0.6);
+        this.life_text.tint = 0x220000;
 
         this.board_layer.addMultiple([this.life_icon, this.life_text]);
 
@@ -261,6 +317,8 @@ export default class Stage2 extends Phaser.State {
         this.physics.arcade.collide(this.player, [this.map_layer, this.map], this.handle_gravity.bind(this));
         this.physics.arcade.collide(this.enemy_layer, [this.map_layer, this.map]);
         this.physics.arcade.collide(this.enemy_layer);
+        this.physics.arcade.collide(this.player, this.boss_gate_sign, this.handle_sign.bind(this));
+        this.physics.arcade.overlap(this.player, this.boss_gate.door, this.handle_sign.bind(this));
 
         // Mouse Effect
         let angle = this.math.angleBetween(this.input.activePointer.x, this.input.activePointer.y, this.player.body.position.x + this.player.offsetX - this.camera.x, this.player.body.position.y + this.player.offsetY - this.camera.y);
@@ -291,10 +349,10 @@ export default class Stage2 extends Phaser.State {
         // Player animations controller
         if (this.player.body.velocity.x < 0) {
             this.player.animations.play(`${this.player.body.gravity.y < 0 ? 'rightrun' : 'leftrun'}`);
-            this.dot.scale.x = -1;
+            this.player.dot.scale.x = -0.8;
         } else if (this.player.body.velocity.x > 0) {
             this.player.animations.play(`${this.player.body.gravity.y < 0 ? 'leftrun' : 'rightrun'}`);
-            this.dot.scale.x = 1;
+            this.player.dot.scale.x = 0.8;
         } else if (!this.game.mouse.is_down) {
             this.player.frame = 0;
             this.player.animations.stop();
@@ -304,6 +362,7 @@ export default class Stage2 extends Phaser.State {
             this.gravity_1.animations.play('active');
             this.gravity_0.frame = 0;
             this.gravity_0.animations.stop();
+            this.player.dot.scale.y = -0.8;
 
             if (this.player.angle == 0) {
                 this.tween_down.start();
@@ -312,6 +371,7 @@ export default class Stage2 extends Phaser.State {
             this.gravity_0.animations.play('active');
             this.gravity_1.frame = 0;
             this.gravity_1.animations.stop();
+            this.player.dot.scale.y = 0.8;
 
             if (this.player.angle != 0) {
                 this.tween_up.start();
@@ -358,7 +418,7 @@ export default class Stage2 extends Phaser.State {
             } else if (child.x > this.camera.x + 950) {
                 child.x = this.camera.x - 950;
             }
-            child.y = this.camera.y;
+            child.y = this.camera.y + 40;
         }
         for (let child of this.layer_4.children) {
             child.x -= this.player.body.velocity.x * 0.01;
@@ -378,8 +438,8 @@ export default class Stage2 extends Phaser.State {
         let ty = -this.player.y / 9900 * 930 + 160;
         this.minimap.x = tx > 0 ? 0 : (tx < -620 ? -620 : tx);
         this.minimap.y = ty > 0 ? 0 : (ty < -451 ? -451 : ty);
-        this.dot.x = tx > 0 ? 160 - tx : (tx < -620 ? 160 - 620 - tx : 160);
-        this.dot.y = ty > 0 ? 160 - ty : (ty < -451 ? 160 - 451 - ty : 160);
+        this.player.dot.x = tx > 0 ? 160 - tx : (tx < -620 ? 160 - 620 - tx : 160);
+        this.player.dot.y = ty > 0 ? 160 - ty : (ty < -451 ? 160 - 451 - ty : 160);
 
         // Update board status
         for (let i = 0; i < this.game.settings.total_enemy_types; ++i) {
@@ -461,6 +521,36 @@ export default class Stage2 extends Phaser.State {
         }
         if (this.game.total_life < 0.1) {
             this.state.start('Over');
+        }
+    }
+    handle_sign(player, sign) {
+        if (sign.key == 'Boss_Gate_Sign01' && sign.body.touching.up) {
+            this.boss_gate_sign_bloom.bloom_effect.stop();
+            this.boss_gate_sign_bloom.destroy();
+            sign.frame = 1;
+            sign.body.enable = false;
+            this.boss_gate.front.visible = true;
+            this.camera.shake(0.0035, 800);
+            this.boss_gate.up_effect.start();
+            this.boss_gate.down_effect.start();
+            this.boss_gate.back_effect.start();
+            this.boss_gate.up_effect.onComplete.add(() => {
+                this.boss_gate.valid = true;
+                this.boss_gate.up.mask.destroy();
+                this.boss_gate.up.destroy();
+                this.boss_gate.down.mask.destroy();
+                this.boss_gate.down.destroy();
+            });
+            this.boss_gate.front_effect.start();
+        } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
+            this.is_boss_state = true;
+            this.boss.visible = true;
+            this.boss.animations.play('walk');
+            this.enemy_layer.removeAll();
+            this.sign_layer.removeAll();
+            this.player.body.bounce.set(0.8);
+            this.boss_HP.front.visible = true;
+            this.boss_HP.back.visible = true;
         }
     }
 }

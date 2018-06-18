@@ -677,12 +677,12 @@ export default class Stage1 extends Phaser.State {
             this.state.start('Over');
         }
     }
-    handle_sign(player, p_Sign) {
-        if (p_Sign.key == 'Boss_Gate_Sign01' && p_Sign.body.touching.up) {
+    handle_sign(player, sign) {
+        if (sign.key == 'Boss_Gate_Sign01' && sign.body.touching.up) {
             this.boss_gate_sign_bloom.bloom_effect.stop();
             this.boss_gate_sign_bloom.destroy();
-            p_Sign.frame = 1;
-            p_Sign.body.enable = false;
+            sign.frame = 1;
+            sign.body.enable = false;
             this.boss_gate.front.visible = true;
             this.camera.shake(0.0035, 800);
             this.boss_gate.up_effect.start();
@@ -696,7 +696,7 @@ export default class Stage1 extends Phaser.State {
                 this.boss_gate.down.destroy();
             });
             this.boss_gate.front_effect.start();
-        } else if (this.boss_gate.valid && p_Sign.key == 'Boss_Gate00') {
+        } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
             this.is_boss_state = true;
             this.boss.visible = true;
             this.boss.animations.play('walk');

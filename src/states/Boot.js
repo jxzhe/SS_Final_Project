@@ -26,7 +26,7 @@ export default class Boot extends Phaser.State {
         this.game.total_enemies = 25;
         this.game.time_angle = 0;
         this.game.last_time = 0;
-        this.game.total_life = 1000;
+        this.game.total_life = 100;
         
         this.time.advancedTiming = true;
     }

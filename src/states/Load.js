@@ -10,6 +10,8 @@ export default class Load extends Phaser.State {
         this.load.audio('melo02', 'audio/system00_melo02.wav');
         this.load.audio('melo03', 'audio/system00_melo03.wav');
 
+        this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
+
         this.load.image('tileset', 'map/tileset.png');
         this.load.tilemap('map', 'map/map.json', null, Phaser.Tilemap.TILED_JSON);
 
@@ -85,6 +87,6 @@ export default class Load extends Phaser.State {
         this.load.image('favicon', 'image/Icon/favicon.png');
     }
     create() {
-        this.state.start('Menu');
+        this.state.start('Stage2');
     }
 }
