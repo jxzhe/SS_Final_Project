@@ -65,7 +65,7 @@ module.exports = {
         compress: true,
         port: 8080
     },
-    // devtool: 'source-map',
-    // mode: 'development'
-    mode: 'production'
+    devtool: 'source-map',
+    mode: 'development'
+    // mode: 'production'
 };

@@ -66,14 +66,15 @@ export default class Menu extends Phaser.State {
             'isPassword': false,
             'password': ''
         };
-        this.load_input.name_title = this.add.bitmapText(928 * 0.18, 90, 'carrier_command', `NAME: `);
+        this.load_input.name_title = this.add.bitmapText(928 * 0.5, 90, 'carrier_command', `Preseted by TEAM 17`);
+        this.load_input.name_title.anchor.set(0.5, 0);
         this.load_input.name_title.fixedToCamera = true;
         this.load_input.name_title.visible = false;
         this.load_input.name.fixedToCamera = true;
         this.load_input.name.visible = false;
         this.load_input.name.tint = 0x331111;
         this.load_input.name_title.tint = 0x331111;
-        this.load_input.name.fontSize = 20;
+        this.load_input.name.fontSize = 40;
         this.load_input.name_title.fontSize = 20;
 
         this.talk_sign_prist = this.add.sprite(312, 745 - 112 + 40, 'talk');
@@ -134,8 +135,8 @@ export default class Menu extends Phaser.State {
         this.talk_sign_bookgirl.mask.anchor.set(0, 1);
         this.talk_sign_bookgirl.mask.beginFill(0x000000);
         this.talk_sign_bookgirl.mask.drawRect(0, -33, 45, 33);
-        
-        this.leaderboard = this.add.sprite(928*0.5, 798*0.5, 'leaderboard');
+
+        this.leaderboard = this.add.sprite(928 * 0.5, 798 * 0.5, 'leaderboard');
         this.leaderboard.fixedToCamera = true;
         this.leaderboard.alpha = 0;
         this.leaderboard.anchor.set(0.5);
@@ -143,18 +144,18 @@ export default class Menu extends Phaser.State {
         this.records = [];
         this.record_text = [];
         firebase.database().ref(`board`).orderByChild('score').limitToLast(5).on('value', snapshot => {
-            if(this.record_text.length != 0) {
-                for(let i of this.record_text) {
+            if (this.record_text.length != 0) {
+                for (let i of this.record_text) {
                     i.destroy();
                 }
             }
             this.records.length = 0;
             snapshot.forEach(child => {
                 console.log(child.key, child.val());
-                this.records.push({name: child.key, score: child.val().score});
+                this.records.push({ name: child.key, score: child.val().score });
             });
-            for(let i = this.records.length - 1; i >= 0; i--) {
-                let t = this.add.bitmapText(928*0.5, (this.records.length-i)*50 + 200, 'carrier_command', `${this.records[i].name}: ${this.records[i].score}`);
+            for (let i = this.records.length - 1; i >= 0; i--) {
+                let t = this.add.bitmapText(928 * 0.5, (this.records.length - i) * 50 + 200, 'carrier_command', `${this.records[i].name}: ${this.records[i].score}`);
                 t.anchor.set(0.5);
                 t.fixedToCamera = true;
                 t.fontSize = 20;
@@ -166,7 +167,7 @@ export default class Menu extends Phaser.State {
 
         this.talk_sign_bookgirl.events.onInputUp.add(() => {
             this.add.tween(this.leaderboard).to({ alpha: 1 }, 300).start().onComplete.add(() => {
-                for(let i = 0; i < this.record_text.length; i++) {
+                for (let i = 0; i < this.record_text.length; i++) {
                     this.record_text[i].visible = true;
                 }
             });
@@ -308,7 +309,7 @@ export default class Menu extends Phaser.State {
         this.mouse_drag.alpha = 0;
 
         if (this.game.player_choice == 0) {
-            if(this.game.first_time_play) {
+            if (this.game.first_time_play) {
                 this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
             } else {
                 this.player = this.add.sprite(1586 * 0.8, 500, 'Player00');
@@ -322,7 +323,7 @@ export default class Menu extends Phaser.State {
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
         }
         else {
-            if(this.game.first_time_play) {
+            if (this.game.first_time_play) {
                 this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
             } else {
                 this.player = this.add.sprite(1586 * 0.8, 500, 'Player00');
@@ -376,6 +377,9 @@ export default class Menu extends Phaser.State {
             this.player.animations.add('rightjump', [7, 8, 9, 10, 11, 12], 10, true);
             this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            this.player.body.velocity.y = -100;
+            this.add.tween(this.player.scale).to({ x: 2.5, y: 2.5 }, 200).yoyo(true).start();
+            this.add.tween(this.player).to({ alpha: 0.2 }, 200).yoyo(true).start();
         });
         this.talk_sign_pumpgirl.btns.player2.events.onInputUp.add(() => {
             this.game.player_choice = 1;
@@ -386,6 +390,9 @@ export default class Menu extends Phaser.State {
             this.player.animations.add('rightjump', [19, 20, 21, 22, 23, 24], 10, true);
             this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
+            this.player.body.velocity.y = -100;
+            this.add.tween(this.player.scale).to({ x: 2.5, y: 2.5 }, 200).yoyo(true).start();
+            this.add.tween(this.player).to({ alpha: 0.2 }, 200).yoyo(true).start();
         });
         this.talk_sign_pumpgirl.btns.player1.events.onInputOver.add(() => {
             this.talk_sign_pumpgirl.btns.player1.tint = 0x553333;
@@ -473,13 +480,13 @@ export default class Menu extends Phaser.State {
                     this.sign_input.name_title.visible = false;
                     this.sign_input.name.visible = false;
                 }
-                else if(child.key == 'bookgirl') {
-                    for(let i of this.record_text) {
+                else if (child.key == 'bookgirl') {
+                    for (let i of this.record_text) {
                         i.visible = false;
                     }
                     this.add.tween(this.leaderboard).to({ alpha: 0 }, 100).start();
                 }
-                else if(child.key == 'prist') {
+                else if (child.key == 'prist') {
                     this.load_input.name_title.visible = false;
                     this.load_input.name.visible = false;
                 }

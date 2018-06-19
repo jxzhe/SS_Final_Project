@@ -136,18 +136,19 @@ export default class Stage2 extends Phaser.State {
     create_main_layer() {
         this.main_layer = this.add.group();
 
-        this.gravity_0 = this.add.sprite(1100, 1100, 'Gravity00');
-        this.gravity_1 = this.add.sprite(1300, 1300, 'Gravity01');
-        this.physics.arcade.enable(this.gravity_0);
-        this.physics.arcade.enable(this.gravity_1);
-        this.gravity_0.anchor.set(0.5);
-        this.gravity_1.anchor.set(0.5);
-        this.gravity_0.body.setCircle(16);
-        this.gravity_1.body.setCircle(16);
-        this.gravity_0.body.immovable = true;
-        this.gravity_1.body.immovable = true;
-        this.gravity_0.animations.add('active', [0, 1, 2, 3, 4, 5], 10, true);
-        this.gravity_1.animations.add('active', [0, 1, 2, 3, 4, 5], 10, true);
+        this.gravity = [
+            this.add.sprite(1100, 1100, 'Gravity00', 0, this.main_layer),
+            this.add.sprite(1300, 1300, 'Gravity01', 0, this.main_layer),
+            this.add.sprite(4770, 4350, 'Gravity00', 0, this.main_layer),
+            this.add.sprite(4310, 4350, 'Gravity01', 0, this.main_layer),
+        ];
+        for (let i = 0; i < 4; ++i) {
+            this.physics.arcade.enable(this.gravity[i]);
+            this.gravity[i].anchor.set(0.5);
+            this.gravity[i].body.setCircle(16);
+            this.gravity[i].body.immovable = true;
+            this.gravity[i].animations.add('active', [0, 1, 2, 3, 4, 5], 10, true);
+        }
 
         this.mouse_drag = this.add.sprite(0, 0, 'Mouse_Drag');
         this.mouse_drag.anchor.set(0.5);
@@ -158,13 +159,14 @@ export default class Stage2 extends Phaser.State {
 
         this.init_pos = [
             { x: 22, y: 25 }, { x: 208, y: 12 },
-            { x: 202, y: 150 }, { x: 26, y: 172 }, { x: 26, y: 172 }
+            { x: 202, y: 150 }, { x: 26, y: 172 }, 
+            { x: 112, y: 84 }, { x: 112, y: 84 }, { x: 112, y: 84 }
         ];
-        let r = Math.floor(Math.random() * 4);
+        let r = Math.floor(Math.random() * 6.99);
 
         if (this.game.player_choice == 0) {
-            // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
-            this.player = this.add.sprite(112 * 45, 84 * 45, 'Player00');
+            this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player00');
+
             this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
             this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
             this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
@@ -173,8 +175,7 @@ export default class Stage2 extends Phaser.State {
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
         }
         else {
-            // this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player01');
-            this.player = this.add.sprite(112 * 45, 84 * 45, 'Player01');
+            this.player = this.add.sprite(this.init_pos[r].x * 45, this.init_pos[r].y * 45, 'Player01');
             this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
             this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
             this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
@@ -215,7 +216,7 @@ export default class Stage2 extends Phaser.State {
         }, this);
         this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
-        this.main_layer.addMultiple([this.mouse_drag, this.player, this.gravity_0, this.gravity_1]);
+        this.main_layer.addMultiple([this.mouse_drag, this.player]);
     }
     create_map() {
         this.map = this.add.tilemap('map');
@@ -451,18 +452,26 @@ export default class Stage2 extends Phaser.State {
         }
 
         if (this.player.body.gravity.y < 0) {
-            this.gravity_1.animations.play('active');
-            this.gravity_0.frame = 0;
-            this.gravity_0.animations.stop();
+            for (let i = 1; i < 4; i += 2) {
+                this.gravity[i].animations.play('active');
+            }
+            for (let i = 0; i < 4; i += 2) {
+                this.gravity[i].frame = 0;
+                this.gravity[i].animations.stop();
+            }
             this.player.dot.scale.y = -0.8;
 
             if (this.player.angle == 0) {
                 this.tween_down.start();
             }
         } else {
-            this.gravity_0.animations.play('active');
-            this.gravity_1.frame = 0;
-            this.gravity_1.animations.stop();
+            for (let i = 0; i < 4; i += 2) {
+                this.gravity[i].animations.play('active');
+            }
+            for (let i = 1; i < 4; i += 2) {
+                this.gravity[i].frame = 0;
+                this.gravity[i].animations.stop();
+            }
             this.player.dot.scale.y = 0.8;
 
             if (this.player.angle != 0) {
@@ -544,6 +553,9 @@ export default class Stage2 extends Phaser.State {
         // Boss functions
         if (this.is_boss_state) {
             if (this.boss.hp < 0.01) {
+                this.game.normal.stop();
+                this.game.boss.stop();
+                this.game.first_time_play = false;
                 this.state.start('Clear');
             }
             this.boss_HP.front.mask.scale.set(this.boss.hp / 100, 1);
@@ -600,6 +612,9 @@ export default class Stage2 extends Phaser.State {
         }
 
         if (this.game.total_life < 0.1) {
+            this.game.normal.stop();
+            this.game.boss.stop();
+            this.game.first_time_play = false;
             this.state.start('Over');
         }
     }
@@ -648,7 +663,9 @@ export default class Stage2 extends Phaser.State {
                 });
             }, 200);
             setTimeout(() => {
-                this.destroy_emitter.remove(emitter); emitter.destroy();
+                if (this.destroy_emitter) {
+                    this.destroy_emitter.remove(emitter);
+                }
             }, 600);
         }, this);
         this.board[`Enemy${enemy.key.substring(5, 7)}Ratio`].total_clear += 1;
@@ -706,26 +723,28 @@ export default class Stage2 extends Phaser.State {
     handle_player_hit(player) {
         if (!player.is_touching) {
             this.game.total_life -= 2;
+            if (this.game.total_life < 0) {
+                this.game.total_life = 0;
+            }
             player.is_touching = true;
         }
     }
     handle_destroy_bullet(player, bullet) {
-        bullet.destroy();
-        // bullet.body.enable = false;
-        // this.board[`${bullet.key}Ratio`].cover.animations.play('kill');
-        // let tween = this.add.tween(bullet.scale).to({ x: 1.75, y: 1.75 }, 175).start();
-        // tween.onComplete.add(() => {
-        //     if (this.counter.lastType == bullet.key) {
-        //         this.counter.combo += 1;
-        //         this.audio[`melo0${this.counter.combo % 3}`].play();
-        //     } else {
-        //         this.counter.combo = 1;
-        //         this.counter.lastType = bullet.key;
-        //         this.audio[`melo00`].play();
-        //     }
-        //     this.tweens.remove(tween);
-        //     this.bullet_layer.remove(bullet);
-        //     bullet.destroy();
-        // }, this);
+        bullet.body.enable = false;
+        this.board[`${bullet.key}Ratio`].cover.animations.play('kill');
+        let tween = this.add.tween(bullet.scale).to({ x: 0, y: 0 }, 200).start();
+        tween.onComplete.add(() => {
+            if (this.counter.lastType == bullet.key) {
+                this.counter.combo += 1;
+                this.audio[`melo0${this.counter.combo % 3}`].play();
+            } else {
+                this.counter.combo = 1;
+                this.counter.lastType = bullet.key;
+                this.audio[`melo00`].play();
+            }
+            this.tweens.remove(tween);
+            this.bullet_layer.remove(bullet);
+            bullet.destroy();
+        }, this);
     }
 }

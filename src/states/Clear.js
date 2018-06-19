@@ -9,7 +9,7 @@ export default class Clear extends Phaser.State {
         this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', `Click To Menu`);
         this.start_text.anchor.set(0.5, 0);
         this.start_text.fontSize = 40;
-        this.start_text_tween = this.add.tween(this.start_text).to({alpha: 0.5}).yoyo(true).loop().start();
+        this.start_text_tween = this.add.tween(this.start_text).to({ alpha: 0.5 }).yoyo(true).loop().start();
         this.start_text.inputEnabled = true;
         this.start_text.input.useHandCursor = true;
         this.start_text.events.onInputUp.add(() => {
@@ -26,7 +26,7 @@ export default class Clear extends Phaser.State {
         renderer.setSize(width, height);
         renderer.domElement.id = 'cc';
         renderer.domElement.style = 'position: absolute; top:8px; left:8px;';
-        document.body.appendChild( renderer.domElement );
+        document.body.appendChild(renderer.domElement);
 
         var scene = new THREE.Scene();
 
@@ -34,7 +34,7 @@ export default class Clear extends Phaser.State {
         camera.position.set(+24, 0, +40);
 
         var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-        scene.add( ambientLight );
+        scene.add(ambientLight);
 
         var directionalLight = new THREE.DirectionalLight(0xFFFFFF);
         directionalLight.position.set(1, 1, 1);
@@ -55,13 +55,13 @@ export default class Clear extends Phaser.State {
         var text_c = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0]];
         var text_l = [[0, 0, 0], [0, 1, 0], [0, 2, 0], [0, 3, 0], [0, 4, 0], [1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0]];
         var text_t = [[2, 0, 0], [0, 4, 0], [1, 4, 0], [2, 4, 0], [3, 4, 0], [4, 4, 0], [2, 1, 0], [2, 2, 0], [2, 3, 0]];
-        
+
         var group_q = new THREE.Group();
-        for(let i = 0; i < text_q.length; i++) {
+        for (let i = 0; i < text_q.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0ff0});
+            let cubeMaterial = new THREE.MeshNormalMaterial();
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_q[i][0];
+            cube.position.x = text_q[i][0] + 3;
             cube.position.y = text_q[i][1];
             cube.position.z = text_q[i][2];
             group_q.add(cube);
@@ -69,11 +69,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_q);
 
         var group_u = new THREE.Group();
-        for(let i = 0; i < text_u.length; i++) {
+        for (let i = 0; i < text_u.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0ff0});
+            let cubeMaterial = new THREE.MeshNormalMaterial();
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_u[i][0] + 6;
+            cube.position.x = text_u[i][0] + 6 + 3;
             cube.position.y = text_u[i][1];
             cube.position.z = text_u[i][2];
             group_u.add(cube);
@@ -81,11 +81,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_u);
 
         var group_e1 = new THREE.Group();
-        for(let i = 0; i < text_e.length; i++) {
+        for (let i = 0; i < text_e.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0ff0});
+            let cubeMaterial = new THREE.MeshNormalMaterial();
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_e[i][0] + 12;
+            cube.position.x = text_e[i][0] + 12 + 3;
             cube.position.y = text_e[i][1];
             cube.position.z = text_e[i][2];
             group_e1.add(cube);
@@ -93,11 +93,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_e1);
 
         var group_s = new THREE.Group();
-        for(let i = 0; i < text_s.length; i++) {
+        for (let i = 0; i < text_s.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0ff0});
+            let cubeMaterial = new THREE.MeshNormalMaterial();
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_s[i][0] + 18;
+            cube.position.x = text_s[i][0] + 18 + 3;
             cube.position.y = text_s[i][1];
             cube.position.z = text_s[i][2];
             group_s.add(cube);
@@ -105,11 +105,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_s);
 
         var group_t = new THREE.Group();
-        for(let i = 0; i < text_t.length; i++) {
+        for (let i = 0; i < text_t.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0ff0});
+            let cubeMaterial = new THREE.MeshNormalMaterial();
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_t[i][0] + 24;
+            cube.position.x = text_t[i][0] + 24 + 3;
             cube.position.y = text_t[i][1];
             cube.position.z = text_t[i][2];
             group_t.add(cube);
@@ -117,11 +117,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_t);
 
         var group_c = new THREE.Group();
-        for(let i = 0; i < text_c.length; i++) {
+        for (let i = 0; i < text_c.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xfff00f});
+            let cubeMaterial = new THREE.MeshToonMaterial({ color: 0xccc00c, shininess: 1 });
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_c[i][0] + 11;
+            cube.position.x = text_c[i][0] + 11 + 3;
             cube.position.y = text_c[i][1] - 6;
             cube.position.z = text_c[i][2];
             group_c.add(cube);
@@ -129,11 +129,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_c);
 
         var group_l = new THREE.Group();
-        for(let i = 0; i < text_l.length; i++) {
+        for (let i = 0; i < text_l.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xfff00f});
+            let cubeMaterial = new THREE.MeshToonMaterial({ color: 0xccc00c, shininess: 1 });
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_l[i][0] + 17;
+            cube.position.x = text_l[i][0] + 17 + 3;
             cube.position.y = text_l[i][1] - 6;
             cube.position.z = text_l[i][2];
             group_l.add(cube);
@@ -141,11 +141,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_l);
 
         var group_e = new THREE.Group();
-        for(let i = 0; i < text_e.length; i++) {
+        for (let i = 0; i < text_e.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xfff00f});
+            let cubeMaterial = new THREE.MeshToonMaterial({ color: 0xccc00c, shininess: 1 });
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_e[i][0] + 23;
+            cube.position.x = text_e[i][0] + 23 + 3;
             cube.position.y = text_e[i][1] - 6;
             cube.position.z = text_e[i][2];
             group_e.add(cube);
@@ -153,11 +153,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_e);
 
         var group_a = new THREE.Group();
-        for(let i = 0; i < text_a.length; i++) {
+        for (let i = 0; i < text_a.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xfff00f});
+            let cubeMaterial = new THREE.MeshToonMaterial({ color: 0xccc00c, shininess: 1 });
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_a[i][0] + 29;
+            cube.position.x = text_a[i][0] + 29 + 3;
             cube.position.y = text_a[i][1] - 6;
             cube.position.z = text_a[i][2];
             group_a.add(cube);
@@ -165,11 +165,11 @@ export default class Clear extends Phaser.State {
         scene.add(group_a);
 
         var group_r = new THREE.Group();
-        for(let i = 0; i < text_r.length; i++) {
+        for (let i = 0; i < text_r.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xfff00f});
+            let cubeMaterial = new THREE.MeshToonMaterial({ color: 0xccc00c, shininess: 1 });
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-            cube.position.x = text_r[i][0] + 35;
+            cube.position.x = text_r[i][0] + 35 + 3;
             cube.position.y = text_r[i][1] - 6;
             cube.position.z = text_r[i][2];
             group_r.add(cube);
@@ -180,21 +180,21 @@ export default class Clear extends Phaser.State {
         var render = function () {
             let time = new Date();
             requestAnimationFrame(render);
-            this.angle += 0.01;
+            this.angle += 0.05;
 
             group_q.position.x = Math.cos(this.angle) * 1;
             group_u.position.x = Math.cos(this.angle) * 1;
             group_e1.position.x = Math.cos(this.angle) * 1;
             group_s.position.x = Math.cos(this.angle) * 1;
             group_t.position.x = Math.cos(this.angle) * 1;
-            
+
             group_c.position.x = Math.cos(this.angle) * 2;
             group_l.position.x = Math.cos(this.angle) * 2;
             group_e.position.x = Math.cos(this.angle) * 2;
             group_a.position.x = Math.cos(this.angle) * 2;
             group_r.position.x = Math.cos(this.angle) * 2;
             renderer.render(scene, camera);
-            directionalLight.position.set(1, Math.cos(time.getSeconds()/100), 1);
+            directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
         }.bind(this);
         render();
     }
