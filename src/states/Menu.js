@@ -286,14 +286,14 @@ export default class Menu extends Phaser.State {
 
         this.npc_layer.addMultiple([this.prist, this.pumpgirl, this.bookgirl, this.save, this.exitdoor]);
 
-        this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
-        this.life_icon.anchor.set(0.5);
-        this.life_icon.fixedToCamera = true;
-        this.life_text = this.add.bitmapText(this.game.width * 0.15, this.game.height * 0.035, 'carrier_command', `x${this.game.total_life}`);
-        this.life_text.anchor.set(0.5);
-        this.life_text.fixedToCamera = true;
+        this.life_icon = this.add.image(10, 10, 'LifeIcon');
+        this.life_icon.scale.set(0.7);
+        this.life_icon.inputEnabled = true;
+        this.life_icon.input.useHandCursor = true;
+        this.life_text = this.add.bitmapText(70, 15, 'carrier_command', `x${this.game.total_life}`);
         this.life_text.scale.set(0.6);
         this.life_text.tint = 0x220000;
+        this.life_icon.fixedToCamera = this.life_text.fixedToCamera = true;
 
         this.input.keyboard.onPressCallback = this.processKey.bind(this);
     }

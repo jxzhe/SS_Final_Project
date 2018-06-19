@@ -322,16 +322,18 @@ export default class Stage1 extends Phaser.State {
         this.board[`Enemy02Ratio`].cover.animations.add('kill', [0, 1, 2, 3, 4], 8, false);
         this.board[`Enemy03Ratio`].cover.animations.add('kill', [0, 1, 2, 3, 4, 5], 8, false);
 
-        this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
-        this.life_icon.anchor.set(0.5);
+        this.life_icon = this.add.image(10, 10, 'LifeIcon');
+        this.life_icon.scale.set(0.7);
         this.life_icon.inputEnabled = true;
         this.life_icon.input.useHandCursor = true;
         this.life_icon.events.onInputUp.add(() => {
             this.game.first_time_play = false;
+            this.game.normal.stop();
+            this.game.boss.stop();
+            this.game.menu.play();
             this.state.start('Menu');
         });
-        this.life_text = this.add.bitmapText(this.game.width * 0.15, this.game.height * 0.035, 'carrier_command', `x${this.game.total_life}`);
-        this.life_text.anchor.set(0.5);
+        this.life_text = this.add.bitmapText(70, 15, 'carrier_command', `x${this.game.total_life}`);
         this.life_text.scale.set(0.6);
         this.life_text.tint = 0x220000;
     }
@@ -717,9 +719,11 @@ export default class Stage1 extends Phaser.State {
             this.boss_gate.front_effect.start();
             this.game.normal.stop();
             this.game.gate.play();
-            this.game.boss.play();
         } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
-            this.is_boss_state = true;
+            if (!this.is_boss_state) {
+                this.game.boss.play();
+                this.is_boss_state = true;
+            }
             this.boss.visible = true;
             this.boss.animations.play('walk');
             this.enemy_layer.removeAll();
