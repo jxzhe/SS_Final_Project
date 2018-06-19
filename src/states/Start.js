@@ -51,7 +51,7 @@ export default class Start extends Phaser.State {
         var group_p = new THREE.Group();
         for(let i = 0; i < text_p.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0x6f6bd6});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             cube.position.x = text_p[i][0];
             cube.position.y = text_p[i][1];
@@ -63,7 +63,7 @@ export default class Start extends Phaser.State {
         var group_r = new THREE.Group();
         for(let i = 0; i < text_r.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0x6f6bd6});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             cube.position.x = text_r[i][0] + 6;
             cube.position.y = text_r[i][1];
@@ -75,7 +75,7 @@ export default class Start extends Phaser.State {
         var group_i = new THREE.Group();
         for(let i = 0; i < text_i.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0x6f6bd6});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             cube.position.x = text_i[i][0] + 12;
             cube.position.y = text_i[i][1];
@@ -87,7 +87,7 @@ export default class Start extends Phaser.State {
         var group_n1 = new THREE.Group();
         for(let i = 0; i < text_n.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0x6f6bd6});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             cube.position.x = text_n[i][0] + 18;
             cube.position.y = text_n[i][1];
@@ -99,7 +99,7 @@ export default class Start extends Phaser.State {
         var group_n2 = new THREE.Group();
         for(let i = 0; i < text_n.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0x6f6bd6});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             cube.position.x = text_n[i][0] + 24;
             cube.position.y = text_n[i][1];
@@ -111,7 +111,7 @@ export default class Start extends Phaser.State {
         var group_y = new THREE.Group();
         for(let i = 0; i < text_y.length; i++) {
             let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+            let cubeMaterial = new THREE.MeshStandardMaterial({color: 0x6f6bd6});
             let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             cube.position.x = text_y[i][0] + 30;
             cube.position.y = text_y[i][1];
@@ -173,17 +173,17 @@ export default class Start extends Phaser.State {
             let time = new Date();
             requestAnimationFrame(render);
             
-            group_p.rotation.x -= 0.005;
-            group_r.rotation.x -= 0.01;
-            group_i.rotation.x -= 0.015;
-            group_n1.rotation.x -= 0.02;
-            group_n2.rotation.x -= 0.025;
-            group_y.rotation.x -= 0.03;
+            group_p.rotation.x -= 0.005 *0.5;
+            group_r.rotation.x -= 0.01*0.5;
+            group_i.rotation.x -= 0.015*0.5;
+            group_n1.rotation.x -= 0.02*0.5;
+            group_n2.rotation.x -= 0.025*0.5;
+            group_y.rotation.x -= 0.03*0.5;
 
-            group_d.rotation.x -= 0.015;
-            group_a.rotation.x -= 0.02;
-            group_s.rotation.x -= 0.025;
-            group_h.rotation.x -= 0.03;
+            group_d.rotation.x -= 0.02*0.5;
+            group_a.rotation.x -= 0.025*0.5;
+            group_s.rotation.x -= 0.03*0.5;
+            group_h.rotation.x -= 0.035*0.5;
             
             renderer.render(scene, camera);
             directionalLight.position.set(1, Math.cos(time.getSeconds()/100), 1);

@@ -104,6 +104,6 @@ export default class Load extends Phaser.State {
         this.load.image('favicon', 'image/Icon/favicon.png');
     }
     create() {
-        this.state.start('Menu');
+        this.state.start('Start');
     }
 }

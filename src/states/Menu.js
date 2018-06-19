@@ -213,12 +213,14 @@ export default class Menu extends Phaser.State {
         this.talk_sign_exitdoor.btns.stage1.input.useHandCursor = true;
         this.talk_sign_exitdoor.btns.stage1.events.onInputUp.add(() => {
             this.game.total_life = 100;
+            this.bgm.stop();
             this.state.start('Stage1');
         });
         this.talk_sign_exitdoor.btns.stage2.inputEnabled = true;
         this.talk_sign_exitdoor.btns.stage2.input.useHandCursor = true;
         this.talk_sign_exitdoor.btns.stage2.events.onInputUp.add(() => {
             this.game.total_life = 100;
+            this.bgm.stop();
             this.state.start('Stage2');
         });
         this.talk_sign_exitdoor.events.onInputUp.add(() => {

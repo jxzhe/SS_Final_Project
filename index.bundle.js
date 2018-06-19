@@ -728,7 +728,7 @@ var Load = function (_Phaser$State) {
         }, {
                 key: 'create',
                 value: function create() {
-                        this.state.start('Menu');
+                        this.state.start('Start');
                 }
         }]);
 
@@ -1024,12 +1024,14 @@ var Menu = function (_Phaser$State) {
             this.talk_sign_exitdoor.btns.stage1.input.useHandCursor = true;
             this.talk_sign_exitdoor.btns.stage1.events.onInputUp.add(function () {
                 _this2.game.total_life = 100;
+                _this2.bgm.stop();
                 _this2.state.start('Stage1');
             });
             this.talk_sign_exitdoor.btns.stage2.inputEnabled = true;
             this.talk_sign_exitdoor.btns.stage2.input.useHandCursor = true;
             this.talk_sign_exitdoor.btns.stage2.events.onInputUp.add(function () {
                 _this2.game.total_life = 100;
+                _this2.bgm.stop();
                 _this2.state.start('Stage2');
             });
             this.talk_sign_exitdoor.events.onInputUp.add(function () {
@@ -3921,7 +3923,7 @@ var Start = function (_Phaser$State) {
                         var group_p = new THREE.Group();
                         for (var i = 0; i < text_p.length; i++) {
                                 var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-                                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x6f6bd6 });
                                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
                                 cube.position.x = text_p[i][0];
                                 cube.position.y = text_p[i][1];
@@ -3933,7 +3935,7 @@ var Start = function (_Phaser$State) {
                         var group_r = new THREE.Group();
                         for (var _i = 0; _i < text_r.length; _i++) {
                                 var _cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x6f6bd6 });
                                 var _cube = new THREE.Mesh(_cubeGeometry, _cubeMaterial);
                                 _cube.position.x = text_r[_i][0] + 6;
                                 _cube.position.y = text_r[_i][1];
@@ -3945,7 +3947,7 @@ var Start = function (_Phaser$State) {
                         var group_i = new THREE.Group();
                         for (var _i2 = 0; _i2 < text_i.length; _i2++) {
                                 var _cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cubeMaterial2 = new THREE.MeshStandardMaterial({ color: 0x6f6bd6 });
                                 var _cube2 = new THREE.Mesh(_cubeGeometry2, _cubeMaterial2);
                                 _cube2.position.x = text_i[_i2][0] + 12;
                                 _cube2.position.y = text_i[_i2][1];
@@ -3957,7 +3959,7 @@ var Start = function (_Phaser$State) {
                         var group_n1 = new THREE.Group();
                         for (var _i3 = 0; _i3 < text_n.length; _i3++) {
                                 var _cubeGeometry3 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cubeMaterial3 = new THREE.MeshStandardMaterial({ color: 0x6f6bd6 });
                                 var _cube3 = new THREE.Mesh(_cubeGeometry3, _cubeMaterial3);
                                 _cube3.position.x = text_n[_i3][0] + 18;
                                 _cube3.position.y = text_n[_i3][1];
@@ -3969,7 +3971,7 @@ var Start = function (_Phaser$State) {
                         var group_n2 = new THREE.Group();
                         for (var _i4 = 0; _i4 < text_n.length; _i4++) {
                                 var _cubeGeometry4 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cubeMaterial4 = new THREE.MeshStandardMaterial({ color: 0x6f6bd6 });
                                 var _cube4 = new THREE.Mesh(_cubeGeometry4, _cubeMaterial4);
                                 _cube4.position.x = text_n[_i4][0] + 24;
                                 _cube4.position.y = text_n[_i4][1];
@@ -3981,7 +3983,7 @@ var Start = function (_Phaser$State) {
                         var group_y = new THREE.Group();
                         for (var _i5 = 0; _i5 < text_y.length; _i5++) {
                                 var _cubeGeometry5 = new THREE.BoxGeometry(1, 1, 1);
-                                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                                var _cubeMaterial5 = new THREE.MeshStandardMaterial({ color: 0x6f6bd6 });
                                 var _cube5 = new THREE.Mesh(_cubeGeometry5, _cubeMaterial5);
                                 _cube5.position.x = text_y[_i5][0] + 30;
                                 _cube5.position.y = text_y[_i5][1];
@@ -4042,17 +4044,17 @@ var Start = function (_Phaser$State) {
                                 var time = new Date();
                                 requestAnimationFrame(render);
 
-                                group_p.rotation.x -= 0.005;
-                                group_r.rotation.x -= 0.01;
-                                group_i.rotation.x -= 0.015;
-                                group_n1.rotation.x -= 0.02;
-                                group_n2.rotation.x -= 0.025;
-                                group_y.rotation.x -= 0.03;
+                                group_p.rotation.x -= 0.005 * 0.5;
+                                group_r.rotation.x -= 0.01 * 0.5;
+                                group_i.rotation.x -= 0.015 * 0.5;
+                                group_n1.rotation.x -= 0.02 * 0.5;
+                                group_n2.rotation.x -= 0.025 * 0.5;
+                                group_y.rotation.x -= 0.03 * 0.5;
 
-                                group_d.rotation.x -= 0.015;
-                                group_a.rotation.x -= 0.02;
-                                group_s.rotation.x -= 0.025;
-                                group_h.rotation.x -= 0.03;
+                                group_d.rotation.x -= 0.02 * 0.5;
+                                group_a.rotation.x -= 0.025 * 0.5;
+                                group_s.rotation.x -= 0.03 * 0.5;
+                                group_h.rotation.x -= 0.035 * 0.5;
 
                                 renderer.render(scene, camera);
                                 directionalLight.position.set(1, Math.cos(time.getSeconds() / 100), 1);
