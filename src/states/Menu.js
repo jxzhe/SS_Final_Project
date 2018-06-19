@@ -63,6 +63,21 @@ export default class Menu extends Phaser.State {
         this.info_back.text.fontSize = 40;
         this.info_back.text.fixedToCamera = true;
 
+        this.load_input = {
+            'name': this.add.bitmapText(400, 90, 'carrier_command', `${this.game.inputBuffer}`),
+            'isPassword': false,
+            'password': ''
+        };
+        this.load_input.name_title = this.add.bitmapText(928 * 0.18, 90, 'carrier_command', `NAME: `);
+        this.load_input.name_title.fixedToCamera = true;
+        this.load_input.name_title.visible = false;
+        this.load_input.name.fixedToCamera = true;
+        this.load_input.name.visible = false;
+        this.load_input.name.tint = 0x331111;
+        this.load_input.name_title.tint = 0x331111;
+        this.load_input.name.fontSize = 20;
+        this.load_input.name_title.fontSize = 20;
+
         this.talk_sign_prist = this.add.sprite(312, 745 - 112 + 40, 'talk');
         this.talk_sign_prist.visible = false;
         this.talk_sign_prist.inputEnabled = true;
@@ -73,7 +88,9 @@ export default class Menu extends Phaser.State {
         this.talk_sign_prist.mask.beginFill(0x000000);
         this.talk_sign_prist.mask.drawRect(0, -33, 45, 33);
         this.talk_sign_prist.events.onInputUp.add(() => {
-            //
+            this.info_back.text.visible = false;
+            this.load_input.name.visible = true;
+            this.load_input.name_title.visible = true;
         }, this);
 
         this.talk_sign_pumpgirl = this.add.sprite(613, 745 - 92 + 40, 'talk');
@@ -291,7 +308,12 @@ export default class Menu extends Phaser.State {
         this.mouse_drag.alpha = 0;
 
         if (this.game.player_choice == 0) {
-            this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+            if(this.game.first_time_play) {
+                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+            } else {
+                this.player = this.add.sprite(1586 * 0.8, 500, 'Player00');
+                this.game.first_time_play = true;
+            }
             this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
             this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
             this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
@@ -300,7 +322,12 @@ export default class Menu extends Phaser.State {
             this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
         }
         else {
-            this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+            if(this.game.first_time_play) {
+                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+            } else {
+                this.player = this.add.sprite(1586 * 0.8, 500, 'Player00');
+                this.game.first_time_play = true;
+            }
             this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
             this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
             this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
@@ -451,6 +478,10 @@ export default class Menu extends Phaser.State {
                         i.visible = false;
                     }
                     this.add.tween(this.leaderboard).to({ alpha: 0 }, 100).start();
+                }
+                else if(child.key == 'prist') {
+                    this.load_input.name_title.visible = false;
+                    this.load_input.name.visible = false;
                 }
             }
         }

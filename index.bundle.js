@@ -291,6 +291,8 @@ var Boot = function (_Phaser$State) {
             this.game.nameBuffer = '';
             this.game.passwordBuffer = '';
 
+            this.game.first_time_play = true;
+
             this.game.player_choice = 0;
             this.game.settings = {
                 border_top_offset_y: 195,
@@ -854,6 +856,21 @@ var Menu = function (_Phaser$State) {
             this.info_back.text.fontSize = 40;
             this.info_back.text.fixedToCamera = true;
 
+            this.load_input = {
+                'name': this.add.bitmapText(400, 90, 'carrier_command', '' + this.game.inputBuffer),
+                'isPassword': false,
+                'password': ''
+            };
+            this.load_input.name_title = this.add.bitmapText(928 * 0.18, 90, 'carrier_command', 'NAME: ');
+            this.load_input.name_title.fixedToCamera = true;
+            this.load_input.name_title.visible = false;
+            this.load_input.name.fixedToCamera = true;
+            this.load_input.name.visible = false;
+            this.load_input.name.tint = 0x331111;
+            this.load_input.name_title.tint = 0x331111;
+            this.load_input.name.fontSize = 20;
+            this.load_input.name_title.fontSize = 20;
+
             this.talk_sign_prist = this.add.sprite(312, 745 - 112 + 40, 'talk');
             this.talk_sign_prist.visible = false;
             this.talk_sign_prist.inputEnabled = true;
@@ -864,7 +881,9 @@ var Menu = function (_Phaser$State) {
             this.talk_sign_prist.mask.beginFill(0x000000);
             this.talk_sign_prist.mask.drawRect(0, -33, 45, 33);
             this.talk_sign_prist.events.onInputUp.add(function () {
-                //
+                _this2.info_back.text.visible = false;
+                _this2.load_input.name.visible = true;
+                _this2.load_input.name_title.visible = true;
             }, this);
 
             this.talk_sign_pumpgirl = this.add.sprite(613, 745 - 92 + 40, 'talk');
@@ -1106,7 +1125,12 @@ var Menu = function (_Phaser$State) {
             this.mouse_drag.alpha = 0;
 
             if (this.game.player_choice == 0) {
-                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+                if (this.game.first_time_play) {
+                    this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player00');
+                } else {
+                    this.player = this.add.sprite(1586 * 0.8, 500, 'Player00');
+                    this.game.first_time_play = true;
+                }
                 this.player.animations.add('leftwalk', [13, 14, 15, 16, 17, 18], 8, true);
                 this.player.animations.add('rightwalk', [19, 20, 21, 22, 23, 24], 8, true);
                 this.player.animations.add('leftjump', [1, 2, 3, 4, 5, 6], 10, true);
@@ -1114,7 +1138,12 @@ var Menu = function (_Phaser$State) {
                 this.player.animations.add('leftrun', [25, 26, 27, 28, 29, 30], 8, true);
                 this.player.animations.add('rightrun', [31, 32, 33, 34, 35, 36], 8, true);
             } else {
-                this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+                if (this.game.first_time_play) {
+                    this.player = this.add.sprite(this.game.width * 0.5, 500, 'Player01');
+                } else {
+                    this.player = this.add.sprite(1586 * 0.8, 500, 'Player00');
+                    this.game.first_time_play = true;
+                }
                 this.player.animations.add('leftwalk', [1, 2, 3, 4, 5, 6], 8, true);
                 this.player.animations.add('rightwalk', [7, 8, 9, 10, 11, 12], 8, true);
                 this.player.animations.add('leftjump', [13, 14, 15, 16, 17, 18], 10, true);
@@ -1291,6 +1320,9 @@ var Menu = function (_Phaser$State) {
                         }
 
                         _this4.add.tween(_this4.leaderboard).to({ alpha: 0 }, 100).start();
+                    } else if (child.key == 'prist') {
+                        _this4.load_input.name_title.visible = false;
+                        _this4.load_input.name.visible = false;
                     }
                 }
             };
@@ -1997,6 +2029,8 @@ var Stage1 = function (_Phaser$State) {
     }, {
         key: 'init_board',
         value: function init_board() {
+            var _this3 = this;
+
             this.board = {
                 'Enemy00Ratio': {
                     'cover': this.add.sprite(this.game.width * 0.4, this.game.height * 0.075, 'Enemy00'),
@@ -2050,6 +2084,12 @@ var Stage1 = function (_Phaser$State) {
 
             this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
             this.life_icon.anchor.set(0.5);
+            this.life_icon.inputEnabled = true;
+            this.life_icon.input.useHandCursor = true;
+            this.life_icon.events.onInputUp.add(function () {
+                _this3.game.first_time_play = false;
+                _this3.state.start('Menu');
+            });
             this.life_text = this.add.bitmapText(this.game.width * 0.15, this.game.height * 0.035, 'carrier_command', 'x' + this.game.total_life);
             this.life_text.anchor.set(0.5);
             this.life_text.scale.set(0.6);
@@ -2099,7 +2139,7 @@ var Stage1 = function (_Phaser$State) {
     }, {
         key: 'update',
         value: function update() {
-            var _this3 = this;
+            var _this4 = this;
 
             var cur_time = this.time.now;
 
@@ -2682,19 +2722,19 @@ var Stage1 = function (_Phaser$State) {
                     }
                     this.boss.move_effect = this.add.tween(this.boss).to({ x: this.player.x }, 2000).start();
                     this.boss.move_effect.onComplete.add(function () {
-                        _this3.tweens.remove(_this3.boss.move_effect);
+                        _this4.tweens.remove(_this4.boss.move_effect);
                         // if(Math.random() > 0.2) {
-                        _this3.boss.animations.play('attack');
+                        _this4.boss.animations.play('attack');
                         setTimeout(function () {
-                            _this3.boss.frame = 2;
+                            _this4.boss.frame = 2;
                         }, 1000);
-                        if (_this3.bullets.length == 0) {
+                        if (_this4.bullets.length == 0) {
                             var _iteratorNormalCompletion19 = true;
                             var _didIteratorError19 = false;
                             var _iteratorError19 = undefined;
 
                             try {
-                                for (var _iterator19 = _this3.bullet_layer.children[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
+                                for (var _iterator19 = _this4.bullet_layer.children[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
                                     var _child17 = _step19.value;
 
                                     _child17.destroy();
@@ -2714,17 +2754,17 @@ var Stage1 = function (_Phaser$State) {
                                 }
                             }
 
-                            _this3.bullets.length = 0;
+                            _this4.bullets.length = 0;
                         }
-                        _this3.time.events.repeat(Phaser.Timer.SECOND * 0.75, 3, function () {
+                        _this4.time.events.repeat(Phaser.Timer.SECOND * 0.75, 3, function () {
                             var bullets = {
-                                0: _this3.add.sprite(_this3.boss.x + 136, _this3.boss.y + 52, 'Enemy00'),
-                                1: _this3.add.sprite(_this3.boss.x + 136, _this3.boss.y + 52, 'Enemy00'),
-                                2: _this3.add.sprite(_this3.boss.x + 136, _this3.boss.y + 52, 'Enemy00')
+                                0: _this4.add.sprite(_this4.boss.x + 136, _this4.boss.y + 52, 'Enemy00'),
+                                1: _this4.add.sprite(_this4.boss.x + 136, _this4.boss.y + 52, 'Enemy00'),
+                                2: _this4.add.sprite(_this4.boss.x + 136, _this4.boss.y + 52, 'Enemy00')
                             };
                             for (var _i = 0; _i < 3; ++_i) {
                                 bullets[_i].scale.set(1.5);
-                                _this3.physics.arcade.enable(bullets[_i]);
+                                _this4.physics.arcade.enable(bullets[_i]);
                                 bullets[_i].body.mass = 0.25;
                                 bullets[_i].body.bounce.set(1);
                                 bullets[_i].body.velocity.y = 200;
@@ -2734,18 +2774,18 @@ var Stage1 = function (_Phaser$State) {
                             bullets[1].body.velocity.x = 0;
                             bullets[2].body.velocity.x = 50;
                             // bullet.body.gravity.y = 200;
-                            _this3.bullet_layer.addMultiple([bullets[0], bullets[1], bullets[2]]);
+                            _this4.bullet_layer.addMultiple([bullets[0], bullets[1], bullets[2]]);
                             for (var _i2 = 0; _i2 < 3; ++_i2) {
-                                _this3.bullets.push(bullets[_i2]);
+                                _this4.bullets.push(bullets[_i2]);
                             }
                             bullets = {
-                                0: _this3.add.sprite(_this3.boss.x - 145, _this3.boss.y + 52, 'Enemy01'),
-                                1: _this3.add.sprite(_this3.boss.x - 145, _this3.boss.y + 52, 'Enemy01'),
-                                2: _this3.add.sprite(_this3.boss.x - 145, _this3.boss.y + 52, 'Enemy01')
+                                0: _this4.add.sprite(_this4.boss.x - 145, _this4.boss.y + 52, 'Enemy01'),
+                                1: _this4.add.sprite(_this4.boss.x - 145, _this4.boss.y + 52, 'Enemy01'),
+                                2: _this4.add.sprite(_this4.boss.x - 145, _this4.boss.y + 52, 'Enemy01')
                             };
                             for (var _i3 = 0; _i3 < 3; ++_i3) {
                                 bullets[_i3].scale.set(1.5);
-                                _this3.physics.arcade.enable(bullets[_i3]);
+                                _this4.physics.arcade.enable(bullets[_i3]);
                                 bullets[_i3].body.mass = 0.25;
                                 bullets[_i3].body.bounce.set(1);
                                 bullets[_i3].body.velocity.y = 250;
@@ -2755,12 +2795,12 @@ var Stage1 = function (_Phaser$State) {
                             bullets[1].body.velocity.x = 0;
                             bullets[2].body.velocity.x = 50;
                             // bullet.body.gravity.y = 200;
-                            _this3.bullet_layer.addMultiple([bullets[0], bullets[1], bullets[2]]);
+                            _this4.bullet_layer.addMultiple([bullets[0], bullets[1], bullets[2]]);
                             for (var _i4 = 0; _i4 < 3; ++_i4) {
-                                _this3.bullets.push(bullets[_i4]);
+                                _this4.bullets.push(bullets[_i4]);
                             }
-                        }, _this3);
-                        _this3.world.bringToTop(_this3.bullet_layer);
+                        }, _this4);
+                        _this4.world.bringToTop(_this4.bullet_layer);
                         // }
                     });
                 }
@@ -2791,42 +2831,42 @@ var Stage1 = function (_Phaser$State) {
     }, {
         key: 'handle_enemy_hit',
         value: function handle_enemy_hit(player, enemy) {
-            var _this4 = this;
+            var _this5 = this;
 
             enemy.body.enable = false;
             this.board[enemy.key + 'Ratio'].cover.animations.play('kill');
             var tween = this.add.tween(enemy.scale).to({ x: 1.75, y: 1.75 }, 175).start();
             tween.onComplete.add(function () {
-                if (_this4.counter.lastType == enemy.key) {
-                    _this4.counter.combo += 1;
-                    _this4.audio['melo0' + _this4.counter.combo % 3].play();
+                if (_this5.counter.lastType == enemy.key) {
+                    _this5.counter.combo += 1;
+                    _this5.audio['melo0' + _this5.counter.combo % 3].play();
                 } else {
-                    _this4.counter.combo = 1;
-                    _this4.counter.lastType = enemy.key;
-                    _this4.audio['melo00'].play();
+                    _this5.counter.combo = 1;
+                    _this5.counter.lastType = enemy.key;
+                    _this5.audio['melo00'].play();
                 }
-                _this4.tweens.remove(tween);
-                var particle_size = _this4.counter.combo / 5;
-                var emitter = _this4.add.emitter(enemy.x, enemy.y, particle_size);
+                _this5.tweens.remove(tween);
+                var particle_size = _this5.counter.combo / 5;
+                var emitter = _this5.add.emitter(enemy.x, enemy.y, particle_size);
                 emitter.gravity = 0;
                 emitter.makeParticles('Particle' + enemy.key.substring(5, 7));
                 emitter.setXSpeed(-150, 150);
                 emitter.setYSpeed(-150, 150);
                 emitter.setScale(1, 0.5, 1, 0.5, 800);
                 emitter.start(true, 800, null, particle_size);
-                _this4.destroy_emitter.add(emitter);
-                _this4.enemy_layer.remove(enemy);
+                _this5.destroy_emitter.add(emitter);
+                _this5.enemy_layer.remove(enemy);
                 enemy.destroy();
                 setTimeout(function () {
                     emitter.forEach(function (particle) {
-                        var moveTo = _this4.add.tween(particle).to({ x: _this4.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.x, y: _this4.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.y }, 400).start();
+                        var moveTo = _this5.add.tween(particle).to({ x: _this5.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.x, y: _this5.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.y }, 400).start();
                         moveTo.onComplete.add(function () {
-                            _this4.tweens.remove(moveTo);
+                            _this5.tweens.remove(moveTo);
                         });
                     });
                 }, 200);
                 setTimeout(function () {
-                    _this4.destroy_emitter.remove(emitter);
+                    _this5.destroy_emitter.remove(emitter);
                     emitter.destroy();
                 }, 600);
             }, this);
@@ -2851,7 +2891,7 @@ var Stage1 = function (_Phaser$State) {
     }, {
         key: 'handle_sign',
         value: function handle_sign(player, sign) {
-            var _this5 = this;
+            var _this6 = this;
 
             if (sign.key == 'Boss_Gate_Sign01' && sign.body.touching.up) {
                 this.boss_gate_sign_bloom.bloom_effect.stop();
@@ -2864,11 +2904,11 @@ var Stage1 = function (_Phaser$State) {
                 this.boss_gate.down_effect.start();
                 this.boss_gate.back_effect.start();
                 this.boss_gate.up_effect.onComplete.add(function () {
-                    _this5.boss_gate.valid = true;
-                    _this5.boss_gate.up.mask.destroy();
-                    _this5.boss_gate.up.destroy();
-                    _this5.boss_gate.down.mask.destroy();
-                    _this5.boss_gate.down.destroy();
+                    _this6.boss_gate.valid = true;
+                    _this6.boss_gate.up.mask.destroy();
+                    _this6.boss_gate.up.destroy();
+                    _this6.boss_gate.down.mask.destroy();
+                    _this6.boss_gate.down.destroy();
                 });
                 this.boss_gate.front_effect.start();
                 this.boss_bgm.play();
@@ -3260,6 +3300,8 @@ var Stage2 = function (_Phaser$State) {
     }, {
         key: 'create_board_layer',
         value: function create_board_layer() {
+            var _this3 = this;
+
             this.board_layer = this.add.group();
             this.board = {
                 'Enemy00Ratio': {
@@ -3316,6 +3358,12 @@ var Stage2 = function (_Phaser$State) {
 
             this.life_icon = this.add.image(10, 10, 'LifeIcon');
             this.life_icon.scale.set(0.7);
+            this.life_icon.inputEnabled = true;
+            this.life_icon.input.useHandCursor = true;
+            this.life_icon.events.onInputUp.add(function () {
+                _this3.game.first_time_play = false;
+                _this3.state.start('Menu');
+            });
             this.life_text = this.add.bitmapText(70, 15, 'carrier_command', 'x' + this.game.total_life);
             this.life_text.scale.set(0.6);
             this.life_text.tint = 0x220000;
@@ -3327,7 +3375,7 @@ var Stage2 = function (_Phaser$State) {
     }, {
         key: 'update',
         value: function update() {
-            var _this3 = this;
+            var _this4 = this;
 
             var cur_time = this.time.now;
 
@@ -3405,8 +3453,8 @@ var Stage2 = function (_Phaser$State) {
             this.physics.arcade.overlap(this.player, this.boss, this.handle_player_hit.bind(this));
 
             this.physics.arcade.overlap(this.hidden_block, this.player, function (block) {
-                _this3.add.tween(_this3.hidden_block).to({ alpha: 0.5 }, 80).start();
-                _this3.hidden_block.last_overlapped = _this3.time.now + 80;
+                _this4.add.tween(_this4.hidden_block).to({ alpha: 0.5 }, 80).start();
+                _this4.hidden_block.last_overlapped = _this4.time.now + 80;
             });
             if (this.hidden_block.last_overlapped && this.time.now > this.hidden_block.last_overlapped) {
                 this.add.tween(this.hidden_block).to({ alpha: 1 }, 80).start();
@@ -3652,28 +3700,28 @@ var Stage2 = function (_Phaser$State) {
                     }
                     this.boss.move_effect = this.add.tween(this.boss).to({ x: this.player.x, y: this.player.y - 250 }, 2000).start();
                     this.boss.move_effect.onComplete.add(function () {
-                        _this3.tweens.remove(_this3.boss.move_effect);
-                        _this3.boss.animations.play('attack');
+                        _this4.tweens.remove(_this4.boss.move_effect);
+                        _this4.boss.animations.play('attack');
                         setTimeout(function () {
-                            _this3.boss.frame = 2;
+                            _this4.boss.frame = 2;
                         }, 1000);
-                        _this3.time.events.repeat(Phaser.Timer.SECOND * 0.75, 3, function () {
+                        _this4.time.events.repeat(Phaser.Timer.SECOND * 0.75, 3, function () {
                             for (var _i3 = 0; _i3 < 6; ++_i3) {
-                                var bullet = _this3.add.sprite(_this3.boss.x + (_i3 < 3 ? 136 : -145), _this3.boss.y + 52, 'Enemy0' + Math.floor(Math.random() * 3.99), 0, _this3.bullet_layer);
+                                var bullet = _this4.add.sprite(_this4.boss.x + (_i3 < 3 ? 136 : -145), _this4.boss.y + 52, 'Enemy0' + Math.floor(Math.random() * 3.99), 0, _this4.bullet_layer);
                                 bullet.angle = -90 + Math.random() * 180;
-                                _this3.physics.arcade.enable(bullet);
+                                _this4.physics.arcade.enable(bullet);
                                 bullet.body.mass = 0.25;
                                 bullet.body.bounce.set(1);
                                 bullet.body.velocity.x = (_i3 - (_i3 < 3 ? 1 : 4)) * 80;
                                 bullet.body.velocity.y = 200;
                                 bullet.hit = false;
                             }
-                        }, _this3);
-                        _this3.world.bringToTop(_this3.bullet_layer);
+                        }, _this4);
+                        _this4.world.bringToTop(_this4.bullet_layer);
                     });
                 }
                 this.bullet_layer.forEach(function (bullet) {
-                    if (bullet.x < 0 || bullet.x > _this3.world.width || bullet.y < 0 || bullet.y > _this3.world.height) {
+                    if (bullet.x < 0 || bullet.x > _this4.world.width || bullet.y < 0 || bullet.y > _this4.world.height) {
                         bullet.destroy();
                     }
                 });
@@ -3706,42 +3754,42 @@ var Stage2 = function (_Phaser$State) {
     }, {
         key: 'handle_enemy_hit',
         value: function handle_enemy_hit(player, enemy) {
-            var _this4 = this;
+            var _this5 = this;
 
             enemy.body.enable = false;
             this.board[enemy.key + 'Ratio'].cover.animations.play('kill');
             var tween = this.add.tween(enemy.scale).to({ x: 1.75, y: 1.75 }, 175).start();
             tween.onComplete.add(function () {
-                if (_this4.counter.lastType == enemy.key) {
-                    _this4.counter.combo += 1;
-                    _this4.audio['melo0' + _this4.counter.combo % 3].play();
+                if (_this5.counter.lastType == enemy.key) {
+                    _this5.counter.combo += 1;
+                    _this5.audio['melo0' + _this5.counter.combo % 3].play();
                 } else {
-                    _this4.counter.combo = 1;
-                    _this4.counter.lastType = enemy.key;
-                    _this4.audio['melo00'].play();
+                    _this5.counter.combo = 1;
+                    _this5.counter.lastType = enemy.key;
+                    _this5.audio['melo00'].play();
                 }
-                _this4.tweens.remove(tween);
-                var particle_size = _this4.counter.combo / 5;
-                var emitter = _this4.add.emitter(enemy.x, enemy.y, particle_size);
+                _this5.tweens.remove(tween);
+                var particle_size = _this5.counter.combo / 5;
+                var emitter = _this5.add.emitter(enemy.x, enemy.y, particle_size);
                 emitter.gravity = 0;
                 emitter.makeParticles('Particle' + enemy.key.substring(5, 7));
                 emitter.setXSpeed(-150, 150);
                 emitter.setYSpeed(-150, 150);
                 emitter.setScale(1, 0.5, 1, 0.5, 800);
                 emitter.start(true, 800, null, particle_size);
-                _this4.destroy_emitter.add(emitter);
-                _this4.enemy_layer.remove(enemy);
+                _this5.destroy_emitter.add(emitter);
+                _this5.enemy_layer.remove(enemy);
                 enemy.destroy();
                 setTimeout(function () {
                     emitter.forEach(function (particle) {
-                        var moveTo = _this4.add.tween(particle).to({ x: _this4.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.x, y: _this4.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.y }, 400).start();
+                        var moveTo = _this5.add.tween(particle).to({ x: _this5.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.x, y: _this5.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].cover.y }, 400).start();
                         moveTo.onComplete.add(function () {
-                            _this4.tweens.remove(moveTo);
+                            _this5.tweens.remove(moveTo);
                         });
                     });
                 }, 200);
                 setTimeout(function () {
-                    _this4.destroy_emitter.remove(emitter);emitter.destroy();
+                    _this5.destroy_emitter.remove(emitter);emitter.destroy();
                 }, 600);
             }, this);
             this.board['Enemy' + enemy.key.substring(5, 7) + 'Ratio'].total_clear += 1;
@@ -3757,7 +3805,7 @@ var Stage2 = function (_Phaser$State) {
     }, {
         key: 'handle_sign',
         value: function handle_sign(player, sign) {
-            var _this5 = this;
+            var _this6 = this;
 
             if (sign.key == 'Boss_Gate_Sign01' && sign.body.touching.up) {
                 this.boss_gate_sign_bloom.bloom_effect.stop();
@@ -3770,11 +3818,11 @@ var Stage2 = function (_Phaser$State) {
                 this.boss_gate.down_effect.start();
                 this.boss_gate.back_effect.start();
                 this.boss_gate.up_effect.onComplete.add(function () {
-                    _this5.boss_gate.valid = true;
-                    _this5.boss_gate.up.mask.destroy();
-                    _this5.boss_gate.up.destroy();
-                    _this5.boss_gate.down.mask.destroy();
-                    _this5.boss_gate.down.destroy();
+                    _this6.boss_gate.valid = true;
+                    _this6.boss_gate.up.mask.destroy();
+                    _this6.boss_gate.up.destroy();
+                    _this6.boss_gate.down.mask.destroy();
+                    _this6.boss_gate.down.destroy();
                 });
                 this.boss_gate.front_effect.start();
                 this.boss_bgm.play();

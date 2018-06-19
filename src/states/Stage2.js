@@ -358,6 +358,12 @@ export default class Stage2 extends Phaser.State {
 
         this.life_icon = this.add.image(10, 10, 'LifeIcon');
         this.life_icon.scale.set(0.7);
+        this.life_icon.inputEnabled = true;
+        this.life_icon.input.useHandCursor = true;
+        this.life_icon.events.onInputUp.add(() => {
+            this.game.first_time_play = false;
+            this.state.start('Menu');
+        });
         this.life_text = this.add.bitmapText(70, 15, 'carrier_command', `x${this.game.total_life}`);
         this.life_text.scale.set(0.6);
         this.life_text.tint = 0x220000;
