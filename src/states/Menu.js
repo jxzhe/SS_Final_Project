@@ -117,6 +117,43 @@ export default class Menu extends Phaser.State {
         this.talk_sign_bookgirl.mask.anchor.set(0, 1);
         this.talk_sign_bookgirl.mask.beginFill(0x000000);
         this.talk_sign_bookgirl.mask.drawRect(0, -33, 45, 33);
+        
+        this.leaderboard = this.add.sprite(928*0.5, 798*0.5, 'leaderboard');
+        this.leaderboard.fixedToCamera = true;
+        this.leaderboard.alpha = 0;
+        this.leaderboard.anchor.set(0.5);
+
+        this.records = [];
+        this.record_text = [];
+        firebase.database().ref(`board`).orderByChild('score').limitToLast(5).on('value', snapshot => {
+            if(this.record_text.length != 0) {
+                for(let i of this.record_text) {
+                    i.destroy();
+                }
+            }
+            this.records.length = 0;
+            snapshot.forEach(child => {
+                console.log(child.key, child.val());
+                this.records.push({name: child.key, score: child.val().score});
+            });
+            for(let i = this.records.length - 1; i >= 0; i--) {
+                let t = this.add.bitmapText(928*0.5, (this.records.length-i)*50 + 200, 'carrier_command', `${this.records[i].name}: ${this.records[i].score}`);
+                t.anchor.set(0.5);
+                t.fixedToCamera = true;
+                t.fontSize = 20;
+                t.tint = 0x331111;
+                t.visible = false;
+                this.record_text.push(t);
+            }
+        });
+
+        this.talk_sign_bookgirl.events.onInputUp.add(() => {
+            this.add.tween(this.leaderboard).to({ alpha: 1 }, 300).start().onComplete.add(() => {
+                for(let i = 0; i < this.record_text.length; i++) {
+                    this.record_text[i].visible = true;
+                }
+            });
+        });
 
         this.sign_input = {
             'name': this.add.bitmapText(400, 90, 'carrier_command', `${this.game.inputBuffer}`),
@@ -227,6 +264,15 @@ export default class Menu extends Phaser.State {
         this.exitdoor.tween_back = this.add.tween(this.talk_sign_exitdoor).to({ y: 745 - 102 + 40 }, 300);
 
         this.npc_layer.addMultiple([this.prist, this.pumpgirl, this.bookgirl, this.save, this.exitdoor]);
+
+        this.life_icon = this.add.image(this.game.width * 0.045, this.game.height * 0.035, 'LifeIcon');
+        this.life_icon.anchor.set(0.5);
+        this.life_icon.fixedToCamera = true;
+        this.life_text = this.add.bitmapText(this.game.width * 0.15, this.game.height * 0.035, 'carrier_command', `x${this.game.total_life}`);
+        this.life_text.anchor.set(0.5);
+        this.life_text.fixedToCamera = true;
+        this.life_text.scale.set(0.6);
+        this.life_text.tint = 0x220000;
 
         this.input.keyboard.onPressCallback = this.processKey.bind(this);
     }
@@ -396,6 +442,12 @@ export default class Menu extends Phaser.State {
                     this.sign_input.name_title.visible = false;
                     this.sign_input.name.visible = false;
                 }
+                else if(child.key == 'bookgirl') {
+                    for(let i of this.record_text) {
+                        i.visible = false;
+                    }
+                    this.add.tween(this.leaderboard).to({ alpha: 0 }, 100).start();
+                }
             }
         }
         if (flag == this.npc_layer.length) {
@@ -438,6 +490,9 @@ export default class Menu extends Phaser.State {
             }
         }
         this.sign_input.name.text = `${this.game.inputBuffer}`;
+
+        // Life window
+        this.life_text.text = `x${this.game.total_life}`;
     }
     processKey(key) {
         if (this.input.keyboard.lastKey.keyCode == Phaser.Keyboard.ENTER) {
@@ -490,9 +545,9 @@ export default class Menu extends Phaser.State {
             }
         }
         else if (this.input.keyboard.lastKey.keyCode == Phaser.Keyboard.BACKSPACE) {
-            this.game.inputBuffer.splice(-1, 1);
+            this.game.inputBuffer = this.game.inputBuffer.slice(0, -1);
             if (this.sign_input.isPassword) {
-                this.game.passwordBuffer.splice(-1, 1);
+                this.game.passwordBuffer = this.game.passwordBuffer.slice(0, -1);
             }
         }
         else {

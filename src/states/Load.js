@@ -37,6 +37,7 @@ export default class Load extends Phaser.State {
         this.load.spritesheet('pumpgirl', 'image/Menu/pumpgirlset.png', 47, 82);
         this.load.spritesheet('saveboy', 'image/Menu/saveset.png', 78, 119);
         this.load.spritesheet('exitdoor', 'image/Menu/exitdoor.png', 58, 94);
+        this.load.image('leaderboard', 'image/Menu/leaderboard.png');
 
 
         this.load.image('Map01_Layer00', 'image/Map01/Map01_Layer00.png');
@@ -99,6 +100,6 @@ export default class Load extends Phaser.State {
         this.load.image('favicon', 'image/Icon/favicon.png');
     }
     create() {
-        this.state.start('Stage2');
+        this.state.start('Menu');
     }
 }
