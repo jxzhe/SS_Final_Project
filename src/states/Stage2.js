@@ -380,12 +380,13 @@ export default class Stage2 extends Phaser.State {
                 }
             }
             this.physics.arcade.overlap(this.boss, this.bullet_layer, this.handle_boss_hit.bind(this));
-        }
-        for (let child of this.enemy_layer.children) {
-            if (this.board[`Enemy${child.key.substring(5, 7)}Ratio`].total_clear >= this.game.total_enemies) {
-                this.physics.arcade.collide(this.player, child, this.handle_obstacle_hit.bind(this));
-            } else {
-                this.physics.arcade.overlap(this.player, child, this.handle_enemy_hit.bind(this));
+        } else {
+            for (let child of this.enemy_layer.children) {
+                if (this.board[`Enemy${child.key.substring(5, 7)}Ratio`].total_clear >= this.game.total_enemies) {
+                    this.physics.arcade.collide(this.player, child, this.handle_player_hit.bind(this));
+                } else {
+                    this.physics.arcade.overlap(this.player, child, this.handle_enemy_hit.bind(this));
+                }
             }
         }
         this.physics.arcade.collide(this.player, [this.main_layer, this.map_layer, this.map], this.handle_gravity.bind(this));
@@ -393,7 +394,6 @@ export default class Stage2 extends Phaser.State {
         this.physics.arcade.collide(this.enemy_layer);
         this.physics.arcade.collide(this.player, this.boss_gate_sign, this.handle_sign.bind(this));
         this.physics.arcade.overlap(this.player, this.boss_gate.door, this.handle_sign.bind(this));
-        this.physics.arcade.overlap(this.player, this.bullet_layer, this.handle_player_hit.bind(this));
         this.physics.arcade.overlap(this.player, this.boss, this.handle_player_hit.bind(this));
 
         this.physics.arcade.overlap(this.hidden_block, this.player, block => {
@@ -651,12 +651,6 @@ export default class Stage2 extends Phaser.State {
                     child.body.moves = false;
                 }
             })
-        }
-    }
-    handle_obstacle_hit(player, enemy) {
-        if (!player.is_touching) {
-            this.game.total_life -= 2;
-            player.is_touching = true;
         }
     }
     handle_sign(player, sign) {

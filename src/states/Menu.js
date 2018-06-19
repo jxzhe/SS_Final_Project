@@ -1,3 +1,4 @@
+import firebase from 'firebase/app';
 export default class Menu extends Phaser.State {
     constructor() {
         super();
@@ -117,15 +118,20 @@ export default class Menu extends Phaser.State {
         this.talk_sign_bookgirl.mask.beginFill(0x000000);
         this.talk_sign_bookgirl.mask.drawRect(0, -33, 45, 33);
 
-        this.sign_input = { 
-            'name': this.add.bitmapText(928 * 0.4, 90, 'carrier_command', `${this.game.inputBuffer}`),
-            'isPassword': false
+        this.sign_input = {
+            'name': this.add.bitmapText(400, 90, 'carrier_command', `${this.game.inputBuffer}`),
+            'isPassword': false,
+            'password': ''
         };
         this.sign_input.name_title = this.add.bitmapText(928 * 0.18, 90, 'carrier_command', `NAME: `);
         this.sign_input.name_title.fixedToCamera = true;
         this.sign_input.name_title.visible = false;
         this.sign_input.name.fixedToCamera = true;
         this.sign_input.name.visible = false;
+        this.sign_input.name.tint = 0x331111;
+        this.sign_input.name_title.tint = 0x331111;
+        this.sign_input.name.fontSize = 20;
+        this.sign_input.name_title.fontSize = 20;
         this.talk_sign_save = this.add.sprite(1211, 745 - 132 + 40, 'talk');
         this.talk_sign_save.anchor.set(0, 1);
         this.talk_sign_save.visible = false;
@@ -167,11 +173,13 @@ export default class Menu extends Phaser.State {
         this.talk_sign_exitdoor.btns.stage1.inputEnabled = true;
         this.talk_sign_exitdoor.btns.stage1.input.useHandCursor = true;
         this.talk_sign_exitdoor.btns.stage1.events.onInputUp.add(() => {
+            this.game.total_life = 100;
             this.state.start('Stage1');
         });
         this.talk_sign_exitdoor.btns.stage2.inputEnabled = true;
         this.talk_sign_exitdoor.btns.stage2.input.useHandCursor = true;
         this.talk_sign_exitdoor.btns.stage2.events.onInputUp.add(() => {
+            this.game.total_life = 100;
             this.state.start('Stage2');
         });
         this.talk_sign_exitdoor.events.onInputUp.add(() => {
@@ -271,7 +279,6 @@ export default class Menu extends Phaser.State {
             }
         }, this);
         this.player.events.onInputUp.add((sprite, pointer) => {
-            this.game.total_life -= 1;
             this.game.mouse.is_down = false;
             this.game.time_angle = 0;
             this.game.last_time = this.time.now;
@@ -385,7 +392,7 @@ export default class Menu extends Phaser.State {
                     this.talk_sign_pumpgirl.btns.player1.visible = false;
                     this.talk_sign_pumpgirl.btns.player2.visible = false;
                 }
-                else if(child.key == 'saveboy') {
+                else if (child.key == 'saveboy') {
                     this.sign_input.name_title.visible = false;
                     this.sign_input.name.visible = false;
                 }
@@ -433,26 +440,68 @@ export default class Menu extends Phaser.State {
         this.sign_input.name.text = `${this.game.inputBuffer}`;
     }
     processKey(key) {
-        if(this.game.input.keyboard.lastKey.keyCode == Phaser.Keyboard.ENTER) {
-            if(this.game.inputBuffer !== '') {
-                // firebase.database().ref(`m_leaderboard${bgIdx}`).push({
-                //     name: `${this.game.inputBuffer}`,
-                //     score: `${this.global.score}`,
-                // });
-                this.game.inputBuffer = '';
-                this.sign_input.name_title.text = 'PSWD: ';
-                this.sign_input.isPassword = true;
+        if (this.input.keyboard.lastKey.keyCode == Phaser.Keyboard.ENTER) {
+            if (this.game.inputBuffer !== '') {
+                if (this.sign_input.isPassword) {
+                    this.game.inputBuffer = '';
+                    if (this.sign_input.password) {
+                        if (this.sign_input.password === this.game.passwordBuffer) {
+                            firebase.database().ref(`/board/${this.game.nameBuffer}`).update({
+                                score: this.game.total_life
+                            }).then(() => {
+                                this.sign_input.name_title.text = 'NAME: ';
+                                this.sign_input.name_title.visible = false;
+                                this.sign_input.name.visible = false;
+                                this.info_back.text.visible = true;
+                                this.game.inputBuffer = this.game.nameBuffer = this.game.passwordBuffer = '';
+                                this.sign_input.isPassword = false;
+                                this.sign_input.password = '';
+                            });
+                        } else {
+                            this.game.inputBuffer = this.game.passwordBuffer = '';
+                        }
+                    } else {
+                        firebase.database().ref(`/board/${this.game.nameBuffer}`).update({
+                            score: this.game.total_life,
+                            password: this.game.passwordBuffer
+                        }).then(() => {
+                            this.sign_input.name_title.text = 'NAME: ';
+                            this.sign_input.name_title.visible = false;
+                            this.sign_input.name.visible = false;
+                            this.info_back.text.visible = true;
+                            this.game.inputBuffer = this.game.nameBuffer = this.game.passwordBuffer = '';
+                            this.sign_input.isPassword = false;
+                            this.sign_input.password = '';
+                        });
+                    }
+                } else {
+                    this.sign_input.name_title.text = 'PASSWORD: ';
+                    this.game.nameBuffer = this.game.inputBuffer;
+                    this.game.inputBuffer = '';
+                    firebase.database().ref(`/board/${this.game.nameBuffer}`).once('value').then(snapshot => {
+                        if (snapshot.exists()) {
+                            this.sign_input.password = String(snapshot.child('password').val());
+                        } else {
+                            this.sign_input.password = '';
+                        }
+                    });
+                    this.sign_input.isPassword = true;
+                }
             }
         }
-        else if(this.game.input.keyboard.lastKey.keyCode == Phaser.Keyboard.BACKSPACE) {
-            this.game.inputBuffer = this.game.inputBuffer.slice(0, -1);
+        else if (this.input.keyboard.lastKey.keyCode == Phaser.Keyboard.BACKSPACE) {
+            this.game.inputBuffer.splice(-1, 1);
+            if (this.sign_input.isPassword) {
+                this.game.passwordBuffer.splice(-1, 1);
+            }
         }
         else {
-            if(!this.sign_input.isPassword && this.game.inputBuffer.length < 10) {
-                this.game.inputBuffer += String(key);
+            if (!this.sign_input.isPassword && this.game.inputBuffer.length < 10) {
+                this.game.inputBuffer += String(key).toUpperCase();
             }
-            else if(this.sign_input.isPassword && this.game.inputBuffer.length < 4) {
-                this.game.inputBuffer += String(key);
+            else if (this.sign_input.isPassword && this.game.inputBuffer.length < 10) {
+                this.game.inputBuffer += '*';
+                this.game.passwordBuffer += String(key);
             }
         }
     }

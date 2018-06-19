@@ -5,6 +5,9 @@ export default class Boot extends Phaser.State {
     }
     init() {
         this.game.inputBuffer = '';
+        this.game.nameBuffer = '';
+        this.game.passwordBuffer = '';
+
         this.game.player_choice = 0;
         this.game.settings = {
             border_top_offset_y: 195,
