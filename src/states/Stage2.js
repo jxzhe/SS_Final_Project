@@ -3,8 +3,6 @@ export default class Stage2 extends Phaser.State {
         super();
     }
     create() {
-        this.boss_bgm = this.add.audio('boss');
-        this.gate = this.add.audio('gate');
         this.create_layer_0();
         this.create_layer_1();
         this.create_layer_2();
@@ -674,9 +672,10 @@ export default class Stage2 extends Phaser.State {
                 this.boss_gate.down.destroy();
             });
             this.boss_gate.front_effect.start();
-            this.boss_bgm.play();
-            this.gate.play();
             this.add.tween(this.purple).to({ alpha: 0.6 }, 1000).start();
+            this.game.normal.stop();
+            this.game.gate.play();
+            this.game.boss.play();
         } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
             this.is_boss_state = true;
             this.boss.visible = true;

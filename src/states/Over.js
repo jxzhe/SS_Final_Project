@@ -3,6 +3,7 @@ export default class Over extends Phaser.State {
         super();
     }
     create() {
+        this.game.menu.play();
         this.angle = 0;
         this.Text3D();
         this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', `Click To Menu`);

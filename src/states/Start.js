@@ -3,6 +3,12 @@ export default class Start extends Phaser.State {
         super();
     }
     create() {
+        this.game.menu = this.add.audio('menu');
+        this.game.boss = this.add.audio('boss');
+        this.game.normal = this.add.audio('normal');
+        this.game.gate = this.add.audio('gate');
+        this.game.menu.play();
+
         this.Text3D();
         this.start_text = this.add.bitmapText(928 * 0.5, 793 * 0.8, 'carrier_command', `Click To Start`);
         this.start_text.anchor.set(0.5, 0);
