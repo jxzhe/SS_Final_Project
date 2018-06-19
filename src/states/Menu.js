@@ -4,6 +4,8 @@ export default class Menu extends Phaser.State {
         super();
     }
     create() {
+        this.bgm = this.add.audio('bgm');
+        this.bgm.play();
         this.create_layer_0();
         this.create_layer_1();
         this.create_layer_2();

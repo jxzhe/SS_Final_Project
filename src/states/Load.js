@@ -16,6 +16,10 @@ export default class Load extends Phaser.State {
         this.load.audio('melo01', 'audio/system00_melo01.wav');
         this.load.audio('melo02', 'audio/system00_melo02.wav');
         this.load.audio('melo03', 'audio/system00_melo03.wav');
+
+        this.load.audio('boss', 'audio/boss.ogg');
+        this.load.audio('bgm', 'audio/bgm.ogg');
+        this.load.audio('gate', 'audio/boss_gate.wav');
         
         this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
 

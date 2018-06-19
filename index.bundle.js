@@ -640,6 +640,10 @@ var Load = function (_Phaser$State) {
                         this.load.audio('melo02', 'audio/system00_melo02.wav');
                         this.load.audio('melo03', 'audio/system00_melo03.wav');
 
+                        this.load.audio('boss', 'audio/boss.ogg');
+                        this.load.audio('bgm', 'audio/bgm.ogg');
+                        this.load.audio('gate', 'audio/boss_gate.wav');
+
                         this.load.bitmapFont('carrier_command', 'font/carrier_command.png', 'font/carrier_command.xml');
 
                         this.load.image('tileset', 'map/tileset.png');
@@ -775,6 +779,8 @@ var Menu = function (_Phaser$State) {
     _createClass(Menu, [{
         key: 'create',
         value: function create() {
+            this.bgm = this.add.audio('bgm');
+            this.bgm.play();
             this.create_layer_0();
             this.create_layer_1();
             this.create_layer_2();
@@ -1704,6 +1710,8 @@ var Stage1 = function (_Phaser$State) {
     _createClass(Stage1, [{
         key: 'create',
         value: function create() {
+            this.boss_bgm = this.add.audio('boss');
+            this.gate = this.add.audio('gate');
             this.create_layers();
             this.init_sign_layer();
             this.init_obstacle_layer();
@@ -2861,6 +2869,8 @@ var Stage1 = function (_Phaser$State) {
                     _this5.boss_gate.down.destroy();
                 });
                 this.boss_gate.front_effect.start();
+                this.boss_bgm.play();
+                this.gate.play();
             } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
                 this.is_boss_state = true;
                 this.boss.visible = true;
@@ -2924,6 +2934,8 @@ var Stage2 = function (_Phaser$State) {
     _createClass(Stage2, [{
         key: 'create',
         value: function create() {
+            this.boss_bgm = this.add.audio('boss');
+            this.gate = this.add.audio('gate');
             this.create_layer_0();
             this.create_layer_1();
             this.create_layer_2();
@@ -3763,6 +3775,8 @@ var Stage2 = function (_Phaser$State) {
                     _this5.boss_gate.down.destroy();
                 });
                 this.boss_gate.front_effect.start();
+                this.boss_bgm.play();
+                this.gate.play();
                 this.add.tween(this.purple).to({ alpha: 0.6 }, 1000).start();
             } else if (this.boss_gate.valid && sign.key == 'Boss_Gate00') {
                 this.is_boss_state = true;
